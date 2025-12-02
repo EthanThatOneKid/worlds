@@ -1,13 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+import * as authkit from "@workos-inc/authkit-nextjs";
 
-export default function Home() {
+export default async function Home() {
+  const { user } = await authkit.withAuth();
+  const signInUrl = await authkit.getSignInUrl();
+  const signUpUrl = await authkit.getSignUpUrl();
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <header>
-          <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
+          {user ? (
+            <p>Welcome back, {user?.firstName}!</p>
+          ) : (
+            <p>
+              <Link href={signInUrl}>Sign In</Link>
+              <Link href={signUpUrl}>Sign Up</Link>
+            </p>
+          )}
         </header>
 
         <Image
