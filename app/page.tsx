@@ -1,11 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import * as authkit from "@workos-inc/authkit-nextjs";
+import { getV1StoresByStore, postV1StoresByStore } from "@/openapi/sdk.gen";
 
 export default async function Home() {
   const { user } = await authkit.withAuth();
   const signInUrl = await authkit.getSignInUrl();
   const signUpUrl = await authkit.getSignUpUrl();
+
+  // TODO: Put RDF data in the body. Confirm desired behavior.
+  // const postResponse = await postV1StoresByStore({
+  //   path: { store: "1" },
+  //   body: {},
+  // });
+
+  // const getResponse = await getV1StoresByStore({
+  //   path: { store: "1" },
+  // });
+  // console.log({ response: getResponse });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">

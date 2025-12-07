@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
     "@workos-inc/authkit-nextjs": "^2.11.1",
@@ -16,6 +17,7 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "0.88.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
