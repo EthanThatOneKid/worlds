@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
+import { client } from "@/sdk/client.gen";
 import "./globals.css";
+
+client.setConfig({
+  baseUrl: "http://localhost:8000",
+  auth: "EthanIsAwesome",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -8,7 +8,7 @@ export type V1Store = {
   id: string;
 };
 
-export type DeleteV1StoresByStoreData = {
+export type RemoveStoreData = {
   body?: never;
   path: {
     store: string;
@@ -17,17 +17,17 @@ export type DeleteV1StoresByStoreData = {
   url: "/v1/stores/{store}";
 };
 
-export type DeleteV1StoresByStoreResponses = {
+export type RemoveStoreResponses = {
   /**
    * Store deleted
    */
   204: void;
 };
 
-export type DeleteV1StoresByStoreResponse =
-  DeleteV1StoresByStoreResponses[keyof DeleteV1StoresByStoreResponses];
+export type RemoveStoreResponse =
+  RemoveStoreResponses[keyof RemoveStoreResponses];
 
-export type GetV1StoresByStoreData = {
+export type GetStoreData = {
   body?: never;
   path: {
     store: string;
@@ -36,7 +36,7 @@ export type GetV1StoresByStoreData = {
   url: "/v1/stores/{store}";
 };
 
-export type GetV1StoresByStoreErrors = {
+export type GetStoreErrors = {
   /**
    * Store not found
    */
@@ -47,17 +47,16 @@ export type GetV1StoresByStoreErrors = {
   406: unknown;
 };
 
-export type GetV1StoresByStoreResponses = {
+export type GetStoreResponses = {
   /**
    * Get a store
    */
   200: V1Store;
 };
 
-export type GetV1StoresByStoreResponse =
-  GetV1StoresByStoreResponses[keyof GetV1StoresByStoreResponses];
+export type GetStoreResponse = GetStoreResponses[keyof GetStoreResponses];
 
-export type PostV1StoresByStoreData = {
+export type AddQuadsData = {
   /**
    * RDF Data
    */
@@ -69,24 +68,23 @@ export type PostV1StoresByStoreData = {
   url: "/v1/stores/{store}";
 };
 
-export type PostV1StoresByStoreErrors = {
+export type AddQuadsErrors = {
   /**
    * Invalid RDF data
    */
   400: unknown;
 };
 
-export type PostV1StoresByStoreResponses = {
+export type AddQuadsResponses = {
   /**
    * Store updated successfully
    */
   204: void;
 };
 
-export type PostV1StoresByStoreResponse =
-  PostV1StoresByStoreResponses[keyof PostV1StoresByStoreResponses];
+export type AddQuadsResponse = AddQuadsResponses[keyof AddQuadsResponses];
 
-export type PutV1StoresByStoreData = {
+export type SetStoreData = {
   /**
    * RDF Data
    */
@@ -98,7 +96,7 @@ export type PutV1StoresByStoreData = {
   url: "/v1/stores/{store}";
 };
 
-export type PutV1StoresByStoreErrors = {
+export type SetStoreErrors = {
   /**
    * Invalid RDF data
    */
@@ -109,17 +107,16 @@ export type PutV1StoresByStoreErrors = {
   412: unknown;
 };
 
-export type PutV1StoresByStoreResponses = {
+export type SetStoreResponses = {
   /**
    * Store updated successfully
    */
   204: void;
 };
 
-export type PutV1StoresByStoreResponse =
-  PutV1StoresByStoreResponses[keyof PutV1StoresByStoreResponses];
+export type SetStoreResponse = SetStoreResponses[keyof SetStoreResponses];
 
-export type GetV1StoresByStoreSparqlData = {
+export type SparqlQueryData = {
   body?: never;
   path: {
     store: string;
@@ -135,14 +132,14 @@ export type GetV1StoresByStoreSparqlData = {
   url: "/v1/stores/{store}/sparql";
 };
 
-export type GetV1StoresByStoreSparqlErrors = {
+export type SparqlQueryErrors = {
   /**
    * Bad Request
    */
   400: unknown;
 };
 
-export type GetV1StoresByStoreSparqlResponses = {
+export type SparqlQueryResponses = {
   /**
    * Query results
    */
@@ -164,10 +161,10 @@ export type GetV1StoresByStoreSparqlResponses = {
   };
 };
 
-export type GetV1StoresByStoreSparqlResponse =
-  GetV1StoresByStoreSparqlResponses[keyof GetV1StoresByStoreSparqlResponses];
+export type SparqlQueryResponse =
+  SparqlQueryResponses[keyof SparqlQueryResponses];
 
-export type PostV1StoresByStoreSparqlData = {
+export type SparqlUpdateData = {
   /**
    * SPARQL Query or Update
    */
@@ -184,14 +181,14 @@ export type PostV1StoresByStoreSparqlData = {
   url: "/v1/stores/{store}/sparql";
 };
 
-export type PostV1StoresByStoreSparqlErrors = {
+export type SparqlUpdateErrors = {
   /**
    * Bad Request
    */
   400: unknown;
 };
 
-export type PostV1StoresByStoreSparqlResponses = {
+export type SparqlUpdateResponses = {
   /**
    * Query results or Update success
    */
@@ -217,5 +214,5 @@ export type PostV1StoresByStoreSparqlResponses = {
   204: void;
 };
 
-export type PostV1StoresByStoreSparqlResponse =
-  PostV1StoresByStoreSparqlResponses[keyof PostV1StoresByStoreSparqlResponses];
+export type SparqlUpdateResponse =
+  SparqlUpdateResponses[keyof SparqlUpdateResponses];
