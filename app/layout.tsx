@@ -4,9 +4,11 @@ import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
 import { client } from "@/sdk/client.gen";
 import "./globals.css";
 
+// TODO: Use process.env variables.
 client.setConfig({
   baseUrl: "http://localhost:8000",
   auth: "EthanIsAwesome",
+  // bodySerializer: null,
 });
 
 const geistSans = Geist({

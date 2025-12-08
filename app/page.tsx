@@ -11,14 +11,12 @@ export default async function Home() {
   // TODO: Put RDF data in the body. Confirm desired behavior.
   // This is just a test to see if it works.
 
-  const body = new Blob(
-    [`<http://example.org/subject> <http://example.org/predicate> "object" .`],
-    { type: "application/n-quads" },
-  );
+  const body = `<http://example.org/subject> <http://example.org/predicate> "object" .`;
 
   const putResponse = await sdk.setStore({
     path: { store: "1" },
-    body,
+    body: body as unknown as Blob,
+    bodySerializer: null,
     headers: {
       "Content-Type": "application/n-quads",
     },
@@ -28,9 +26,14 @@ export default async function Home() {
 
   const getResponse = await sdk.getStore({
     path: { store: "1" },
+    parseAs: "text",
+    headers: {
+      Accept: "application/n-quads",
+    },
   });
 
-  console.log({ response: getResponse });
+  const data = getResponse.data;
+  console.log({ response: getResponse, data });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -46,14 +49,13 @@ export default async function Home() {
           )}
         </header>
 
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
+        <section className="w-full">
+          <h2 className="text-xl font-bold mb-4">Store Contents</h2>
+          <pre className="p-4 bg-gray-100 dark:bg-zinc-800 rounded overflow-auto">
+            {typeof data === "string" ? data : JSON.stringify(data, null, 2)}
+          </pre>
+        </section>
+
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.
