@@ -11,7 +11,7 @@
     "openapi-ts": "openapi-ts"
   },
   "dependencies": {
-    "@fartlabs/worlds": "npm:@jsr/fartlabs__worlds@^0.0.1",
+    "@fartlabs/worlds": "npm:@jsr/fartlabs__worlds@^0.0.3",
     "@workos-inc/authkit-nextjs": "^2.11.1",
     "next": "16.0.6",
     "react": "19.2.0",
