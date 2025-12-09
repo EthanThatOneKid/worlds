@@ -9,8 +9,8 @@ export default async function Home() {
   const signUpUrl = await authkit.getSignUpUrl();
 
   const sdk = new WorldsApiSdk({
-    baseUrl: "http://localhost:8000/v1",
-    apiKey: "EthanIsAwesome",
+    baseUrl: process.env.WORLDS_API_BASE_URL!,
+    apiKey: process.env.WORLDS_API_KEY!,
   });
 
   const putResponse = await sdk.setStore(
