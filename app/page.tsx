@@ -1,39 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
 import * as authkit from "@workos-inc/authkit-nextjs";
-import * as sdk from "@/sdk";
+import { WorldsApiSdk } from "@fartlabs/worlds";
 
 export default async function Home() {
   const { user } = await authkit.withAuth();
   const signInUrl = await authkit.getSignInUrl();
   const signUpUrl = await authkit.getSignUpUrl();
 
-  // TODO: Put RDF data in the body. Confirm desired behavior.
-  // This is just a test to see if it works.
-
-  const body = `<http://example.org/subject> <http://example.org/predicate> "object" .`;
-
-  const putResponse = await sdk.setStore({
-    path: { store: "1" },
-    body: body as unknown as Blob,
-    bodySerializer: null,
-    headers: {
-      "Content-Type": "application/n-quads",
-    },
+  const sdk = new WorldsApiSdk({
+    baseUrl: "http://localhost:8000/v1",
+    apiKey: "EthanIsAwesome",
   });
+
+  const putResponse = await sdk.setStore(
+    "1",
+    `<http://example.org/subject> <http://example.org/predicate> "object" .`,
+    "application/n-quads",
+  );
 
   console.log({ putResponse });
 
-  const getResponse = await sdk.getStore({
-    path: { store: "1" },
-    parseAs: "text",
-    headers: {
-      Accept: "application/n-quads",
-    },
-  });
+  const data = await sdk.getStore("1", "application/n-quads");
 
-  const data = getResponse.data;
-  console.log({ response: getResponse, data });
+  console.log({ response: data });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
