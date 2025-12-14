@@ -1,36 +1,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import * as authkit from "@workos-inc/authkit-nextjs";
-import { WorldsApiSdk } from "@fartlabs/worlds";
 
 export default async function Home() {
   const { user } = await authkit.withAuth();
   const signInUrl = await authkit.getSignInUrl();
   const signUpUrl = await authkit.getSignUpUrl();
 
-  const sdk = new WorldsApiSdk({
-    baseUrl: process.env.WORLDS_API_BASE_URL!,
-    apiKey: process.env.WORLDS_API_KEY!,
-  });
-
-  const putResponse = await sdk.setStore(
-    "1",
-    `<http://example.org/subject> <http://example.org/predicate> "object" .`,
-    "application/n-quads",
-  );
-
-  console.log({ putResponse });
-
-  const data = await sdk.getStore("1", "application/n-quads");
-
-  console.log({ response: data });
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <header>
           {user ? (
-            <p>Welcome back, {user?.firstName}!</p>
+            <div className="flex items-center gap-4">
+              <p>Welcome back, {user?.firstName}!</p>
+              <form
+                action={async () => {
+                  "use server";
+                  await authkit.signOut();
+                }}
+              >
+                <button
+                  type="submit"
+                  className="rounded-full bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+                >
+                  Sign Out
+                </button>
+              </form>
+            </div>
           ) : (
             <p>
               <Link href={signInUrl}>Sign In</Link>
@@ -41,9 +38,7 @@ export default async function Home() {
 
         <section className="w-full">
           <h2 className="text-xl font-bold mb-4">Store Contents</h2>
-          <pre className="p-4 bg-gray-100 dark:bg-zinc-800 rounded overflow-auto">
-            {typeof data === "string" ? data : JSON.stringify(data, null, 2)}
-          </pre>
+          <Link href="/dashboard">Dashboard</Link>
         </section>
 
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
