@@ -13,14 +13,15 @@ export const GET = authkit.handleAuth({
     }
 
     // Skip if user already has an account.
-    const existingAccount = await sdk.getAccount(data.user.id);
+    const existingAccount = await sdk.accounts.getAccount(data.user.id);
     if (!existingAccount) {
       return;
     }
 
     // Create the account in Worlds API
-    await sdk.createAccount({
-      id: data.user.id,
+    await sdk.accounts.createAccount({
+      id: data.user.id, // Associate WorkOS ID with account ID.
+      planType: "",
       apiKey: randomUUID(),
       description: data.user.email || data.user.firstName || "No description",
       plan: "free_plan",
