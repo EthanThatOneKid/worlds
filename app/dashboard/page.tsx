@@ -28,7 +28,7 @@ export default async function DashboardPage() {
   }
 
   try {
-    await sdk.getAccount(worldsAccountId);
+    await sdk.accounts.get(worldsAccountId);
   } catch (error) {
     console.error("Failed to fetch account:", error);
     return (
@@ -43,7 +43,16 @@ export default async function DashboardPage() {
     );
   }
 
-  const worlds = await sdk.getAccountWorlds(worldsAccountId);
+  const account = await sdk.accounts.get(worldsAccountId);
+  if (!account?.apiKey) {
+    throw new Error("No API key found for account");
+  }
+  const { Worlds } = await import("@fartlabs/worlds");
+  const userWorlds = new Worlds({
+    apiKey: account.apiKey,
+    baseUrl: process.env.WORLDS_API_BASE_URL!,
+  });
+  const worlds = await userWorlds.list();
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
       <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-6 py-4">

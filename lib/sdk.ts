@@ -1,4 +1,4 @@
-import { InternalWorlds } from "@fartlabs/worlds";
+import { InternalWorlds } from "@fartlabs/worlds/internal";
 
 export const sdk = new InternalWorlds({
   baseUrl: process.env.WORLDS_API_BASE_URL!,

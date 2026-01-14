@@ -6,9 +6,9 @@ import { updateWorldDescription, deleteWorld } from "./actions";
 
 interface World {
   id: string;
-  tripleCount: number;
+  tripleCount?: number;
   updatedAt: string | Date | number;
-  description?: string;
+  description?: string | null;
 }
 
 export function WorldItem({ world }: { world: World }) {
@@ -167,7 +167,7 @@ export function WorldItem({ world }: { world: World }) {
           ) : (
             <p
               className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2"
-              title={world.description}
+              title={world.description || undefined}
             >
               {world.description || (
                 <span className="italic text-zinc-400">No description</span>
@@ -177,7 +177,7 @@ export function WorldItem({ world }: { world: World }) {
         </div>
 
         <div className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 space-y-1">
-          <p>{world.tripleCount.toLocaleString()} triples</p>
+          <p>{(world.tripleCount || 0).toLocaleString()} triples</p>
           <p>Updated {new Date(world.updatedAt).toLocaleDateString()}</p>
         </div>
         <div className="text-sm text-zinc-500 dark:text-zinc-400">

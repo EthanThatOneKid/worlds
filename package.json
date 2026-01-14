@@ -8,10 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "openapi-ts": "openapi-ts"
+    "check": "tsc --noEmit",
+    "update": "npx jsr add @fartlabs/worlds"
   },
   "dependencies": {
-    "@fartlabs/worlds": "npm:@jsr/fartlabs__worlds@^0.0.11",
+    "@fartlabs/worlds": "npm:@jsr/fartlabs__worlds@^0.0.16",
     "@workos-inc/authkit-nextjs": "^2.13.0",
     "@workos-inc/node": "^8.0.0",
     "next": "16.1.1",

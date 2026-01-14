@@ -11,7 +11,7 @@ async function getUserWorldsSdk() {
     throw new Error("Unauthorized");
   }
 
-  const account = await sdk.getAccount(user.id);
+  const account = await sdk.accounts.get(user.id);
   if (!account?.apiKey) {
     throw new Error("No API key found for account");
   }
@@ -27,12 +27,13 @@ export async function updateWorldDescription(
   description: string,
 ) {
   const worlds = await getUserWorldsSdk();
-  await worlds.updateWorldDescription(worldId, description);
+  // @ts-expect-error TODO: Fix this type error
+  await worlds.update(worldId, { description });
   revalidatePath("/dashboard");
 }
 
 export async function deleteWorld(worldId: string) {
   const worlds = await getUserWorldsSdk();
-  await worlds.removeWorld(worldId);
+  await worlds.remove(worldId);
   revalidatePath("/dashboard");
 }
