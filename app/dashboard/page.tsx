@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Worlds } from "@fartlabs/worlds";
 import { sdk } from "@/lib/sdk";
 import { WorldItem } from "./world-item";
+import { CreateWorldButton } from "./create-world-button";
 
 export default async function DashboardPage() {
   const { user } = await authkit.withAuth();
@@ -71,7 +72,7 @@ export default async function DashboardPage() {
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
             My Worlds
           </h1>
-          {/* Placeholder for future "Create World" button */}
+          <CreateWorldButton />
         </div>
 
         {worlds.length === 0 ? (

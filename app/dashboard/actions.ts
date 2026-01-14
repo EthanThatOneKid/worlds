@@ -37,3 +37,34 @@ export async function deleteWorld(worldId: string) {
   await worlds.remove(worldId);
   revalidatePath("/dashboard");
 }
+
+export async function createWorld() {
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const account = await sdk.accounts.get(user.id);
+  if (!account?.apiKey) {
+    throw new Error("No API key found for account");
+  }
+
+  const worlds = new Worlds({
+    apiKey: account.apiKey,
+    baseUrl: process.env.WORLDS_API_BASE_URL!,
+  });
+
+  const now = Date.now();
+  await worlds.create({
+    id: crypto.randomUUID(),
+    accountId: account.id!, // Assuming account.id is present and the correct field
+    name: "New World",
+    description: null,
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: null,
+    isPublic: false,
+  });
+
+  revalidatePath("/dashboard");
+}
