@@ -1,6 +1,7 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Worlds } from "@fartlabs/worlds";
 import { sdk } from "@/lib/sdk";
 import { WorldItem } from "./world-item";
 
@@ -11,43 +12,39 @@ export default async function DashboardPage() {
     redirect(signInUrl);
   }
 
-  const worldsAccountId = user.metadata.worlds_account_id;
-  if (!worldsAccountId) {
+  if (!user.id) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-zinc-50">
-            Account Not Found
-          </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Your WorkOS user is not associated with a Worlds API account.
-          </p>
-        </div>
-      </div>
+      <ErrorState
+        title="Account Not Found"
+        message="Your WorkOS user is not associated with a Worlds API account."
+      />
     );
   }
 
+  let account;
   try {
-    await sdk.accounts.get(worldsAccountId);
+    account = await sdk.accounts.get(user.id);
   } catch (error) {
     console.error("Failed to fetch account:", error);
     return (
-      <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-red-600">Error</h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Failed to load account data. Please try again later.
-          </p>
-        </div>
-      </div>
+      <ErrorState
+        title="Error"
+        message="Failed to load account data. Please try again later."
+        titleClassName="text-red-600"
+      />
     );
   }
 
-  const account = await sdk.accounts.get(worldsAccountId);
   if (!account?.apiKey) {
-    throw new Error("No API key found for account");
+    return (
+      <ErrorState
+        title="Error"
+        message="No API key found for account"
+        titleClassName="text-red-600"
+      />
+    );
   }
-  const { Worlds } = await import("@fartlabs/worlds");
+
   const userWorlds = new Worlds({
     apiKey: account.apiKey,
     baseUrl: process.env.WORLDS_API_BASE_URL!,
@@ -94,6 +91,25 @@ export default async function DashboardPage() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+function ErrorState({
+  title,
+  message,
+  titleClassName = "text-zinc-900 dark:text-zinc-50",
+}: {
+  title: string;
+  message: string;
+  titleClassName?: string;
+}) {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
+      <div className="text-center">
+        <h1 className={`text-2xl font-bold mb-4 ${titleClassName}`}>{title}</h1>
+        <p className="text-zinc-600 dark:text-zinc-400">{message}</p>
+      </div>
     </div>
   );
 }
