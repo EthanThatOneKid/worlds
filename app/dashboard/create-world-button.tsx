@@ -1,14 +1,21 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { createWorld } from "./actions";
 
 export function CreateWorldButton() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleCreate = () => {
     startTransition(async () => {
-      await createWorld();
+      const result = await createWorld();
+      if (result && !result.success) {
+        alert(`Failed to create world: ${result.error}`);
+      } else {
+        router.refresh();
+      }
     });
   };
 
@@ -20,7 +27,7 @@ export function CreateWorldButton() {
         inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium
         transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2
         dark:focus:ring-zinc-800 disabled:opacity-50 disabled:pointer-events-none
-        bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200
+        bg-zinc-900 text-white hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90
       `}
     >
       {isPending ? (

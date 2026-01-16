@@ -1,7 +1,7 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Worlds } from "@fartlabs/worlds";
+
 import { sdk } from "@/lib/sdk";
 import { WorldItem } from "./world-item";
 import { CreateWorldButton } from "./create-world-button";
@@ -36,21 +36,18 @@ export default async function DashboardPage() {
     );
   }
 
-  if (!account?.apiKey) {
+  if (!account) {
     return (
       <ErrorState
-        title="Error"
-        message="No API key found for account"
-        titleClassName="text-red-600"
+        title="Account Not Found"
+        message="Your WorkOS user is not associated with a Worlds API account."
       />
     );
   }
 
-  const userWorlds = new Worlds({
-    apiKey: account.apiKey,
-    baseUrl: process.env.WORLDS_API_BASE_URL!,
-  });
-  const worlds = await userWorlds.list();
+  const worlds = (await sdk.worlds.list(1, 100, { accountId: user.id })).toSorted(
+    (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
+  );
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
       <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-6 py-4">
