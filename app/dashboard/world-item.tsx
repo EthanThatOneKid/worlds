@@ -1,17 +1,15 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { updateWorldDescription, deleteWorld } from "./actions";
+import type { WorldRecord } from "@fartlabs/worlds";
+import { deleteWorld, updateWorldDescription } from "./actions";
 
-interface World {
-  id: string;
-  tripleCount?: number;
-  updatedAt: string | Date | number;
-  description?: string | null;
-}
-
-export function WorldItem({ world }: { world: World }) {
+export function WorldItem({
+  world,
+}: {
+  world: WorldRecord & { tripleCount?: number };
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(world.description || "");
   const [isPending, startTransition] = useTransition();
@@ -128,9 +126,14 @@ export function WorldItem({ world }: { world: World }) {
 
         <h3
           className="text-lg font-semibold text-zinc-900 dark:text-white mb-1 truncate"
-          title={world.id}
+          title={world.name || world.id}
         >
-          {world.id}
+          <Link
+            href={`/worlds/${world.id}`}
+            className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          >
+            {world.name || world.id}
+          </Link>
         </h3>
 
         <div className="mb-4 min-h-[3rem]">

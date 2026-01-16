@@ -45,8 +45,9 @@ export default async function DashboardPage() {
     );
   }
 
-  const worlds = (await sdk.worlds.list(1, 100, { accountId: user.id })).toSorted(
-    (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
+  const listResult = await sdk.worlds.list(1, 100, { accountId: user.id });
+  const worlds = listResult.toSorted(
+    (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
   );
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
