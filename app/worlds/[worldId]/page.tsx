@@ -1,7 +1,7 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
+import { codeToHtml } from "shiki";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-
 import { sdk } from "@/lib/sdk";
 import { WorldDetails } from "./world-details";
 
@@ -82,6 +82,37 @@ export default async function WorldPage({
     );
   }
 
+  // Generate code snippets
+  const codeSnippet = `import { World } from "@fartlabs/worlds";
+
+const world = new World({
+  apiKey: "${account.apiKey}",
+  worldId: "${worldId}"
+});
+
+const worldRecord = await world.get();
+console.log("Connected to world:", worldRecord.name);`;
+
+  const maskedCodeSnippet = `import { World } from "@fartlabs/worlds";
+
+const world = new World({
+  apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}",
+  worldId: "${worldId}"
+});
+
+const worldRecord = await world.get();
+console.log("Connected to world:", worldRecord.name);`;
+
+  const codeSnippetHtml = await codeToHtml(codeSnippet, {
+    lang: "typescript",
+    theme: "github-dark",
+  });
+
+  const maskedCodeSnippetHtml = await codeToHtml(maskedCodeSnippet, {
+    lang: "typescript",
+    theme: "github-dark",
+  });
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
       <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-6 py-4">
@@ -121,7 +152,14 @@ export default async function WorldPage({
       </nav>
 
       <main className="mx-auto max-w-5xl px-6 py-12">
-        <WorldDetails world={world} />
+        <WorldDetails
+          world={world}
+          apiKey={account.apiKey}
+          codeSnippet={codeSnippet}
+          maskedCodeSnippet={maskedCodeSnippet}
+          codeSnippetHtml={codeSnippetHtml}
+          maskedCodeSnippetHtml={maskedCodeSnippetHtml}
+        />
       </main>
     </div>
   );

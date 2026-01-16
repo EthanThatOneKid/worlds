@@ -8,8 +8,23 @@ import {
   updateWorldDescription,
   updateWorldName,
 } from "./actions";
+import { WorldConnectButton } from "./connect-sdk-dialog";
 
-export function WorldDetails({ world }: { world: WorldRecord }) {
+export function WorldDetails({
+  world,
+  apiKey,
+  codeSnippet,
+  maskedCodeSnippet,
+  codeSnippetHtml,
+  maskedCodeSnippetHtml,
+}: {
+  world: WorldRecord;
+  apiKey: string;
+  codeSnippet: string;
+  maskedCodeSnippet: string;
+  codeSnippetHtml: string;
+  maskedCodeSnippetHtml: string;
+}) {
   const router = useRouter();
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -145,14 +160,27 @@ export function WorldDetails({ world }: { world: WorldRecord }) {
         </button>
       </div>
 
-      {/* World ID Badge */}
-      <div className="inline-flex items-center space-x-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
-        <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          ID:
-        </span>
-        <code className="text-sm font-mono text-zinc-900 dark:text-zinc-100">
-          {world.id}
-        </code>
+      <div className="flex items-center justify-between">
+        {/* World ID Badge */}
+        <div className="inline-flex items-center space-x-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            ID:
+          </span>
+          <code className="text-sm font-mono text-zinc-900 dark:text-zinc-100">
+            {world.id}
+          </code>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <WorldConnectButton
+            worldId={world.id}
+            apiKey={apiKey}
+            codeSnippet={codeSnippet}
+            maskedCodeSnippet={maskedCodeSnippet}
+            codeSnippetHtml={codeSnippetHtml}
+            maskedCodeSnippetHtml={maskedCodeSnippetHtml}
+          />
+        </div>
       </div>
 
       {/* Description Section */}

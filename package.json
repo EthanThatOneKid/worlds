@@ -16,8 +16,10 @@
     "@workos-inc/authkit-nextjs": "^2.13.0",
     "@workos-inc/node": "^8.0.0",
     "next": "16.1.1",
+    "nuqs": "^2.8.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "shiki": "^3.21.0",
     "workos": "^0.0.24"
   },
   "devDependencies": {

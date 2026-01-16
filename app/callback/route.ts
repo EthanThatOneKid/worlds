@@ -23,7 +23,7 @@ export const GET = authkit.handleAuth({
       });
     } catch (error) {
       console.error("Error in callback route:", error);
-      throw error; // Re-throw to trigger AuthKit error handling
+      throw error; // Re-throw to trigger AuthKit error handling.
     }
   },
 });
