@@ -77,3 +77,13 @@ export async function deleteAccount() {
   // Sign out the user
   await authkit.signOut();
 }
+
+export async function rotateApiKey() {
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  await sdk.accounts.rotate(user.id);
+  revalidatePath(`/accounts/${user.id}`);
+}

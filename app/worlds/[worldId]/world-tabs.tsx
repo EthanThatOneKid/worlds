@@ -5,8 +5,15 @@ import { WorldDetails } from "./world-details";
 import { WorldUsage } from "./world-usage";
 import { WorldPlayground } from "./world-playground";
 import type { WorldRecord } from "@fartlabs/worlds";
+import { useState } from "react";
 
-const tabs = ["overview", "usage", "playground"] as const;
+const tabs = [
+  "overview",
+  "usage",
+  "playground",
+  "conversations",
+  "webhooks",
+] as const;
 
 interface WorldTabsProps {
   world: WorldRecord;
@@ -35,8 +42,9 @@ export function WorldTabs({
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="border-b border-zinc-200 dark:border-zinc-800">
-        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+      <div className="md:border-b border-zinc-200 dark:border-zinc-800">
+        {/* Desktop Tabs */}
+        <nav className="-mb-px hidden md:flex space-x-8" aria-label="Tabs">
           <button
             onClick={() => setActiveTab("overview")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
@@ -67,11 +75,39 @@ export function WorldTabs({
           >
             Playground
           </button>
+          <button
+            onClick={() => setActiveTab("conversations")}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
+              activeTab === "conversations"
+                ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+            }`}
+          >
+            Conversations
+          </button>
+          <button
+            onClick={() => setActiveTab("webhooks")}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
+              activeTab === "webhooks"
+                ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+            }`}
+          >
+            Webhooks
+          </button>
         </nav>
+
+        {/* Mobile Dropdown */}
+        <div className="md:hidden pb-4">
+          <MobileTabSelect
+            activeTab={activeTab}
+            onChange={(tab) => setActiveTab(tab)}
+          />
+        </div>
       </div>
 
       {/* Tab Content */}
-      <div>
+      <div className="min-h-[400px]">
         {activeTab === "overview" && (
           <WorldDetails
             world={world}
@@ -89,7 +125,184 @@ export function WorldTabs({
         {activeTab === "playground" && (
           <WorldPlayground worldId={world.id} userId={userId} />
         )}
+        {activeTab === "conversations" && (
+          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center bg-white dark:bg-zinc-900 shadow-sm animate-in fade-in duration-300">
+            <div className="mx-auto w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7.5 8.25h9m-9 3h9m-9 3h3m-6.75 4.125a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3V7.5a3 3 0 0 0-3-3h-7.5a3 3 0 0 0-3 3v10.625Z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+              Conversations - Coming soon
+            </h3>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+              A chat interface for your worlds is currently under development.
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-4">
+              <a
+                href="https://github.com/EthanThatOneKid/worlds/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer shadow-sm"
+              >
+                Provide Feedback
+              </a>
+              <a
+                href="mailto:ethan@wazoo.tech"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+              >
+                Reach out to founder
+              </a>
+            </div>
+          </div>
+        )}
+        {activeTab === "webhooks" && (
+          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center bg-white dark:bg-zinc-900 shadow-sm animate-in fade-in duration-300">
+            <div className="mx-auto w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+              Webhooks - Coming soon
+            </h3>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+              Connect third-party webhooks to your world.
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-4">
+              <a
+                href="https://github.com/EthanThatOneKid/worlds/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer shadow-sm"
+              >
+                Provide Feedback
+              </a>
+              <a
+                href="mailto:ethan@wazoo.tech"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+              >
+                Reach out to founder
+              </a>
+            </div>
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+function MobileTabSelect({
+  activeTab,
+  onChange,
+}: {
+  activeTab: (typeof tabs)[number];
+  onChange: (tab: (typeof tabs)[number]) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
+      >
+        <span className="capitalize font-medium block">{activeTab}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className={`w-5 h-5 text-zinc-500 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl animate-in fade-in zoom-in-95 duration-100 overflow-hidden">
+          <div className="p-1 space-y-0.5">
+            {tabs.map((tab) => (
+              <label
+                key={tab}
+                className={`flex items-center w-full p-2.5 rounded-md cursor-pointer transition-colors ${
+                  activeTab === tab
+                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="mobile-tabs"
+                  value={tab}
+                  checked={activeTab === tab}
+                  onChange={() => {
+                    onChange(tab);
+                    setIsOpen(false);
+                  }}
+                  className="sr-only"
+                />
+                <span className="capitalize text-sm font-medium flex-1">
+                  {tab}
+                </span>
+                {activeTab === tab && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m4.5 12.75 6 6 9-13.5"
+                    />
+                  </svg>
+                )}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Backdrop to close when clicking outside */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-0 bg-transparent"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 }

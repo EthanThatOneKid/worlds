@@ -7,6 +7,8 @@ import { WorldItem } from "@/components/world-item";
 import { CreateWorldButton } from "@/components/create-world-button";
 import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
+import { codeToHtml } from "shiki";
+import { ConnectSdkButton } from "@/components/connect-sdk";
 
 export const metadata: Metadata = {
   title: "My Worlds",
@@ -55,16 +57,51 @@ export default async function Home() {
   const worlds = listResult.toSorted(
     (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
   );
+
+  // Generate general SDK snippets for the account
+  const codeSnippet = `import { Worlds } from "@fartlabs/worlds/internal";
+
+const sdk = new Worlds({ apiKey: "${account.apiKey}" });
+
+const worlds = await sdk.worlds.list(1, 100);
+console.log("My worlds:", worlds.length);`;
+
+  const maskedCodeSnippet = `import { Worlds } from "@fartlabs/worlds/internal";
+
+const sdk = new Worlds({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}" });
+
+const worlds = await sdk.worlds.list(1, 100);
+console.log("My worlds:", worlds.length);`;
+
+  const codeSnippetHtml = await codeToHtml(codeSnippet, {
+    lang: "typescript",
+    theme: "github-dark",
+  });
+
+  const maskedCodeSnippetHtml = await codeToHtml(maskedCodeSnippet, {
+    lang: "typescript",
+    theme: "github-dark",
+  });
+
   return (
     <>
       <PageHeader accountId={user.id} />
 
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
             My Worlds
           </h1>
-          <CreateWorldButton />
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <ConnectSdkButton
+              apiKey={account.apiKey}
+              codeSnippet={codeSnippet}
+              maskedCodeSnippet={maskedCodeSnippet}
+              codeSnippetHtml={codeSnippetHtml}
+              maskedCodeSnippetHtml={maskedCodeSnippetHtml}
+            />
+            <CreateWorldButton />
+          </div>
         </div>
 
         {worlds.length === 0 ? (

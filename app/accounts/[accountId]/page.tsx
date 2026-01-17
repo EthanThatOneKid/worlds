@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { DeleteAccountSection } from "@/components/delete-account-section";
+import { ApiKeySection } from "@/components/api-key-section";
 import { Metadata } from "next";
+import { sdk } from "@/lib/sdk";
 
 export const metadata: Metadata = {
   title: "Account",
@@ -15,6 +17,22 @@ export default async function AccountPage() {
   if (!user) {
     const signInUrl = await authkit.getSignInUrl();
     redirect(signInUrl);
+  }
+
+  const account = await sdk.accounts.get(user.id);
+  if (!account) {
+    return (
+      <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-zinc-50">
+            Account Not Found
+          </h1>
+          <p className="text-zinc-600 dark:text-zinc-400">
+            Your WorkOS user is not associated with a Worlds API account.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -94,6 +112,9 @@ export default async function AccountPage() {
             )}
           </dl>
         </div>
+
+        <ApiKeySection apiKey={account.apiKey} />
+
         <DeleteAccountSection userEmail={user.email} />
       </div>
     </>

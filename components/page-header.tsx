@@ -31,11 +31,21 @@ export function PageHeader({
             </span>
           </Link>
         </div>
-        <UserMenu
-          email={email}
-          accountId={accountId}
-          onSignOut={signOutAction}
-        />
+        <div className="flex items-center space-x-4">
+          {accountId && (
+            <Link
+              href={`/accounts/${accountId}#api-keys`}
+              className="text-sm font-medium px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all"
+            >
+              API Keys
+            </Link>
+          )}
+          <UserMenu
+            email={email}
+            accountId={accountId}
+            onSignOut={signOutAction}
+          />
+        </div>
       </div>
     </nav>
   );

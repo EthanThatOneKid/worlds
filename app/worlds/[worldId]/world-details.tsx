@@ -4,15 +4,12 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import type { WorldRecord } from "@fartlabs/worlds";
-import {
-  deleteWorld,
-  updateWorldDescription,
-  updateWorldName,
-} from "./actions";
-import { WorldConnectButton } from "./connect-sdk-dialog";
+import { updateWorldDescription, updateWorldName } from "./actions";
+import { ConnectSdkButton } from "@/components/connect-sdk";
 import { PixelPlanet } from "@/components/pixel-planet/pixel-planet";
 import { PlanetDialog } from "@/components/pixel-planet/planet-dialog";
 import { getSeedFromId } from "@/components/pixel-planet/lib/seed-utils";
+import { DeleteWorldSection } from "@/components/delete-world-section";
 
 export function WorldDetails({
   world,
@@ -37,8 +34,7 @@ export function WorldDetails({
   const [name, setName] = useState(world.name);
   const [description, setDescription] = useState(world.description || "");
   const [isPending, startTransition] = useTransition();
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const [isCopied, setIsCopied] = useState(false);
   const [showPlanetDialog, setShowPlanetDialog] = useQueryState(
     "lounge",
@@ -57,19 +53,6 @@ export function WorldDetails({
       await updateWorldDescription(world.id, description);
       setIsEditingDescription(false);
     });
-  };
-
-  const handleDeleteClick = () => {
-    if (confirmDelete) {
-      setIsDeleting(true);
-      startTransition(async () => {
-        await deleteWorld(world.id);
-        router.push("/dashboard");
-      });
-    } else {
-      setConfirmDelete(true);
-      setTimeout(() => setConfirmDelete(false), 3000);
-    }
   };
 
   const seed = getSeedFromId(world.id);
@@ -104,7 +87,7 @@ export function WorldDetails({
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full text-3xl font-bold rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-3 py-1 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full text-4xl font-bold rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-3 py-1 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     placeholder="Enter world name..."
                     autoFocus
                   />
@@ -155,9 +138,7 @@ export function WorldDetails({
               ) : (
                 <div className="flex items-center gap-3 group">
                   <h1
-                    onClick={() =>
-                      !isPending && !isDeleting && setIsEditingName(true)
-                    }
+                    onClick={() => !isPending && setIsEditingName(true)}
                     className="text-4xl font-bold text-zinc-900 dark:text-white cursor-pointer hover:underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 decoration-2 transition-all truncate"
                     title="Click to edit name"
                   >
@@ -165,7 +146,7 @@ export function WorldDetails({
                   </h1>
                   <button
                     onClick={() => setIsEditingName(true)}
-                    disabled={isPending || isDeleting}
+                    disabled={isPending}
                     className="opacity-0 group-hover:opacity-100 p-1.5 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
                     title="Edit Name"
                   >
@@ -245,39 +226,13 @@ export function WorldDetails({
 
           {/* Actions Row */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <WorldConnectButton
-              worldId={world.id}
+            <ConnectSdkButton
               apiKey={apiKey}
               codeSnippet={codeSnippet}
               maskedCodeSnippet={maskedCodeSnippet}
               codeSnippetHtml={codeSnippetHtml}
               maskedCodeSnippetHtml={maskedCodeSnippetHtml}
             />
-            <button
-              onClick={handleDeleteClick}
-              disabled={isPending || isDeleting}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 text-sm font-medium cursor-pointer border ${
-                confirmDelete
-                  ? "bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/50"
-                  : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:border-red-200 dark:hover:border-red-900/30 hover:text-red-600 dark:hover:text-red-400"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                />
-              </svg>
-              <span>{confirmDelete ? "Confirm Delete?" : "Delete World"}</span>
-            </button>
           </div>
         </div>
       </div>
@@ -291,7 +246,7 @@ export function WorldDetails({
           {!isEditingDescription && (
             <button
               onClick={() => setIsEditingDescription(true)}
-              disabled={isPending || isDeleting}
+              disabled={isPending}
               className="opacity-0 group-hover:opacity-100 p-1 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
               title="Edit Description"
             >
@@ -344,9 +299,7 @@ export function WorldDetails({
           </div>
         ) : (
           <p
-            onClick={() =>
-              !isPending && !isDeleting && setIsEditingDescription(true)
-            }
+            onClick={() => !isPending && setIsEditingDescription(true)}
             className="text-sm text-zinc-600 dark:text-zinc-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             title="Click to edit description"
           >
@@ -377,6 +330,8 @@ export function WorldDetails({
           value={new Date(world.updatedAt).toLocaleString()}
         />
       </div>
+
+      <DeleteWorldSection worldId={world.id} worldName={world.name || ""} />
     </div>
   );
 }
