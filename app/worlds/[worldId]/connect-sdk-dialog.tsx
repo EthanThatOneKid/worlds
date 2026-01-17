@@ -27,7 +27,7 @@ export function WorldConnectButton({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center space-x-2 rounded-md bg-zinc-900 dark:bg-zinc-100 px-4 py-2 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+        className="inline-flex items-center space-x-2 rounded-md bg-zinc-900 dark:bg-zinc-100 px-4 py-2 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +107,7 @@ function ConnectSdkDialog({
           </h2>
           <button
             onClick={onClose}
-            className="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
+            className="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -138,10 +138,9 @@ function ConnectSdkDialog({
               <span className="text-xs italic text-zinc-500">
                 Please reference{" "}
                 <a
-                  href="https://jsr.io/@fartlabs/worlds"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                 >
                   jsr.io/@fartlabs/worlds
                 </a>{" "}
@@ -152,7 +151,7 @@ function ConnectSdkDialog({
             <div className="flex items-center space-x-4 border-b border-zinc-200 dark:border-zinc-700 mb-2">
               <button
                 onClick={() => setInstallTab("npm")}
-                className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
                   installTab === "npm"
                     ? "border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400"
                     : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -162,7 +161,7 @@ function ConnectSdkDialog({
               </button>
               <button
                 onClick={() => setInstallTab("deno")}
-                className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
                   installTab === "deno"
                     ? "border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400"
                     : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -180,7 +179,7 @@ function ConnectSdkDialog({
                 onClick={() =>
                   copyToClipboard(installCommand, setCopiedInstall)
                 }
-                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors"
+                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors cursor-pointer"
                 title="Copy command"
               >
                 {copiedInstall ? (
@@ -224,7 +223,7 @@ function ConnectSdkDialog({
               </h3>
               <button
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
               >
                 {showApiKey ? "Hide API Key" : "Show API Key"}
               </button>
@@ -246,7 +245,7 @@ function ConnectSdkDialog({
                     setCopiedCode,
                   )
                 }
-                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors"
+                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors cursor-pointer"
                 title="Copy code"
               >
                 {copiedCode ? (
@@ -317,7 +316,7 @@ function ConnectSdkDialog({
         <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 border-t border-zinc-200 dark:border-zinc-800">
           <button
             onClick={onClose}
-            className="w-full inline-flex justify-center rounded-md bg-white dark:bg-zinc-700 px-3 py-2 text-sm font-semibold text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset ring-zinc-300 dark:ring-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-600 sm:w-auto sm:ml-auto"
+            className="w-full inline-flex justify-center rounded-md bg-white dark:bg-zinc-700 px-3 py-2 text-sm font-semibold text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset ring-zinc-300 dark:ring-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-600 sm:w-auto sm:ml-auto cursor-pointer"
           >
             Close
           </button>

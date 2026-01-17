@@ -4,6 +4,10 @@ import { revalidatePath } from "next/cache";
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { sdk } from "@/lib/sdk";
 
+export async function signOutAction() {
+  await authkit.signOut();
+}
+
 export async function updateWorldDescription(
   worldId: string,
   description: string,
@@ -14,7 +18,7 @@ export async function updateWorldDescription(
   }
 
   await sdk.worlds.update(worldId, { description }, { accountId: user.id });
-  revalidatePath("/dashboard");
+  revalidatePath("/");
 }
 
 export async function deleteWorld(worldId: string) {
@@ -24,7 +28,7 @@ export async function deleteWorld(worldId: string) {
   }
 
   await sdk.worlds.remove(worldId, { accountId: user.id });
-  revalidatePath("/dashboard");
+  revalidatePath("/");
 }
 
 export async function createWorld() {
@@ -50,7 +54,7 @@ export async function createWorld() {
     // Artificial delay to allow for eventual consistency in DB
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     console.error("Failed to create world:", error);
@@ -60,3 +64,4 @@ export async function createWorld() {
     };
   }
 }
+

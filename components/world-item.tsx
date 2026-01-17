@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import type { WorldRecord } from "@fartlabs/worlds";
-import { deleteWorld, updateWorldDescription } from "./actions";
+import { deleteWorld, updateWorldDescription } from "@/app/actions";
 
 export function WorldItem({
   world,
@@ -72,7 +72,7 @@ export function WorldItem({
             <button
               onClick={() => setIsEditing(!isEditing)}
               disabled={isPending || isDeleting}
-              className="p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
               title="Edit Description"
             >
               <svg
@@ -95,8 +95,8 @@ export function WorldItem({
               disabled={isPending || isDeleting}
               className={`p-2 rounded-full transition-all duration-200 flex items-center ${
                 confirmDelete
-                  ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 w-auto"
-                  : "text-zinc-400 hover:text-red-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 w-auto cursor-pointer"
+                  : "text-zinc-400 hover:text-red-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
               }`}
               title="Delete World"
             >
@@ -151,7 +151,7 @@ export function WorldItem({
                 <button
                   onClick={handleSave}
                   disabled={isPending}
-                  className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+                  className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium cursor-pointer"
                 >
                   Save
                 </button>
@@ -161,7 +161,7 @@ export function WorldItem({
                     setDescription(world.description || "");
                   }}
                   disabled={isPending}
-                  className="text-xs text-zinc-600 dark:text-zinc-400 px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+                  className="text-xs text-zinc-600 dark:text-zinc-400 px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>

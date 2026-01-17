@@ -80,7 +80,7 @@ export function WorldDetails({
                 <button
                   onClick={handleSaveName}
                   disabled={isPending}
-                  className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+                  className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium cursor-pointer"
                 >
                   Save
                 </button>
@@ -90,7 +90,7 @@ export function WorldDetails({
                     setName(world.name);
                   }}
                   disabled={isPending}
-                  className="text-sm text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+                  className="text-sm text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -110,7 +110,7 @@ export function WorldDetails({
               <button
                 onClick={() => setIsEditingName(true)}
                 disabled={isPending || isDeleting}
-                className="opacity-0 group-hover:opacity-100 p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+                className="opacity-0 group-hover:opacity-100 p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
                 title="Edit Name"
               >
                 <svg
@@ -134,7 +134,7 @@ export function WorldDetails({
         <button
           onClick={handleDeleteClick}
           disabled={isPending || isDeleting}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 font-medium ${
+          className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 font-medium cursor-pointer ${
             confirmDelete
               ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 ring-2 ring-red-500"
               : "text-zinc-600 dark:text-zinc-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400"
@@ -193,7 +193,7 @@ export function WorldDetails({
             <button
               onClick={() => setIsEditingDescription(true)}
               disabled={isPending || isDeleting}
-              className="p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 text-zinc-400 hover:text-blue-500 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
               title="Edit Description"
             >
               <svg
@@ -227,7 +227,7 @@ export function WorldDetails({
               <button
                 onClick={handleSaveDescription}
                 disabled={isPending}
-                className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+                className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium cursor-pointer"
               >
                 Save
               </button>
@@ -237,7 +237,7 @@ export function WorldDetails({
                   setDescription(world.description || "");
                 }}
                 disabled={isPending}
-                className="text-sm text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+                className="text-sm text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
