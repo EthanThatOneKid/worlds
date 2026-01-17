@@ -57,7 +57,7 @@ export default async function Home() {
   );
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
-      <PageHeader email={user.email} />
+      <PageHeader accountId={user.id} />
 
       <main className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-8 flex items-center justify-between">

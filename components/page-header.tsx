@@ -5,9 +5,11 @@ import { signOutAction } from "@/app/actions";
 
 export function PageHeader({
   email,
+  accountId,
   children,
 }: {
   email?: string | null;
+  accountId?: string | null;
   children?: ReactNode;
 }) {
   return (
@@ -22,7 +24,11 @@ export function PageHeader({
             Worlds Console
           </Link>
         </div>
-        <UserMenu email={email} onSignOut={signOutAction} />
+        <UserMenu
+          email={email}
+          accountId={accountId}
+          onSignOut={signOutAction}
+        />
       </div>
     </nav>
   );

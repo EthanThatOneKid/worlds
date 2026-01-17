@@ -148,7 +148,7 @@ console.log("Connected to world:", worldRecord.name);`;
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
-      <PageHeader email={user.email}>
+      <PageHeader accountId={user.id}>
         <Link
           href="/"
           className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer"
