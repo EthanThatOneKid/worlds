@@ -22,6 +22,7 @@ const fragmentShaderPlanet = (): string => {
         uniform float rotation;
         uniform vec2 light_origin;
         uniform float time_speed;
+        uniform float manual_offset;
         float dither_size = 2.0;
         float light_border_1 = 0.4;
         float light_border_2 = 0.6;
@@ -91,7 +92,7 @@ const fragmentShaderPlanet = (): string => {
             // get a noise value with light distance added
             // this creates a moving dynamic shape
             float fbm1 = fbm(uv);
-            d_light += fbm(uv*size+fbm1+vec2(time*0.1+time_speed, 0.0))*lightIntensity;
+            d_light += fbm(uv*size+fbm1+vec2(time*0.1+time_speed+manual_offset, 0.0))*lightIntensity;
             
             // size of edge in which colors should be dithered
             float dither_border = (1.0/pixels)*dither_size;
@@ -144,6 +145,7 @@ export function createBasePlanet(
       rotation: { value: rotation },
       seed: { value: flip() ? Math.random() * 10 : Math.random() * 100 },
       time: { value: 0.0 },
+      manual_offset: { value: 0.0 },
     },
     vertexShader: vertexShader(),
     fragmentShader: fragmentShaderPlanet(),

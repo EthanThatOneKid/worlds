@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQueryState, parseAsBoolean } from "nuqs";
+import { DialogCloseButton } from "@/components/dialog-close-button";
 
 export function WorldConnectButton({
   worldId,
@@ -103,25 +104,7 @@ function ConnectSdkDialog({
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
             Connect via SDK
           </h2>
-          <button
-            onClick={onClose}
-            className="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          <DialogCloseButton onClick={onClose} variant="inline" />
         </div>
 
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">

@@ -52,6 +52,7 @@ export function PlanetDialog({
             type={type}
             seed={seed}
             stars={true}
+            advanced={{ orbitControls: true }}
             className="flex-1 w-full h-full"
             style={{
               position: "absolute",

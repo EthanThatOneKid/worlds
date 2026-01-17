@@ -22,6 +22,7 @@ const fragmentShaderPlanet = (): string => {
         uniform float rotation;
         uniform vec2 light_origin;
         uniform float time_speed;
+        uniform float manual_offset;
         uniform float land_cutoff;
         float dither_size = 2.0;
         float light_border_1 = 0.4;
@@ -95,7 +96,7 @@ const fragmentShaderPlanet = (): string => {
             uv = spherify(uv);
             
             // some scrolling noise for landmasses
-            vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed,0.0);
+            vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed+manual_offset,0.0);
             
             // use multiple fbm's at different places so we can determine what color land gets
             float fbm1 = fbm(base_fbm_uv);
@@ -168,6 +169,7 @@ export function createlandMassLayer(
       lightIntensity: { value: lightIntensity },
       light_origin: { value: lightPos },
       time_speed: { value: rotationSpeed },
+      manual_offset: { value: 0.0 },
       rotation: { value: rotation },
       seed: { value: flip() ? Math.random() * 10 : Math.random() * 100 },
       time: { value: 0.0 },

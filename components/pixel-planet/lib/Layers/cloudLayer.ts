@@ -22,6 +22,7 @@ const fragmentShaderClouds = (): string => {
         uniform float cloud_cover;
         uniform vec2 light_origin;
         uniform float time_speed;
+        uniform float manual_offset;
         uniform float stretch;
         float cloud_curve = 1.3;
         float light_border_1 = 0.4;
@@ -84,9 +85,9 @@ const fragmentShaderClouds = (): string => {
             
             // more iterations for more turbulence
             for (int i = 0; i < 9; i++) {
-                c_noise += circleNoise((uv * size * 0.3) + (float(i+1)+10.) + (vec2(time*time_speed, 0.0)));
+                c_noise += circleNoise((uv * size * 0.3) + (float(i+1)+10.) + (vec2(time*time_speed+manual_offset, 0.0)));
             }
-            float fbm = fbm(uv*size+c_noise + vec2(time*time_speed, 0.0));
+            float fbm = fbm(uv*size+c_noise + vec2(time*time_speed+manual_offset, 0.0));
             
             return fbm;//step(a_cutoff, fbm);
         }
@@ -174,6 +175,7 @@ export function createCloudLayer(
       pixels: { value: 100.0 },
       seed: { value: flip() ? Math.random() * 10 : Math.random() * 100 },
       time_speed: { value: rotationSpeed },
+      manual_offset: { value: 0.0 },
       base_color: { value: colorPalette[0] },
       outline_color: { value: colorPalette[1] },
       shadow_base_color: { value: colorPalette[2] },

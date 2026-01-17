@@ -35,6 +35,7 @@ export interface PlanetOptions {
   pixelSize?: number;
   waterLevel?: number; // for lakes/rivers
   cloudCover?: number;
+  orbitControls?: boolean; // Enable drag-to-rotate interaction
   colors?: {
     base?: [number, number, number, number][];
     craters?: [number, number, number, number][];

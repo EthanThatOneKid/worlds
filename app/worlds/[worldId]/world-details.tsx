@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import type { WorldRecord } from "@fartlabs/worlds";
 import {
   deleteWorld,
@@ -39,7 +40,10 @@ export function WorldDetails({
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const [showPlanetDialog, setShowPlanetDialog] = useState(false);
+  const [showPlanetDialog, setShowPlanetDialog] = useQueryState(
+    "lounge",
+    parseAsBoolean.withDefault(false),
+  );
 
   const handleSaveName = () => {
     startTransition(async () => {
@@ -74,7 +78,7 @@ export function WorldDetails({
     <div className="space-y-8">
       <PlanetDialog
         isOpen={showPlanetDialog}
-        onClose={() => setShowPlanetDialog(false)}
+        onClose={() => setShowPlanetDialog(null)}
         type="earth"
         seed={seed}
       />
