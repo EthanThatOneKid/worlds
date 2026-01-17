@@ -310,15 +310,6 @@ function ConnectSdkDialog({
             </div>
           </div>
         </div>
-
-        <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 border-t border-zinc-200 dark:border-zinc-800">
-          <button
-            onClick={onClose}
-            className="w-full inline-flex justify-center rounded-md bg-white dark:bg-zinc-700 px-3 py-2 text-sm font-semibold text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset ring-zinc-300 dark:ring-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-600 sm:w-auto sm:ml-auto cursor-pointer"
-          >
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );

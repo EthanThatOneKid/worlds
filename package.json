@@ -14,6 +14,9 @@
   },
   "dependencies": {
     "@fartlabs/worlds": "npm:@jsr/fartlabs__worlds@^0.0.22",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@types/three": "^0.182.0",
     "@workos-inc/authkit-nextjs": "^2.13.0",
     "@workos-inc/node": "^8.0.0",
     "next": "16.1.1",
@@ -21,6 +24,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "shiki": "^3.21.0",
+    "three": "^0.182.0",
     "workos": "^0.0.24"
   },
   "devDependencies": {
