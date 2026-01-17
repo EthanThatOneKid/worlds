@@ -1,5 +1,6 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { DeleteAccountSection } from "@/components/delete-account-section";
 import { Metadata } from "next";
@@ -17,10 +18,30 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <>
       <PageHeader accountId={user.id} />
 
-      <main className="mx-auto max-w-2xl px-6 py-12">
+      <div className="mx-auto max-w-2xl px-6 py-12">
+        <Link
+          href="/"
+          className="inline-flex items-center space-x-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors mb-6 cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+          <span>My Worlds</span>
+        </Link>
         <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-8">
           Account
         </h1>
@@ -74,7 +95,7 @@ export default async function AccountPage() {
           </dl>
         </div>
         <DeleteAccountSection userEmail={user.email} />
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

@@ -15,6 +15,7 @@ import { getSeedFromId } from "@/components/pixel-planet/lib/seed-utils";
 
 export function WorldDetails({
   world,
+  userId, // eslint-disable-line @typescript-eslint/no-unused-vars
   apiKey,
   codeSnippet,
   maskedCodeSnippet,
@@ -22,6 +23,7 @@ export function WorldDetails({
   maskedCodeSnippetHtml,
 }: {
   world: WorldRecord;
+  userId: string;
   apiKey: string;
   codeSnippet: string;
   maskedCodeSnippet: string;
@@ -361,20 +363,7 @@ export function WorldDetails({
             </span>
           }
         />
-        <StatCard
-          label="Visibility"
-          value={
-            <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset ${
-                world.isPublic
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 ring-blue-600/20"
-                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 ring-zinc-600/20"
-              }`}
-            >
-              {world.isPublic ? "Public" : "Private"}
-            </span>
-          }
-        />
+        <StatCard label="Account ID" value={world.accountId} mono />
         <StatCard
           label="Created"
           value={new Date(world.createdAt).toLocaleString()}
@@ -383,7 +372,6 @@ export function WorldDetails({
           label="Last Updated"
           value={new Date(world.updatedAt).toLocaleString()}
         />
-        <StatCard label="Account ID" value={world.accountId} mono />
       </div>
     </div>
   );

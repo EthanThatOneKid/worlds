@@ -56,10 +56,10 @@ export default async function Home() {
     (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
   );
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <>
       <PageHeader accountId={user.id} />
 
-      <main className="mx-auto max-w-5xl px-6 py-12">
+      <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
             My Worlds
@@ -83,8 +83,8 @@ export default async function Home() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
 

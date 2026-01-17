@@ -3,7 +3,7 @@ import { codeToHtml } from "shiki";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { WorldDetails } from "./world-details";
+import { WorldTabs } from "./world-tabs";
 import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
 
@@ -147,7 +147,7 @@ console.log("Connected to world:", worldRecord.name);`;
   });
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <>
       <PageHeader accountId={user.id}>
         <Link
           href="/"
@@ -171,17 +171,18 @@ console.log("Connected to world:", worldRecord.name);`;
         </Link>
       </PageHeader>
 
-      <main className="mx-auto max-w-5xl px-6 py-12">
-        <WorldDetails
+      <div className="w-full mx-auto max-w-5xl px-6 pb-12">
+        <WorldTabs
           world={world}
+          userId={user.id}
           apiKey={account.apiKey}
           codeSnippet={codeSnippet}
           maskedCodeSnippet={maskedCodeSnippet}
           codeSnippetHtml={codeSnippetHtml}
           maskedCodeSnippetHtml={maskedCodeSnippetHtml}
         />
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
 
