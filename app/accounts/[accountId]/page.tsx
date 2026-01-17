@@ -1,6 +1,7 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/page-header";
+import { DeleteAccountSection } from "@/components/delete-account-section";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -72,6 +73,7 @@ export default async function AccountPage() {
             )}
           </dl>
         </div>
+        <DeleteAccountSection userEmail={user.email} />
       </main>
     </div>
   );

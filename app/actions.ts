@@ -64,3 +64,16 @@ export async function createWorld() {
     };
   }
 }
+
+export async function deleteAccount() {
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Remove the account from the database
+  await sdk.accounts.delete(user.id);
+
+  // Sign out the user
+  await authkit.signOut();
+}
