@@ -9,7 +9,7 @@ export function PageFooter() {
         </p>
         <div className="flex items-center space-x-6">
           <Link
-            href="https://github.com/fartlabs/worlds"
+            href="https://github.com/EthanThatOneKid/worlds-api"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
@@ -17,7 +17,7 @@ export function PageFooter() {
             GitHub
           </Link>
           <Link
-            href="https://github.com/fartlabs/worlds"
+            href="https://wazoo.mintlify.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
