@@ -62,8 +62,6 @@ export function WorldConnectButton({
 }
 
 function ConnectSdkDialog({
-  worldId,
-  apiKey,
   codeSnippet,
   maskedCodeSnippet,
   codeSnippetHtml,
