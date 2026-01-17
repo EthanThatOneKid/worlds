@@ -5,5 +5,13 @@ export function getSeedFromId(id: string): number {
     hash = (hash << 5) - hash + char;
     hash = hash & hash;
   }
-  return (Math.abs(hash) % 100) + 1; // Ensure non-zero seed within safe range
+
+  // Generate a 5-digit seed (range: 10000 to 99999)
+  // 5 digits provides 100k unique variations while staying within
+  // GLSL float precision limits (32-bit floats have ~7 decimal digits of precision)
+  const min5Digit = 10000;
+  const max5Digit = 99999;
+  const range = max5Digit - min5Digit + 1;
+
+  return min5Digit + (Math.abs(hash) % range);
 }
