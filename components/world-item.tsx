@@ -180,7 +180,6 @@ export function WorldItem({
         </div>
 
         <div className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 space-y-1">
-          <p>{(world.tripleCount || 0).toLocaleString()} triples</p>
           <p>Updated {new Date(world.updatedAt).toLocaleDateString()}</p>
         </div>
         <div className="text-sm text-zinc-500 dark:text-zinc-400">

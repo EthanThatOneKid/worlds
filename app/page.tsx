@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Your Worlds",
+  title: "My Worlds",
 };
 
 export default async function Home() {
