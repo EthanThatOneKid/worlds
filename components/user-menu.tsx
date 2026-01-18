@@ -32,7 +32,7 @@ export function UserMenu({
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all focus:outline-none cursor-pointer"
+        className="p-2 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-all focus:outline-none cursor-pointer"
         title={email || "User menu"}
       >
         <svg
@@ -52,12 +52,12 @@ export function UserMenu({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 border border-zinc-200 dark:border-zinc-700">
+        <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-stone-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 border border-stone-200 dark:border-stone-700">
           <div className="py-1">
             {accountId && (
               <Link
                 href={`/accounts/${accountId}`}
-                className="block w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer"
+                className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
                 onClick={() => setIsOpen(false)}
               >
                 Account
@@ -68,7 +68,7 @@ export function UserMenu({
                 setIsOpen(false);
                 await onSignOut();
               }}
-              className="block w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer"
+              className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
             >
               Sign out
             </button>

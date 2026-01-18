@@ -39,7 +39,7 @@ export function WorldUsage({ worldId, userId }: WorldUsageProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-zinc-500 dark:text-zinc-400">
+        <div className="text-stone-500 dark:text-stone-400">
           Loading usage statistics...
         </div>
       </div>
@@ -57,7 +57,7 @@ export function WorldUsage({ worldId, userId }: WorldUsageProps) {
   if (usage.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-zinc-500 dark:text-zinc-400">
+        <p className="text-stone-500 dark:text-stone-400">
           No usage data available yet.
         </p>
       </div>
@@ -72,48 +72,48 @@ export function WorldUsage({ worldId, userId }: WorldUsageProps) {
   return (
     <div className="w-full">
       <div className="space-y-6">
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-6">
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg p-6">
           <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-zinc-900 dark:text-white">
+            <span className="text-4xl font-bold text-stone-900 dark:text-white">
               {totalRequests.toLocaleString()}
             </span>
-            <span className="text-sm text-zinc-500 dark:text-zinc-400">
+            <span className="text-sm text-stone-500 dark:text-stone-400">
               total requests
             </span>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-          <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
+          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+            <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
               Usage by Time Period
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-              <thead className="bg-zinc-50 dark:bg-zinc-800/50">
+            <table className="min-w-full divide-y divide-stone-200 dark:divide-stone-800">
+              <thead className="bg-stone-50 dark:bg-stone-800/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider">
                     Period
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider">
                     Requests
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider">
                     Account ID
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-zinc-900 divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className="bg-white dark:bg-stone-900 divide-y divide-stone-200 dark:divide-stone-800">
                 {usage.map((bucket) => (
                   <tr key={bucket.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-900 dark:text-zinc-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-900 dark:text-stone-100">
                       {new Date(bucket.bucketStartTs).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-900 dark:text-stone-100">
                       {bucket.requestCount.toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-sm font-mono text-zinc-600 dark:text-zinc-400 max-w-xs truncate">
+                    <td className="px-6 py-4 text-sm font-mono text-stone-600 dark:text-stone-400 max-w-xs truncate">
                       {bucket.accountId}
                     </td>
                   </tr>

@@ -32,12 +32,12 @@ export function ApiKeySection({ apiKey }: { apiKey: string }) {
   return (
     <div
       id="api-keys"
-      className="mt-8 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm"
+      className="mt-8 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 p-6 shadow-sm"
     >
-      <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+      <h3 className="text-lg font-medium text-stone-900 dark:text-white">
         API Key
       </h3>
-      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+      <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
         Your API key carries full access to your account. Keep it secret and
         never share it in public repositories or client-side code.
       </p>
@@ -48,12 +48,12 @@ export function ApiKeySection({ apiKey }: { apiKey: string }) {
             type={showKey ? "text" : "password"}
             value={apiKey}
             readOnly
-            className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-3 py-2 text-sm font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none"
+            className="w-full rounded-md border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 px-3 py-2 text-sm font-code text-stone-900 dark:text-stone-100 focus:outline-none"
           />
         </div>
         <button
           onClick={() => setShowKey(!showKey)}
-          className="p-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
+          className="p-2 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-md transition-colors cursor-pointer"
           title={showKey ? "Hide key" : "Show key"}
         >
           {showKey ? (
@@ -98,7 +98,7 @@ export function ApiKeySection({ apiKey }: { apiKey: string }) {
           className={`p-2 rounded-md transition-colors cursor-pointer ${
             isCopied
               ? "text-green-600 dark:text-green-500 bg-green-50 dark:bg-green-900/10"
-              : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800"
           }`}
           title="Copy to clipboard"
         >
@@ -136,13 +136,13 @@ export function ApiKeySection({ apiKey }: { apiKey: string }) {
         </button>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+      <div className="mt-6 pt-6 border-t border-stone-200 dark:border-stone-800">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="text-sm font-medium text-red-600 dark:text-red-400">
               Rotate API Key
             </h4>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
               Immediately invalidate the current key and generate a new one.
             </p>
           </div>

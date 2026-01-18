@@ -151,7 +151,7 @@ console.log("Connected to world:", worldRecord.name);`;
       <PageHeader accountId={user.id}>
         <Link
           href="/"
-          className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer"
+          className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer"
           title="Back to Dashboard"
         >
           <svg
@@ -189,20 +189,20 @@ console.log("Connected to world:", worldRecord.name);`;
 function ErrorState({
   title,
   message,
-  titleClassName = "text-zinc-900 dark:text-zinc-50",
+  titleClassName = "text-stone-900 dark:text-stone-50",
 }: {
   title: string;
   message: string;
   titleClassName?: string;
 }) {
   return (
-    <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <div className="flex min-h-screen items-center justify-center p-8 bg-stone-50 dark:bg-stone-950 font-sans">
       <div className="text-center">
         <h1 className={`text-2xl font-bold mb-4 ${titleClassName}`}>{title}</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">{message}</p>
+        <p className="text-stone-600 dark:text-stone-400">{message}</p>
         <Link
           href="/"
-          className="mt-6 inline-block text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+          className="mt-6 inline-block text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
         >
           Return to Dashboard
         </Link>

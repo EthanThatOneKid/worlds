@@ -13,7 +13,10 @@ const tabs = [
   "playground",
   "conversations",
   "webhooks",
+  "settings",
 ] as const;
+
+import { WorldSettings } from "./world-settings";
 
 interface WorldTabsProps {
   world: WorldRecord;
@@ -42,15 +45,15 @@ export function WorldTabs({
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="md:border-b border-zinc-200 dark:border-zinc-800">
+      <div className="md:border-b border-stone-200 dark:border-stone-800">
         {/* Desktop Tabs */}
         <nav className="-mb-px hidden md:flex space-x-8" aria-label="Tabs">
           <button
             onClick={() => setActiveTab("overview")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "overview"
-                ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
             }`}
           >
             Overview
@@ -59,8 +62,8 @@ export function WorldTabs({
             onClick={() => setActiveTab("usage")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "usage"
-                ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
             }`}
           >
             Usage
@@ -69,8 +72,8 @@ export function WorldTabs({
             onClick={() => setActiveTab("playground")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "playground"
-                ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
             }`}
           >
             Playground
@@ -79,8 +82,8 @@ export function WorldTabs({
             onClick={() => setActiveTab("conversations")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "conversations"
-                ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
             }`}
           >
             Conversations
@@ -89,11 +92,21 @@ export function WorldTabs({
             onClick={() => setActiveTab("webhooks")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "webhooks"
-                ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
             }`}
           >
             Webhooks
+          </button>
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
+              activeTab === "settings"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
+            }`}
+          >
+            Settings
           </button>
         </nav>
 
@@ -126,15 +139,15 @@ export function WorldTabs({
           <WorldPlayground worldId={world.id} userId={userId} />
         )}
         {activeTab === "conversations" && (
-          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center bg-white dark:bg-zinc-900 shadow-sm animate-in fade-in duration-300">
-            <div className="mx-auto w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+          <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
+            <div className="mx-auto w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                className="w-6 h-6 text-amber-600 dark:text-amber-400"
               >
                 <path
                   strokeLinecap="round"
@@ -143,10 +156,10 @@ export function WorldTabs({
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+            <h3 className="text-lg font-medium text-stone-900 dark:text-white">
               Conversations - Coming soon
             </h3>
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
               A chat interface for your worlds is currently under development.
             </p>
             <div className="mt-6 flex items-center justify-center gap-4">
@@ -154,13 +167,13 @@ export function WorldTabs({
                 href="https://github.com/EthanThatOneKid/worlds/issues/new"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer shadow-sm"
+                className="inline-flex items-center px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
               >
                 Provide Feedback
               </a>
               <a
                 href="mailto:ethan@wazoo.tech"
-                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+                className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors"
               >
                 Reach out to founder
               </a>
@@ -168,15 +181,15 @@ export function WorldTabs({
           </div>
         )}
         {activeTab === "webhooks" && (
-          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center bg-white dark:bg-zinc-900 shadow-sm animate-in fade-in duration-300">
-            <div className="mx-auto w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+          <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
+            <div className="mx-auto w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                className="w-6 h-6 text-amber-600 dark:text-amber-400"
               >
                 <path
                   strokeLinecap="round"
@@ -185,10 +198,10 @@ export function WorldTabs({
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+            <h3 className="text-lg font-medium text-stone-900 dark:text-white">
               Webhooks - Coming soon
             </h3>
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
               Connect third-party webhooks to your world.
             </p>
             <div className="mt-6 flex items-center justify-center gap-4">
@@ -196,19 +209,20 @@ export function WorldTabs({
                 href="https://github.com/EthanThatOneKid/worlds/issues/new"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer shadow-sm"
+                className="inline-flex items-center px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
               >
                 Provide Feedback
               </a>
               <a
                 href="mailto:ethan@wazoo.tech"
-                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+                className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors"
               >
                 Reach out to founder
               </a>
             </div>
           </div>
         )}
+        {activeTab === "settings" && <WorldSettings world={world} />}
       </div>
     </div>
   );
@@ -227,7 +241,7 @@ function MobileTabSelect({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
+        className="w-full flex items-center justify-between p-3 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-900 dark:text-white hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors"
       >
         <span className="capitalize font-medium block">{activeTab}</span>
         <svg
@@ -236,7 +250,7 @@ function MobileTabSelect({
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className={`w-5 h-5 text-zinc-500 transition-transform duration-200 ${
+          className={`w-5 h-5 text-stone-500 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         >
@@ -249,15 +263,15 @@ function MobileTabSelect({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl animate-in fade-in zoom-in-95 duration-100 overflow-hidden">
+        <div className="absolute z-10 w-full mt-2 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-xl animate-in fade-in zoom-in-95 duration-100 overflow-hidden">
           <div className="p-1 space-y-0.5">
             {tabs.map((tab) => (
               <label
                 key={tab}
                 className={`flex items-center w-full p-2.5 rounded-md cursor-pointer transition-colors ${
                   activeTab === tab
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300"
+                    : "text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100"
                 }`}
               >
                 <input
@@ -281,7 +295,7 @@ function MobileTabSelect({
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                    className="w-4 h-4 text-amber-600 dark:text-amber-400"
                   >
                     <path
                       strokeLinecap="round"

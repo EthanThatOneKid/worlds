@@ -82,7 +82,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
       <div className="space-y-6">
         {/* Query Type Selector */}
         <div className="flex items-center gap-4">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-stone-700 dark:text-stone-300">
             Query Type:
           </label>
           <div className="flex gap-2">
@@ -90,8 +90,8 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
               onClick={() => setQueryType("query")}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                 queryType === "query"
-                  ? "bg-blue-600 text-white"
-                  : "bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-600"
+                  ? "bg-amber-600 text-white"
+                  : "bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600"
               }`}
             >
               SELECT Query
@@ -100,8 +100,8 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
               onClick={() => setQueryType("update")}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                 queryType === "update"
-                  ? "bg-blue-600 text-white"
-                  : "bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-600"
+                  ? "bg-amber-600 text-white"
+                  : "bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600"
               }`}
             >
               INSERT/DELETE Update
@@ -110,8 +110,8 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         </div>
 
         {/* Sample Queries */}
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-white mb-3">
+        <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">
             Sample Queries
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -119,7 +119,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
               <button
                 key={name}
                 onClick={() => setQuery(sampleQuery)}
-                className="px-3 py-1.5 text-sm bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                className="px-3 py-1.5 text-sm bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-600 rounded-md hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors cursor-pointer"
               >
                 {name}
               </button>
@@ -128,15 +128,15 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         </div>
 
         {/* Query Input */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-          <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
+          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
               SPARQL {queryType === "query" ? "Query" : "Update"}
             </h3>
             <button
               onClick={executeQuery}
               disabled={loading || !query.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer font-medium"
+              className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer font-medium"
             >
               {loading ? "Executing..." : "Execute"}
             </button>
@@ -145,7 +145,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={`Enter your SPARQL ${queryType === "query" ? "query" : "update"} here...`}
-            className="w-full p-4 font-mono text-sm bg-zinc-950 text-zinc-100 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[500px] resize-vertical"
+            className="w-full p-4 font-mono text-sm bg-stone-950 text-stone-100 border-0 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-[500px] resize-vertical"
             spellCheck={false}
           />
         </div>
@@ -164,14 +164,14 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
 
         {/* Results Display */}
         {results && (
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-            <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
+            <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
                 Results
               </h3>
             </div>
-            <div className="p-4 bg-zinc-950 overflow-auto">
-              <pre className="text-sm text-zinc-100 font-mono">
+            <div className="p-4 bg-stone-950 overflow-auto">
+              <pre className="text-sm text-stone-100 font-mono">
                 {JSON.stringify(results, null, 2)}
               </pre>
             </div>

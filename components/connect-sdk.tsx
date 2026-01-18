@@ -26,7 +26,7 @@ export function ConnectSdkButton({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex w-full sm:w-auto justify-center items-center space-x-2 rounded-md bg-zinc-900 dark:bg-zinc-100 px-4 py-2 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
+        className="inline-flex w-full sm:w-auto justify-center items-center space-x-2 rounded-md border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer shadow-sm"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -90,14 +90,14 @@ function ConnectSdkDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm animate-in fade-in duration-200 text-stone-900 dark:text-stone-100">
       <div
-        className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-lg shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 border border-zinc-200 dark:border-zinc-800"
+        className="w-full max-w-2xl bg-white dark:bg-stone-900 rounded-lg shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 border border-stone-200 dark:border-stone-800"
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-zinc-800">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
+        <div className="flex items-center justify-between p-6 border-b border-stone-200 dark:border-stone-800">
+          <h2 className="text-xl font-bold text-stone-900 dark:text-white">
             Connect via SDK
           </h2>
           <DialogCloseButton onClick={onClose} variant="inline" />
@@ -106,18 +106,18 @@ function ConnectSdkDialog({
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           {/* Installation */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
               1. Install the SDK
             </h3>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="text-sm text-stone-600 dark:text-stone-400">
               Run this command in your project terminal.
               <br />
-              <span className="text-xs italic text-zinc-500">
+              <span className="text-xs italic text-stone-500">
                 Please reference{" "}
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                  className="text-primary dark:text-primary-light hover:underline cursor-pointer"
                   href="https://jsr.io/@fartlabs/worlds"
                 >
                   jsr.io/@fartlabs/worlds
@@ -126,13 +126,13 @@ function ConnectSdkDialog({
               </span>
             </p>
 
-            <div className="flex items-center space-x-4 border-b border-zinc-200 dark:border-zinc-700 mb-2">
+            <div className="flex items-center space-x-4 border-b border-stone-200 dark:border-stone-700 mb-2">
               <button
                 onClick={() => setInstallTab("npm")}
                 className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
                   installTab === "npm"
-                    ? "border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    ? "border-primary text-primary dark:text-primary-light dark:border-primary-light"
+                    : "border-transparent text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200"
                 }`}
               >
                 NPM
@@ -141,8 +141,8 @@ function ConnectSdkDialog({
                 onClick={() => setInstallTab("deno")}
                 className={`py-2 px-1 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
                   installTab === "deno"
-                    ? "border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    ? "border-primary text-primary dark:text-primary-light dark:border-primary-light"
+                    : "border-transparent text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200"
                 }`}
               >
                 Deno
@@ -150,14 +150,14 @@ function ConnectSdkDialog({
             </div>
 
             <div className="relative group">
-              <pre className="bg-zinc-950 text-zinc-100 p-4 rounded-md font-mono text-sm overflow-x-auto border border-zinc-800">
+              <pre className="bg-stone-950 text-stone-100 p-4 rounded-md font-mono text-sm overflow-x-auto border border-stone-800">
                 {installCommand}
               </pre>
               <button
                 onClick={() =>
                   copyToClipboard(installCommand, setCopiedInstall)
                 }
-                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors cursor-pointer"
+                className="absolute right-2 top-2 p-2 bg-stone-800 text-stone-400 hover:text-white rounded transition-colors cursor-pointer"
                 title="Copy command"
               >
                 {copiedInstall ? (
@@ -196,22 +196,22 @@ function ConnectSdkDialog({
           {/* Code Snippet */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">
+              <h3 className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
                 2. Use the SDK
               </h3>
               <button
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                className="text-xs text-primary dark:text-primary-light hover:underline cursor-pointer"
               >
                 {showApiKey ? "Hide API Key" : "Show API Key"}
               </button>
             </div>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="text-sm text-stone-600 dark:text-stone-400">
               Initialize the client with your API key to connect.
             </p>
             <div className="relative group">
               <div
-                className="bg-[#24292e] text-zinc-100 p-4 rounded-md font-mono text-sm overflow-x-auto border border-zinc-800"
+                className="bg-[#24292e] text-stone-100 p-4 rounded-md font-mono text-sm overflow-x-auto border border-stone-800"
                 dangerouslySetInnerHTML={{
                   __html: showApiKey ? codeSnippetHtml : maskedCodeSnippetHtml,
                 }}
@@ -223,7 +223,7 @@ function ConnectSdkDialog({
                     setCopiedCode,
                   )
                 }
-                className="absolute right-2 top-2 p-2 bg-zinc-800 text-zinc-400 hover:text-white rounded transition-colors cursor-pointer"
+                className="absolute right-2 top-2 p-2 bg-stone-800 text-stone-400 hover:text-white rounded transition-colors cursor-pointer"
                 title="Copy code"
               >
                 {copiedCode ? (
@@ -262,7 +262,7 @@ function ConnectSdkDialog({
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg
-                    className="h-5 w-5 text-amber-400"
+                    className="h-5 w-5 text-amber-500"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"

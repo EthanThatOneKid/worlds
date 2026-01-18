@@ -33,7 +33,7 @@ export function DeleteAccountSection({
         <div className="mt-4">
           <button
             onClick={() => setIsOpen(true)}
-            className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:ring-offset-zinc-900 cursor-pointer"
+            className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:ring-offset-stone-900 cursor-pointer"
           >
             Delete Account
           </button>
@@ -57,14 +57,14 @@ export function DeleteAccountSection({
           value={confirmEmail}
           onChange={(e) => setConfirmEmail(e.target.value)}
           placeholder={userEmail || ""}
-          className="block w-full rounded-md border-red-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white px-3 py-2"
+          className="block w-full rounded-md border-red-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-white px-3 py-2"
           autoFocus
         />
         <div className="flex space-x-3">
           <button
             onClick={handleDelete}
             disabled={confirmEmail !== userEmail || isPending}
-            className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:ring-offset-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:ring-offset-stone-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isPending ? "Deleting..." : "I understand, delete my account"}
           </button>
@@ -74,7 +74,7 @@ export function DeleteAccountSection({
               setConfirmEmail("");
             }}
             disabled={isPending}
-            className="rounded-md bg-white dark:bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:ring-offset-zinc-900 cursor-pointer"
+            className="rounded-md bg-white dark:bg-stone-800 px-4 py-2 text-sm font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:ring-offset-stone-900 cursor-pointer"
           >
             Cancel
           </button>

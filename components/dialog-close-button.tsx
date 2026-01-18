@@ -13,9 +13,9 @@ export function DialogCloseButton({
     "p-2 text-white rounded-full backdrop-blur-md transition-all duration-200 border hover:scale-110 active:scale-95 group";
 
   const variantStyles = {
-    floating: "bg-black/50 hover:bg-zinc-800 border-white/10",
+    floating: "bg-black/50 hover:bg-stone-800 border-white/10",
     inline:
-      "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200",
+      "bg-transparent hover:bg-stone-100 dark:hover:bg-stone-800 border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200",
   };
 
   return (

@@ -42,7 +42,7 @@ export function PlanetDialog({
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-2xl bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="absolute top-4 right-4 z-10">
           <DialogCloseButton onClick={onClose} variant="floating" />
         </div>

@@ -3,7 +3,7 @@ import * as authkit from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
 
 import { sdk } from "@/lib/sdk";
-import { WorldItem } from "@/components/world-item";
+import { WorldRow } from "@/components/world-row";
 import { CreateWorldButton } from "@/components/create-world-button";
 import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
@@ -87,12 +87,15 @@ console.log("My worlds:", worlds.length);`;
     <>
       <PageHeader accountId={user.id} />
 
-      <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
             My Worlds
+            <span className="inline-flex items-center rounded-full bg-stone-100 dark:bg-stone-800 px-2.5 py-0.5 text-xs font-medium text-stone-800 dark:text-stone-100">
+              {worlds.length}
+            </span>
           </h1>
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
             <ConnectSdkButton
               apiKey={account.apiKey}
               codeSnippet={codeSnippet}
@@ -105,22 +108,60 @@ console.log("My worlds:", worlds.length);`;
         </div>
 
         {worlds.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center">
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+          <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-stone-50/50 dark:bg-stone-900/50">
+            <h3 className="text-sm font-medium text-stone-900 dark:text-white">
               No worlds yet
             </h3>
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-              You haven&apos;t created any worlds yet.
+            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+              Get started by creating your first world.
             </p>
+            <div className="mt-6">
+              <CreateWorldButton />
+            </div>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {worlds.map((world) => (
-              <WorldItem key={world.id} world={world} />
-            ))}
+          <div className="overflow-hidden rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm">
+            <table className="min-w-full divide-y divide-stone-200 dark:divide-stone-800">
+              <thead className="bg-stone-50 dark:bg-stone-950/50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="py-3 pl-4 pr-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider w-[48px]"
+                  >
+                    <span className="sr-only">Planet</span>
+                  </th>
+                  <th
+                    scope="col"
+                    className="py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                  >
+                    World Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                  >
+                    ID
+                  </th>
+                  <th
+                    scope="col"
+                    className="py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                  >
+                    Updated
+                  </th>
+                  <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-200 dark:divide-stone-800 bg-white dark:bg-stone-900">
+                {worlds.map((world) => (
+                  <WorldRow key={world.id} world={world} />
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
-      </div>
+      </main>
     </>
   );
 }
@@ -128,17 +169,17 @@ console.log("My worlds:", worlds.length);`;
 function ErrorState({
   title,
   message,
-  titleClassName = "text-zinc-900 dark:text-zinc-50",
+  titleClassName = "text-stone-900 dark:text-stone-50",
 }: {
   title: string;
   message: string;
   titleClassName?: string;
 }) {
   return (
-    <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <div className="flex min-h-screen items-center justify-center p-8 bg-stone-50 dark:bg-stone-950 font-sans">
       <div className="text-center">
-        <h1 className={`text-2xl font-bold mb-4 ${titleClassName}`}>{title}</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">{message}</p>
+        <h1 className={`text-xl font-bold mb-2 ${titleClassName}`}>{title}</h1>
+        <p className="text-sm text-stone-600 dark:text-stone-400">{message}</p>
       </div>
     </div>
   );

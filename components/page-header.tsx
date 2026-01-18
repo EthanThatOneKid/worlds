@@ -5,28 +5,27 @@ import { UserMenu } from "./user-menu";
 import { signOutAction } from "@/app/actions";
 
 export function PageHeader({
-  email,
   accountId,
   children,
 }: {
-  email?: string | null;
   accountId?: string | null;
   children?: ReactNode;
 }) {
   return (
-    <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-6 py-4">
-      <div className="mx-auto max-w-5xl flex items-center justify-between">
+    <nav className="border-b border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-sm sticky top-0 z-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {children}
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="https://wazoo.tech/wazoo.svg"
-              alt="Wazoo Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full logo-image"
-            />
-            <span className="text-lg font-bold text-zinc-900 dark:text-white hover:opacity-80 transition-opacity cursor-pointer">
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-6 h-6 rounded-full overflow-hidden border border-stone-200 dark:border-stone-700 shadow-sm group-hover:border-primary/50 transition-colors">
+              <Image
+                src="https://wazoo.tech/wazoo.svg"
+                alt="Wazoo Logo"
+                fill
+                className="object-cover logo-image"
+              />
+            </div>
+            <span className="text-sm font-code tracking-tight text-stone-900 dark:text-stone-100 group-hover:text-primary transition-colors">
               Worlds Console
             </span>
           </Link>
@@ -35,13 +34,12 @@ export function PageHeader({
           {accountId && (
             <Link
               href={`/accounts/${accountId}#api-keys`}
-              className="text-sm font-medium px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all"
+              className="text-xs font-medium px-2.5 py-1 rounded-md border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all"
             >
               API Keys
             </Link>
           )}
           <UserMenu
-            email={email}
             accountId={accountId}
             onSignOut={signOutAction}
           />

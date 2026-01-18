@@ -22,12 +22,12 @@ export default async function AccountPage() {
   const account = await sdk.accounts.get(user.id);
   if (!account) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 font-sans">
+      <div className="flex min-h-screen items-center justify-center p-8 bg-stone-50 dark:bg-stone-950 font-sans">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-2xl font-bold mb-4 text-stone-900 dark:text-stone-50">
             Account Not Found
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-stone-600 dark:text-stone-400">
             Your WorkOS user is not associated with a Worlds API account.
           </p>
         </div>
@@ -42,7 +42,7 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-2xl px-6 py-12">
         <Link
           href="/"
-          className="inline-flex items-center space-x-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors mb-6 cursor-pointer"
+          className="inline-flex items-center space-x-2 text-sm text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors mb-6 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,52 +60,52 @@ export default async function AccountPage() {
           </svg>
           <span>My Worlds</span>
         </Link>
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-8">
+        <h1 className="text-3xl font-bold text-stone-900 dark:text-white mb-8">
           Account
         </h1>
 
-        <div className="bg-white dark:bg-zinc-900 shadow rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800">
-          <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">
+        <div className="bg-white dark:bg-stone-900 shadow rounded-lg overflow-hidden border border-stone-200 dark:border-stone-800">
+          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+            <h3 className="text-lg font-medium text-stone-900 dark:text-white">
               Profile Information
             </h3>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
               Your account details.
             </p>
           </div>
-          <dl className="divide-y divide-zinc-200 dark:divide-zinc-800">
+          <dl className="divide-y divide-stone-200 dark:divide-stone-800">
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              <dt className="text-sm font-medium text-stone-500 dark:text-stone-400">
                 Email
               </dt>
-              <dd className="mt-1 text-sm text-zinc-900 dark:text-zinc-100 sm:mt-0 sm:col-span-2">
+              <dd className="mt-1 text-sm text-stone-900 dark:text-stone-100 sm:mt-0 sm:col-span-2">
                 {user.email}
               </dd>
             </div>
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              <dt className="text-sm font-medium text-stone-500 dark:text-stone-400">
                 User ID
               </dt>
-              <dd className="mt-1 text-sm font-mono text-zinc-900 dark:text-zinc-100 sm:mt-0 sm:col-span-2 break-all">
+              <dd className="mt-1 text-sm font-mono text-stone-900 dark:text-stone-100 sm:mt-0 sm:col-span-2 break-all">
                 {user.id}
               </dd>
             </div>
             {user.firstName && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                <dt className="text-sm font-medium text-stone-500 dark:text-stone-400">
                   First Name
                 </dt>
-                <dd className="mt-1 text-sm text-zinc-900 dark:text-zinc-100 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-stone-900 dark:text-stone-100 sm:mt-0 sm:col-span-2">
                   {user.firstName}
                 </dd>
               </div>
             )}
             {user.lastName && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                <dt className="text-sm font-medium text-stone-500 dark:text-stone-400">
                   Last Name
                 </dt>
-                <dd className="mt-1 text-sm text-zinc-900 dark:text-zinc-100 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-stone-900 dark:text-stone-100 sm:mt-0 sm:col-span-2">
                   {user.lastName}
                 </dd>
               </div>
