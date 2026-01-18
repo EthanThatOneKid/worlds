@@ -58,7 +58,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - **Format**: `npm run format`
 - **Type Check**: `npm run check`
 
-For more information on the background, research, and glossary, please visit the [Worlds API repository](https://github.com/FartLabs/worlds).
+For more information on the background, research, and glossary, please visit the [Worlds API repository](https://github.com/FartLabs/worlds). Official documentation: <https://github.com/wazootech/docs>.
 
 ---
 

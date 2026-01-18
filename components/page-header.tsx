@@ -39,10 +39,7 @@ export function PageHeader({
               API Keys
             </Link>
           )}
-          <UserMenu
-            accountId={accountId}
-            onSignOut={signOutAction}
-          />
+          <UserMenu accountId={accountId} onSignOut={signOutAction} />
         </div>
       </div>
     </nav>
