@@ -24,15 +24,17 @@ INSERT DATA {
     ex:name "Alice" ;
     ex:age 30 .
 }`,
+  "Delete all triples": `DELETE WHERE {
+  ?s ?p ?o .
+}`,
 };
 
-export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
+  export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   const [query, setQuery] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [results, setResults] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [queryType, setQueryType] = useState<"query" | "update">("query");
 
   const executeQuery = async () => {
     try {
@@ -40,20 +42,13 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
       setError(null);
       setResults(null);
 
-      const contentType =
-        queryType === "query"
-          ? "application/sparql-query"
-          : "application/sparql-update";
-
       const response = await fetch(
         `/api/worlds/${worldId}/sparql?account=${userId}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": contentType,
-            ...(queryType === "query" && {
-              Accept: "application/sparql-results+json",
-            }),
+            "Content-Type": "application/sparql-query",
+            Accept: "application/sparql-results+json",
           },
           body: query,
         },
@@ -64,11 +59,11 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         throw new Error(errorText || response.statusText);
       }
 
-      if (queryType === "query") {
-        const data = await response.json();
-        setResults(data);
+      const data = await response.json();
+      if (data === null) {
+         setResults({ message: "Update executed successfully" });
       } else {
-        setResults({ message: "Update executed successfully" });
+        setResults(data);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to execute query");
@@ -80,35 +75,6 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   return (
     <div className="w-full">
       <div className="space-y-6">
-        {/* Query Type Selector */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            Query Type:
-          </label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setQueryType("query")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-                queryType === "query"
-                  ? "bg-amber-600 text-white"
-                  : "bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600"
-              }`}
-            >
-              SELECT Query
-            </button>
-            <button
-              onClick={() => setQueryType("update")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-                queryType === "update"
-                  ? "bg-amber-600 text-white"
-                  : "bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600"
-              }`}
-            >
-              INSERT/DELETE Update
-            </button>
-          </div>
-        </div>
-
         {/* Sample Queries */}
         <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">
@@ -130,9 +96,14 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         {/* Query Input */}
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
-              SPARQL {queryType === "query" ? "Query" : "Update"}
-            </h3>
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
+                SPARQL Editor
+              </h3>
+              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
+                SPARQL Editor
+              </h3>
+            </div>
             <button
               onClick={executeQuery}
               disabled={loading || !query.trim()}
@@ -144,7 +115,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
           <textarea
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={`Enter your SPARQL ${queryType === "query" ? "query" : "update"} here...`}
+            placeholder="Enter your SPARQL query or update here..."
             className="w-full p-4 font-mono text-sm bg-stone-950 text-stone-100 border-0 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-[500px] resize-vertical"
             spellCheck={false}
           />

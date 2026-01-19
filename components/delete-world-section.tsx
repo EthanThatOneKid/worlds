@@ -21,7 +21,7 @@ export function DeleteWorldSection({
 
     startTransition(async () => {
       await deleteWorld(worldId);
-      router.push("/dashboard");
+      router.push("/");
     });
   };
 

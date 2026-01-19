@@ -22,23 +22,11 @@ export async function POST(
   const body = await req.text();
 
   try {
-    if (contentType === "application/sparql-query") {
-      const result = await sdk.worlds.sparqlQuery(worldId, body, {
-        accountId,
-      });
-      return NextResponse.json(result);
-    } else if (contentType === "application/sparql-update") {
-      await sdk.worlds.sparqlUpdate(worldId, body, { accountId });
-      return new NextResponse(null, { status: 204 });
-    } else {
-      return NextResponse.json(
-        {
-          error:
-            "Invalid content type. Use application/sparql-query or application/sparql-update",
-        },
-        { status: 400 },
-      );
-    }
+    const result = await sdk.worlds.sparql(worldId, body, {
+      accountId,
+    });
+    console.log("SPARQL Result:", result);
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Failed to execute SPARQL:", error);
     return NextResponse.json(

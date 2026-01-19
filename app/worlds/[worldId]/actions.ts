@@ -26,7 +26,7 @@ export async function updateWorldDescription(
 
   await sdk.worlds.update(worldId, { description }, { accountId: user.id });
   revalidatePath(`/worlds/${worldId}`);
-  revalidatePath("/dashboard");
+  revalidatePath("/");
 }
 
 export async function deleteWorld(worldId: string) {
@@ -36,5 +36,5 @@ export async function deleteWorld(worldId: string) {
   }
 
   await sdk.worlds.remove(worldId, { accountId: user.id });
-  revalidatePath("/dashboard");
+  revalidatePath("/");
 }

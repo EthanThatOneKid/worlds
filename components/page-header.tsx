@@ -17,7 +17,7 @@ export function PageHeader({
         <div className="flex items-center space-x-4">
           {children}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-6 h-6 rounded-full overflow-hidden border border-stone-200 dark:border-stone-700 shadow-sm group-hover:border-primary/50 transition-colors">
+            <div className="relative w-6 h-6 rounded-full overflow-hidden shadow-sm transition-colors">
               <Image
                 src="https://wazoo.tech/wazoo.svg"
                 alt="Wazoo Logo"
