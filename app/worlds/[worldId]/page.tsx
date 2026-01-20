@@ -29,7 +29,7 @@ export async function generateMetadata({
       };
     }
     return {
-      title: world.name || "World Details",
+      title: world.label || "World Details",
     };
   } catch {
     return {
@@ -116,25 +116,23 @@ export default async function WorldPage({
   }
 
   // Generate code snippets
-  const codeSnippet = `import { World } from "@fartlabs/worlds";
+  const codeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const world = new World({
+const sdk = new WorldsSdk({
   apiKey: "${account.apiKey}",
-  worldId: "${worldId}"
 });
 
-const worldRecord = await world.get();
-console.log("Connected to world:", worldRecord.name);`;
+const world = await sdk.worlds.get("${worldId}");
+console.log("Connected to world:", world.label);`;
 
-  const maskedCodeSnippet = `import { World } from "@fartlabs/worlds";
+  const maskedCodeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const world = new World({
+const sdk = new WorldsSdk({
   apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}",
-  worldId: "${worldId}"
 });
 
-const worldRecord = await world.get();
-console.log("Connected to world:", worldRecord.name);`;
+const world = await sdk.worlds.get("${worldId}");
+console.log("Connected to world:", world.label);`;
 
   const codeSnippetHtml = await codeToHtml(codeSnippet, {
     lang: "typescript",

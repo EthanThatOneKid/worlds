@@ -61,9 +61,9 @@ export function WorldDetails({
                 <div className="flex items-center gap-2 group">
                   <h1
                     className="text-2xl md:text-3xl font-bold text-stone-900 dark:text-white transition-all truncate"
-                    title={world.name}
+                    title={world.label}
                   >
-                    {world.name}
+                    {world.label}
                   </h1>
                 </div>
               </div>

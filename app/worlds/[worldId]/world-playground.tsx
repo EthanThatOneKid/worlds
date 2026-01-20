@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { SparqlResults } from "@fartlabs/worlds";
 
 interface WorldPlaygroundProps {
   worldId: string;
@@ -29,10 +30,11 @@ INSERT DATA {
 }`,
 };
 
-  export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
+export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   const [query, setQuery] = useState("");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [results, setResults] = useState<any | null>(null);
+  const [results, setResults] = useState<
+    SparqlResults | { message: string } | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -59,9 +61,9 @@ INSERT DATA {
         throw new Error(errorText || response.statusText);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as SparqlResults | null;
       if (data === null) {
-         setResults({ message: "Update executed successfully" });
+        setResults({ message: "Update executed successfully" });
       } else {
         setResults(data);
       }
@@ -139,6 +141,11 @@ INSERT DATA {
             <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
               <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
                 Results
+                {"boolean" in results
+                  ? " (Boolean)"
+                  : "results" in results
+                    ? " (Select)"
+                    : " (Update)"}
               </h3>
             </div>
             <div className="p-4 bg-stone-950 overflow-auto">

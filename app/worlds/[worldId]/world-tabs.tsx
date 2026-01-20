@@ -132,9 +132,7 @@ export function WorldTabs({
             maskedCodeSnippetHtml={maskedCodeSnippetHtml}
           />
         )}
-        {activeTab === "usage" && (
-          <WorldUsage worldId={world.id} userId={userId} />
-        )}
+        {activeTab === "usage" && <WorldUsage />}
         {activeTab === "playground" && (
           <WorldPlayground worldId={world.id} userId={userId} />
         )}

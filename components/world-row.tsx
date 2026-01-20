@@ -48,7 +48,7 @@ export function WorldRow({ world }: { world: WorldRecord }) {
           href={`/worlds/${world.id}`}
           className="font-medium text-stone-900 dark:text-stone-100 hover:text-primary transition-colors block"
         >
-          {world.name || "Untitled World"}
+          {world.label || "Untitled World"}
         </Link>
       </td>
       <td className="py-2 px-3">

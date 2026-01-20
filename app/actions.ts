@@ -41,9 +41,7 @@ export async function createWorld() {
     console.log("Creating new world...", { accountId: user.id });
     const world = await sdk.worlds.create(
       {
-        accountId: user.id,
-        name: "New World",
-        description: null,
+        label: "New World",
         isPublic: false,
       },
       { accountId: user.id },

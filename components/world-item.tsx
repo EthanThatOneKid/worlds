@@ -48,13 +48,13 @@ export function WorldItem({ world }: { world: WorldRecord }) {
             <div className="flex flex-col justify-center min-w-0">
               <h3
                 className="text-lg font-semibold text-zinc-900 dark:text-white truncate"
-                title={world.name || world.id}
+                title={world.label || world.id}
               >
                 <Link
                   href={`/worlds/${world.id}`}
                   className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
-                  {world.name || world.id}
+                  {world.label || world.id}
                 </Link>
               </h3>
             </div>

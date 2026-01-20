@@ -45,32 +45,39 @@ export default async function Home() {
   }
 
   if (!account) {
+    redirect("/sign-up");
+  }
+
+  let worlds;
+  try {
+    const listResult = await sdk.worlds.list(1, 100, { accountId: user.id });
+    worlds = listResult.toSorted(
+      (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
+    );
+  } catch (error) {
+    console.error("Failed to list worlds:", error);
     return (
       <ErrorState
-        title="Account Not Found"
-        message="Your WorkOS user is not associated with a Worlds API account."
+        title="Error Loading Worlds"
+        message="Failed to load worlds. Please check your API permissions."
+        titleClassName="text-red-600"
       />
     );
   }
 
-  const listResult = await sdk.worlds.list(1, 100, { accountId: user.id });
-  const worlds = listResult.toSorted(
-    (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
-  );
-
   // Generate general SDK snippets for the account
-  const codeSnippet = `import { Worlds } from "@fartlabs/worlds/internal";
+  const codeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const sdk = new Worlds({ apiKey: "${account.apiKey}" });
+const sdk = new WorldsSdk({ apiKey: "${account.apiKey}" });
 
-const worlds = await sdk.worlds.list(1, 100);
+const worlds = await sdk.worlds.list();
 console.log("My worlds:", worlds.length);`;
 
-  const maskedCodeSnippet = `import { Worlds } from "@fartlabs/worlds/internal";
+  const maskedCodeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const sdk = new Worlds({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}" });
+const sdk = new WorldsSdk({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}" });
 
-const worlds = await sdk.worlds.list(1, 100);
+const worlds = await sdk.worlds.list();
 console.log("My worlds:", worlds.length);`;
 
   const codeSnippetHtml = await codeToHtml(codeSnippet, {

@@ -18,7 +18,6 @@ export async function POST(
     return NextResponse.json({ error: "Account ID required" }, { status: 400 });
   }
 
-  const contentType = req.headers.get("content-type");
   const body = await req.text();
 
   try {

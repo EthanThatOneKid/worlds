@@ -18,8 +18,6 @@ export const GET = authkit.handleAuth({
       // Create the account in Worlds API.
       await sdk.accounts.create({
         id: data.user.id, // Associate WorkOS ID with account ID.
-        plan: null,
-        description: null,
       });
     } catch (error) {
       console.error("Error in callback route:", error);
