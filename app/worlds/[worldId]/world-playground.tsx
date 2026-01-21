@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import type { SparqlResults } from "@fartlabs/worlds";
+import dynamic from "next/dynamic";
+
+const CodeEditor = dynamic(
+  () => import("@uiw/react-textarea-code-editor").then((mod) => mod.default),
+  { ssr: false },
+);
 import { SparqlResultsDisplay } from "./sparql-results-display";
 
 interface WorldPlaygroundProps {
@@ -111,13 +117,23 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
               {loading ? "Executing..." : "Execute"}
             </button>
           </div>
-          <textarea
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter your SPARQL query or update here..."
-            className="w-full flex-grow p-4 font-mono text-sm bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100 border-0 focus:outline-none focus:ring-0 resize-none"
-            spellCheck={false}
-          />
+          <div className="flex-grow overflow-auto bg-stone-950">
+            <CodeEditor
+              value={query}
+              language="sparql"
+              placeholder="Enter your SPARQL query or update here..."
+              onChange={(e) => setQuery(e.target.value)}
+              padding={16}
+              data-color-mode="dark"
+              style={{
+                fontSize: 14,
+                backgroundColor: "#0c0a09",
+                fontFamily:
+                  "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                minHeight: "100%",
+              }}
+            />
+          </div>
         </div>
 
         {/* Results/Error Display */}
