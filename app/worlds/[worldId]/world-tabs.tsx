@@ -4,12 +4,14 @@ import { useQueryState, parseAsStringLiteral } from "nuqs";
 import { WorldDetails } from "./world-details";
 
 import { WorldPlayground } from "./world-playground";
+import { WorldSearch } from "./world-search";
 import type { WorldRecord } from "@fartlabs/worlds";
 import { useState } from "react";
 
 const tabs = [
   "overview",
   "playground",
+  "search",
   "conversations",
   "webhooks",
   "settings",
@@ -69,6 +71,16 @@ export function WorldTabs({
             Playground
           </button>
           <button
+            onClick={() => setActiveTab("search")}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
+              activeTab === "search"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400"
+                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
+            }`}
+          >
+            Search
+          </button>
+          <button
             onClick={() => setActiveTab("conversations")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
               activeTab === "conversations"
@@ -124,6 +136,9 @@ export function WorldTabs({
         )}
         {activeTab === "playground" && (
           <WorldPlayground worldId={world.id} userId={userId} />
+        )}
+        {activeTab === "search" && (
+          <WorldSearch worldId={world.id} userId={userId} />
         )}
         {activeTab === "conversations" && (
           <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
