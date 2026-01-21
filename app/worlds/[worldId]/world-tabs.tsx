@@ -18,6 +18,7 @@ const tabs = [
 ] as const;
 
 import { WorldSettings } from "./world-settings";
+import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
 
 interface WorldTabsProps {
   world: WorldRecord;
@@ -141,8 +142,10 @@ export function WorldTabs({
           <WorldSearch worldId={world.id} userId={userId} />
         )}
         {activeTab === "conversations" && (
-          <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
-            <div className="mx-auto w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
+          <ComingSoonPlaceholder
+            title="Conversations - Coming soon"
+            description="A chat interface for your worlds is currently under development."
+            icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -157,34 +160,14 @@ export function WorldTabs({
                   d="M7.5 8.25h9m-9 3h9m-9 3h3m-6.75 4.125a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3V7.5a3 3 0 0 0-3-3h-7.5a3 3 0 0 0-3 3v10.625Z"
                 />
               </svg>
-            </div>
-            <h3 className="text-lg font-medium text-stone-900 dark:text-white">
-              Conversations - Coming soon
-            </h3>
-            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
-              A chat interface for your worlds is currently under development.
-            </p>
-            <div className="mt-6 flex items-center justify-center gap-4">
-              <a
-                href="https://github.com/EthanThatOneKid/worlds/issues/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
-              >
-                Provide Feedback
-              </a>
-              <a
-                href="mailto:ethan@wazoo.tech"
-                className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors"
-              >
-                Reach out to founder
-              </a>
-            </div>
-          </div>
+            }
+          />
         )}
         {activeTab === "webhooks" && (
-          <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
-            <div className="mx-auto w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
+          <ComingSoonPlaceholder
+            title="Webhooks - Coming soon"
+            description="Connect third-party webhooks to your world."
+            icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -199,30 +182,8 @@ export function WorldTabs({
                   d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
                 />
               </svg>
-            </div>
-            <h3 className="text-lg font-medium text-stone-900 dark:text-white">
-              Webhooks - Coming soon
-            </h3>
-            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
-              Connect third-party webhooks to your world.
-            </p>
-            <div className="mt-6 flex items-center justify-center gap-4">
-              <a
-                href="https://github.com/EthanThatOneKid/worlds/issues/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
-              >
-                Provide Feedback
-              </a>
-              <a
-                href="https://etok.me/meet"
-                className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors border border-stone-200 dark:border-stone-700 px-4 py-2 rounded-md hover:bg-stone-50 dark:hover:bg-stone-800"
-              >
-                Chat with founder
-              </a>
-            </div>
-          </div>
+            }
+          />
         )}
         {activeTab === "settings" && <WorldSettings world={world} />}
       </div>
