@@ -143,7 +143,7 @@ export function SparqlResultsDisplay({
 
   // Fallback
   return (
-    <pre className="text-sm p-4 text-stone-100 font-mono">
+    <pre className="text-sm p-4 text-stone-900 dark:text-stone-100 font-mono">
       {JSON.stringify(results, null, 2)}
     </pre>
   );

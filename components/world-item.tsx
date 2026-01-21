@@ -34,20 +34,20 @@ export function WorldItem({ world }: { world: WorldRecord }) {
   const seed = getSeedFromId(world.id);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm transition-shadow hover:shadow-md group">
+    <div className="overflow-hidden rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm transition-shadow hover:shadow-md group">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <button
               onClick={handlePlanetClick}
-              className="h-16 w-16 overflow-hidden rounded-full bg-black/5 dark:bg-black/40 flex items-center justify-center relative hover:scale-110 transition-transform cursor-pointer border-4 border-white dark:border-zinc-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
+              className="h-16 w-16 overflow-hidden rounded-full bg-black/5 dark:bg-black/40 flex items-center justify-center relative hover:scale-110 transition-transform cursor-pointer border-4 border-white dark:border-stone-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-stone-900"
               title="View Planet"
             >
               <PixelPlanet type="earth" seed={seed} />
             </button>
             <div className="flex flex-col justify-center min-w-0">
               <h3
-                className="text-lg font-semibold text-zinc-900 dark:text-white truncate"
+                className="text-lg font-semibold text-stone-900 dark:text-white truncate"
                 title={world.label || world.id}
               >
                 <Link
@@ -63,19 +63,19 @@ export function WorldItem({ world }: { world: WorldRecord }) {
 
         <div className="mb-4 min-h-[3rem]">
           <p
-            className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2"
+            className="text-sm text-stone-600 dark:text-stone-400 line-clamp-2"
             title={world.description || undefined}
           >
             {world.description || (
-              <span className="italic text-zinc-400">No description</span>
+              <span className="italic text-stone-400">No description</span>
             )}
           </p>
         </div>
 
-        <div className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 space-y-1">
+        <div className="mb-4 text-xs text-stone-500 dark:text-stone-400 space-y-1">
           <p>Updated {new Date(world.updatedAt).toLocaleDateString()}</p>
         </div>
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+        <div className="text-sm text-stone-500 dark:text-stone-400">
           <Link
             href={`/worlds/${world.id}`}
             className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center"

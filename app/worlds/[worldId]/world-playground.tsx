@@ -115,7 +115,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Enter your SPARQL query or update here..."
-            className="w-full flex-grow p-4 font-mono text-sm bg-stone-950 text-stone-100 border-0 focus:outline-none focus:ring-0 resize-none"
+            className="w-full flex-grow p-4 font-mono text-sm bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100 border-0 focus:outline-none focus:ring-0 resize-none"
             spellCheck={false}
           />
         </div>

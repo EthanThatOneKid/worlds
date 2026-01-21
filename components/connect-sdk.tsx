@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQueryState, parseAsBoolean } from "nuqs";
-import { DialogCloseButton } from "@/components/dialog-close-button";
+import { DialogCloseButton } from "@/components/ui/dialog-close-button";
 
 export function ConnectSdkButton({
   apiKey,

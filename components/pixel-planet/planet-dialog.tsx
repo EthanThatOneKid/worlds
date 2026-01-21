@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { PixelPlanet, PixelPlanetProps } from "./pixel-planet";
-import { DialogCloseButton } from "@/components/dialog-close-button";
+import { DialogCloseButton } from "@/components/ui/dialog-close-button";
 
 interface PlanetDialogProps {
   isOpen: boolean;
