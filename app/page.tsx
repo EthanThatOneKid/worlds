@@ -145,13 +145,13 @@ console.log("My worlds:", worlds.length);`;
                   </th>
                   <th
                     scope="col"
-                    className="py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                    className="hidden md:table-cell py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
                   >
                     ID
                   </th>
                   <th
                     scope="col"
-                    className="py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                    className="hidden md:table-cell py-3 px-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
                   >
                     Updated
                   </th>

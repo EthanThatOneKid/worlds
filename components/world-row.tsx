@@ -51,12 +51,12 @@ export function WorldRow({ world }: { world: WorldRecord }) {
           {world.label || "Untitled World"}
         </Link>
       </td>
-      <td className="py-2 px-3">
+      <td className="hidden md:table-cell py-2 px-3">
         <span className="font-mono text-xs text-stone-500 dark:text-stone-500">
           {world.id}
         </span>
       </td>
-      <td className="py-2 px-3">
+      <td className="hidden md:table-cell py-2 px-3">
         <span className="text-sm text-stone-600 dark:text-stone-400">
           {new Date(world.updatedAt).toLocaleDateString()}
         </span>
