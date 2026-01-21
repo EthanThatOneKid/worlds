@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { SparqlResults } from "@fartlabs/worlds";
+import { SparqlResultsDisplay } from "./sparql-results-display";
 
 interface WorldPlaygroundProps {
   worldId: string;
@@ -75,37 +76,32 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   };
 
   return (
-    <div className="w-full">
-      <div className="space-y-6">
-        {/* Sample Queries */}
-        <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">
-            Sample Queries
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(SAMPLE_QUERIES).map(([name, sampleQuery]) => (
-              <button
-                key={name}
-                onClick={() => setQuery(sampleQuery)}
-                className="px-3 py-1.5 text-sm bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-600 rounded-md hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors cursor-pointer"
-              >
-                {name}
-              </button>
-            ))}
-          </div>
+    <div className="w-full space-y-4">
+      {/* Sample Queries */}
+      <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg p-4">
+        <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">
+          Sample Queries
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(SAMPLE_QUERIES).map(([name, sampleQuery]) => (
+            <button
+              key={name}
+              onClick={() => setQuery(sampleQuery)}
+              className="px-3 py-1.5 text-sm bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-600 rounded-md hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors cursor-pointer"
+            >
+              {name}
+            </button>
+          ))}
         </div>
+      </div>
 
+      <div className="space-y-6">
         {/* Query Input */}
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
-          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
-                SPARQL Editor
-              </h3>
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
-                SPARQL Editor
-              </h3>
-            </div>
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col h-[500px]">
+          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between flex-shrink-0">
+            <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
+              SPARQL Editor
+            </h3>
             <button
               onClick={executeQuery}
               disabled={loading || !query.trim()}
@@ -118,43 +114,39 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Enter your SPARQL query or update here..."
-            className="w-full p-4 font-mono text-sm bg-stone-950 text-stone-100 border-0 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-[500px] resize-vertical"
+            className="w-full flex-grow p-4 font-mono text-sm bg-stone-950 text-stone-100 border-0 focus:outline-none focus:ring-0 resize-none"
             spellCheck={false}
           />
         </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-2">
-              Error
-            </h4>
-            <pre className="text-sm text-red-700 dark:text-red-300 whitespace-pre-wrap font-mono">
-              {error}
-            </pre>
+        {/* Results/Error Display */}
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col min-h-[300px]">
+          <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex-shrink-0">
+            <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
+              {error ? "Error" : "Results"}
+              {!error && results && "boolean" in results
+                ? " (Boolean)"
+                : !error && results && "results" in results
+                  ? " (Select)"
+                  : !error && results && "message" in results
+                    ? " (Update)"
+                    : ""}
+            </h3>
           </div>
-        )}
-
-        {/* Results Display */}
-        {results && (
-          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
-            <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
-                Results
-                {"boolean" in results
-                  ? " (Boolean)"
-                  : "results" in results
-                    ? " (Select)"
-                    : " (Update)"}
-              </h3>
-            </div>
-            <div className="p-4 bg-stone-950 overflow-auto">
-              <pre className="text-sm text-stone-100 font-mono">
-                {JSON.stringify(results, null, 2)}
-              </pre>
-            </div>
+          <div className="flex-grow bg-stone-950 overflow-hidden relative">
+            {error ? (
+              <div className="p-4 overflow-auto h-full">
+                 <pre className="text-sm text-red-400 whitespace-pre-wrap font-mono">
+                  {error}
+                </pre>
+              </div>
+            ) : (
+                <div className="h-full overflow-hidden bg-white dark:bg-stone-950">
+                    <SparqlResultsDisplay results={results} loading={loading} />
+                </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

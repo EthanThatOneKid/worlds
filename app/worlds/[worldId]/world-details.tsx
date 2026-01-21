@@ -76,7 +76,7 @@ export function WorldDetails({
                     setIsCopied(true);
                     setTimeout(() => setIsCopied(false), 2000);
                   }}
-                  className="inline-flex items-center gap-2 px-1.5 py-0.5 -ml-1.5 rounded-md text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer group select-none"
+                  className="inline-flex items-center gap-2 px-1.5 py-0.5 -ml-1.5 rounded-md text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 transition-colors cursor-pointer group select-none"
                   title="Click to copy ID"
                 >
                   <span className="font-mono text-xs opacity-70">ID:</span>
@@ -103,7 +103,7 @@ export function WorldDetails({
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="w-3 h-3"
                     >
                       <path
                         strokeLinecap="round"
