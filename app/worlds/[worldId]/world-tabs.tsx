@@ -2,14 +2,13 @@
 
 import { useQueryState, parseAsStringLiteral } from "nuqs";
 import { WorldDetails } from "./world-details";
-import { WorldUsage } from "./world-usage";
+
 import { WorldPlayground } from "./world-playground";
 import type { WorldRecord } from "@fartlabs/worlds";
 import { useState } from "react";
 
 const tabs = [
   "overview",
-  "usage",
   "playground",
   "conversations",
   "webhooks",
@@ -58,16 +57,7 @@ export function WorldTabs({
           >
             Overview
           </button>
-          <button
-            onClick={() => setActiveTab("usage")}
-            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
-              activeTab === "usage"
-                ? "border-amber-500 text-amber-600 dark:text-amber-400"
-                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
-            }`}
-          >
-            Usage
-          </button>
+
           <button
             onClick={() => setActiveTab("playground")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
@@ -132,7 +122,6 @@ export function WorldTabs({
             maskedCodeSnippetHtml={maskedCodeSnippetHtml}
           />
         )}
-        {activeTab === "usage" && <WorldUsage />}
         {activeTab === "playground" && (
           <WorldPlayground worldId={world.id} userId={userId} />
         )}
