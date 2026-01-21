@@ -136,7 +136,9 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
             {!error && results && (
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(JSON.stringify(results, null, 2));
+                  navigator.clipboard.writeText(
+                    JSON.stringify(results, null, 2),
+                  );
                   setIsResultsCopied(true);
                   setTimeout(() => setIsResultsCopied(false), 2000);
                 }}
@@ -180,14 +182,14 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
           <div className="flex-grow bg-stone-950 overflow-hidden relative">
             {error ? (
               <div className="p-4 overflow-auto h-full">
-                 <pre className="text-sm text-red-400 whitespace-pre-wrap font-mono">
+                <pre className="text-sm text-red-400 whitespace-pre-wrap font-mono">
                   {error}
                 </pre>
               </div>
             ) : (
-                <div className="h-full overflow-hidden bg-white dark:bg-stone-950">
-                    <SparqlResultsDisplay results={results} loading={loading} />
-                </div>
+              <div className="h-full overflow-hidden bg-white dark:bg-stone-950">
+                <SparqlResultsDisplay results={results} loading={loading} />
+              </div>
             )}
           </div>
         </div>
