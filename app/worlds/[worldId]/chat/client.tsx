@@ -7,9 +7,10 @@ import React, { useRef, useEffect } from "react";
 
 type Props = {
   worldId: string;
+  className?: string;
 };
 
-export function ConversationChat({ worldId }: Props) {
+export function ConversationChat({ worldId, className = "" }: Props) {
   const {
     messages: chatMessages,
     sendMessage,
@@ -44,23 +45,18 @@ export function ConversationChat({ worldId }: Props) {
   }, [chatMessages]);
 
   return (
-    <div className="flex-1 min-h-0 overflow-hidden rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm flex flex-col">
+    <div
+      className={`overflow-hidden rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm flex flex-col ${
+        chatMessages.length > 0 ? "min-h-[400px] max-h-[700px]" : ""
+      } ${className}`}
+    >
       {/* Messages List */}
-      <div
-        className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
-        ref={scrollRef}
-      >
-        {chatMessages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-12 opacity-50">
-            <div className="p-4 rounded-full bg-stone-100 dark:bg-stone-800 mb-4">
-              <MessageSquareIcon className="size-8 text-stone-400" />
-            </div>
-            <p className="text-stone-500 dark:text-stone-400 text-sm">
-              Start the conversation...
-            </p>
-          </div>
-        ) : (
-          chatMessages.map((m) => (
+      {chatMessages.length > 0 && (
+        <div
+          className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
+          ref={scrollRef}
+        >
+          {chatMessages.map((m) => (
             <div
               key={m.id}
               className={`flex w-full ${
@@ -70,7 +66,7 @@ export function ConversationChat({ worldId }: Props) {
               <div
                 className={`max-w-[80%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed shadow-sm ${
                   m.role === "user"
-                    ? "bg-amber-500 text-white rounded-tr-none"
+                    ? "bg-amber-500 text-stone-950 rounded-tr-none"
                     : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700"
                 }`}
               >
@@ -205,19 +201,19 @@ export function ConversationChat({ worldId }: Props) {
                 )}
               </div>
             </div>
-          ))
-        )}
+          ))}
 
-        {/* Status Indicator */}
-        {status === "streaming" ? (
-          <div className="flex justify-start">
-            <div className="bg-stone-100 dark:bg-stone-800 rounded-2xl rounded-tl-none px-4 py-2 flex items-center gap-2">
-              <Loader2Icon className="size-4 animate-spin text-stone-400" />
-              <span className="text-xs text-stone-400">Thinking...</span>
+          {/* Status Indicator */}
+          {status === "streaming" ? (
+            <div className="flex justify-start">
+              <div className="bg-stone-100 dark:bg-stone-800 rounded-2xl rounded-tl-none px-4 py-2 flex items-center gap-2">
+                <Loader2Icon className="size-4 animate-spin text-stone-400" />
+                <span className="text-xs text-stone-400">Thinking...</span>
+              </div>
             </div>
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+      )}
 
       {/* Input Area */}
       <div className="p-4 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800">

@@ -1,4 +1,3 @@
-
 # Chatbot Tool Usage
 
 With [`useChat`](/docs/reference/ai-sdk-ui/use-chat) and [`streamText`](/docs/reference/ai-sdk-core/stream-text), you can use tools in your chatbot application.
@@ -45,9 +44,9 @@ In this example, we'll use three tools:
 ### API route
 
 ```tsx filename='app/api/chat/route.ts'
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
+import { convertToModelMessages, streamText, UIMessage } from "ai";
 __PROVIDER_IMPORT__;
-import { z } from 'zod';
+import { z } from "zod";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -61,10 +60,10 @@ export async function POST(req: Request) {
     tools: {
       // server-side tool with execute function:
       getWeatherInformation: {
-        description: 'show the weather in a given city to the user',
+        description: "show the weather in a given city to the user",
         inputSchema: z.object({ city: z.string() }),
         execute: async ({}: { city: string }) => {
-          const weatherOptions = ['sunny', 'cloudy', 'rainy', 'snowy', 'windy'];
+          const weatherOptions = ["sunny", "cloudy", "rainy", "snowy", "windy"];
           return weatherOptions[
             Math.floor(Math.random() * weatherOptions.length)
           ];
@@ -72,15 +71,15 @@ export async function POST(req: Request) {
       },
       // client-side tool that starts user interaction:
       askForConfirmation: {
-        description: 'Ask the user for confirmation.',
+        description: "Ask the user for confirmation.",
         inputSchema: z.object({
-          message: z.string().describe('The message to ask for confirmation.'),
+          message: z.string().describe("The message to ask for confirmation."),
         }),
       },
       // client-side tool that is automatically executed on the client:
       getLocation: {
         description:
-          'Get the user location. Always ask for confirmation before using this tool.',
+          "Get the user location. Always ask for confirmation before using this tool.",
         inputSchema: z.object({}),
       },
     },
@@ -117,19 +116,19 @@ There are three things worth mentioning:
    The result is added to the chat using `addToolOutput` with the `tool` parameter for type safety.
 
 ```tsx filename='app/page.tsx' highlight="2,6,10,14-20"
-'use client';
+"use client";
 
-import { useChat } from '@ai-sdk/react';
+import { useChat } from "@ai-sdk/react";
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
-} from 'ai';
-import { useState } from 'react';
+} from "ai";
+import { useState } from "react";
 
 export default function Chat() {
   const { messages, sendMessage, addToolOutput } = useChat({
     transport: new DefaultChatTransport({
-      api: '/api/chat',
+      api: "/api/chat",
     }),
 
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
@@ -141,41 +140,41 @@ export default function Chat() {
         return;
       }
 
-      if (toolCall.toolName === 'getLocation') {
-        const cities = ['New York', 'Los Angeles', 'Chicago', 'San Francisco'];
+      if (toolCall.toolName === "getLocation") {
+        const cities = ["New York", "Los Angeles", "Chicago", "San Francisco"];
 
         // No await - avoids potential deadlocks
         addToolOutput({
-          tool: 'getLocation',
+          tool: "getLocation",
           toolCallId: toolCall.toolCallId,
           output: cities[Math.floor(Math.random() * cities.length)],
         });
       }
     },
   });
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   return (
     <>
-      {messages?.map(message => (
+      {messages?.map((message) => (
         <div key={message.id}>
           <strong>{`${message.role}: `}</strong>
-          {message.parts.map(part => {
+          {message.parts.map((part) => {
             switch (part.type) {
               // render text parts as simple text:
-              case 'text':
+              case "text":
                 return part.text;
 
               // for tool parts, use the typed tool part names:
-              case 'tool-askForConfirmation': {
+              case "tool-askForConfirmation": {
                 const callId = part.toolCallId;
 
                 switch (part.state) {
-                  case 'input-streaming':
+                  case "input-streaming":
                     return (
                       <div key={callId}>Loading confirmation request...</div>
                     );
-                  case 'input-available':
+                  case "input-available":
                     return (
                       <div key={callId}>
                         {part.input.message}
@@ -183,9 +182,9 @@ export default function Chat() {
                           <button
                             onClick={() =>
                               addToolOutput({
-                                tool: 'askForConfirmation',
+                                tool: "askForConfirmation",
                                 toolCallId: callId,
-                                output: 'Yes, confirmed.',
+                                output: "Yes, confirmed.",
                               })
                             }
                           >
@@ -194,9 +193,9 @@ export default function Chat() {
                           <button
                             onClick={() =>
                               addToolOutput({
-                                tool: 'askForConfirmation',
+                                tool: "askForConfirmation",
                                 toolCallId: callId,
-                                output: 'No, denied',
+                                output: "No, denied",
                               })
                             }
                           >
@@ -205,31 +204,31 @@ export default function Chat() {
                         </div>
                       </div>
                     );
-                  case 'output-available':
+                  case "output-available":
                     return (
                       <div key={callId}>
                         Location access allowed: {part.output}
                       </div>
                     );
-                  case 'output-error':
+                  case "output-error":
                     return <div key={callId}>Error: {part.errorText}</div>;
                 }
                 break;
               }
 
-              case 'tool-getLocation': {
+              case "tool-getLocation": {
                 const callId = part.toolCallId;
 
                 switch (part.state) {
-                  case 'input-streaming':
+                  case "input-streaming":
                     return (
                       <div key={callId}>Preparing location request...</div>
                     );
-                  case 'input-available':
+                  case "input-available":
                     return <div key={callId}>Getting location...</div>;
-                  case 'output-available':
+                  case "output-available":
                     return <div key={callId}>Location: {part.output}</div>;
-                  case 'output-error':
+                  case "output-error":
                     return (
                       <div key={callId}>
                         Error getting location: {part.errorText}
@@ -239,31 +238,31 @@ export default function Chat() {
                 break;
               }
 
-              case 'tool-getWeatherInformation': {
+              case "tool-getWeatherInformation": {
                 const callId = part.toolCallId;
 
                 switch (part.state) {
                   // example of pre-rendering streaming tool inputs:
-                  case 'input-streaming':
+                  case "input-streaming":
                     return (
                       <pre key={callId}>{JSON.stringify(part, null, 2)}</pre>
                     );
-                  case 'input-available':
+                  case "input-available":
                     return (
                       <div key={callId}>
                         Getting weather information for {part.input.city}...
                       </div>
                     );
-                  case 'output-available':
+                  case "output-available":
                     return (
                       <div key={callId}>
                         Weather in {part.input.city}: {part.output}
                       </div>
                     );
-                  case 'output-error':
+                  case "output-error":
                     return (
                       <div key={callId}>
-                        Error getting weather for {part.input.city}:{' '}
+                        Error getting weather for {part.input.city}:{" "}
                         {part.errorText}
                       </div>
                     );
@@ -277,15 +276,15 @@ export default function Chat() {
       ))}
 
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           if (input.trim()) {
             sendMessage({ text: input });
-            setInput('');
+            setInput("");
           }
         }}
       >
-        <input value={input} onChange={e => setInput(e.target.value)} />
+        <input value={input} onChange={(e) => setInput(e.target.value)} />
       </form>
     </>
   );
@@ -297,19 +296,19 @@ export default function Chat() {
 Sometimes an error may occur during client-side tool execution. Use the `addToolOutput` method with a `state` of `output-error` and `errorText` value instead of `output` record the error.
 
 ```tsx filename='app/page.tsx' highlight="19,36-41"
-'use client';
+"use client";
 
-import { useChat } from '@ai-sdk/react';
+import { useChat } from "@ai-sdk/react";
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
-} from 'ai';
-import { useState } from 'react';
+} from "ai";
+import { useState } from "react";
 
 export default function Chat() {
   const { messages, sendMessage, addToolOutput } = useChat({
     transport: new DefaultChatTransport({
-      api: '/api/chat',
+      api: "/api/chat",
     }),
 
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
@@ -321,22 +320,22 @@ export default function Chat() {
         return;
       }
 
-      if (toolCall.toolName === 'getWeatherInformation') {
+      if (toolCall.toolName === "getWeatherInformation") {
         try {
           const weather = await getWeatherInformation(toolCall.input);
 
           // No await - avoids potential deadlocks
           addToolOutput({
-            tool: 'getWeatherInformation',
+            tool: "getWeatherInformation",
             toolCallId: toolCall.toolCallId,
             output: weather,
           });
         } catch (err) {
           addToolOutput({
-            tool: 'getWeatherInformation',
+            tool: "getWeatherInformation",
             toolCallId: toolCall.toolCallId,
-            state: 'output-error',
-            errorText: 'Unable to get the weather information',
+            state: "output-error",
+            errorText: "Unable to get the weather information",
           });
         }
       }
@@ -362,9 +361,9 @@ For tools that need to run in the browser (updating UI state, accessing browser 
 Enable approval by setting `needsApproval` on your tool. See [Tool Execution Approval](/docs/ai-sdk-core/tools-and-tool-calling#tool-execution-approval) for configuration options including dynamic approval based on input.
 
 ```tsx filename='app/api/chat/route.ts'
-import { streamText, tool } from 'ai';
+import { streamText, tool } from "ai";
 __PROVIDER_IMPORT__;
-import { z } from 'zod';
+import { z } from "zod";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
@@ -374,7 +373,7 @@ export async function POST(req: Request) {
     messages,
     tools: {
       getWeather: tool({
-        description: 'Get the weather in a location',
+        description: "Get the weather in a location",
         inputSchema: z.object({
           city: z.string(),
         }),
@@ -396,21 +395,21 @@ export async function POST(req: Request) {
 When a tool requires approval, the tool part state is `approval-requested`. Use `addToolApprovalResponse` to approve or deny:
 
 ```tsx filename='app/page.tsx'
-'use client';
+"use client";
 
-import { useChat } from '@ai-sdk/react';
+import { useChat } from "@ai-sdk/react";
 
 export default function Chat() {
   const { messages, addToolApprovalResponse } = useChat();
 
   return (
     <>
-      {messages.map(message => (
+      {messages.map((message) => (
         <div key={message.id}>
-          {message.parts.map(part => {
-            if (part.type === 'tool-getWeather') {
+          {message.parts.map((part) => {
+            if (part.type === "tool-getWeather") {
               switch (part.state) {
-                case 'approval-requested':
+                case "approval-requested":
                   return (
                     <div key={part.toolCallId}>
                       <p>Get weather for {part.input.city}?</p>
@@ -436,7 +435,7 @@ export default function Chat() {
                       </button>
                     </div>
                   );
-                case 'output-available':
+                case "output-available":
                   return (
                     <div key={part.toolCallId}>
                       Weather in {part.input.city}: {part.output}
@@ -464,8 +463,8 @@ export default function Chat() {
 Use `lastAssistantMessageIsCompleteWithApprovalResponses` to automatically continue the conversation after approvals:
 
 ```tsx
-import { useChat } from '@ai-sdk/react';
-import { lastAssistantMessageIsCompleteWithApprovalResponses } from 'ai';
+import { useChat } from "@ai-sdk/react";
+import { lastAssistantMessageIsCompleteWithApprovalResponses } from "ai";
 
 const { messages, addToolApprovalResponse } = useChat({
   sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses,
@@ -481,21 +480,21 @@ When using dynamic tools (tools with unknown types at compile time), the UI part
   message.parts.map((part, index) => {
     switch (part.type) {
       // Static tools with specific (`tool-${toolName}`) types
-      case 'tool-getWeatherInformation':
+      case "tool-getWeatherInformation":
         return <WeatherDisplay part={part} />;
 
       // Dynamic tools use generic `dynamic-tool` type
-      case 'dynamic-tool':
+      case "dynamic-tool":
         return (
           <div key={index}>
             <h4>Tool: {part.toolName}</h4>
-            {part.state === 'input-streaming' && (
+            {part.state === "input-streaming" && (
               <pre>{JSON.stringify(part.input, null, 2)}</pre>
             )}
-            {part.state === 'output-available' && (
+            {part.state === "output-available" && (
               <pre>{JSON.stringify(part.output, null, 2)}</pre>
             )}
-            {part.state === 'output-error' && (
+            {part.state === "output-error" && (
               <div>Error: {part.errorText}</div>
             )}
           </div>
@@ -540,21 +539,21 @@ export default function Chat() {
   // ...
   return (
     <>
-      {messages?.map(message => (
+      {messages?.map((message) => (
         <div key={message.id}>
-          {message.parts.map(part => {
+          {message.parts.map((part) => {
             switch (part.type) {
-              case 'tool-askForConfirmation':
-              case 'tool-getLocation':
-              case 'tool-getWeatherInformation':
+              case "tool-askForConfirmation":
+              case "tool-getLocation":
+              case "tool-getWeatherInformation":
                 switch (part.state) {
-                  case 'input-streaming':
+                  case "input-streaming":
                     return <pre>{JSON.stringify(part.input, null, 2)}</pre>;
-                  case 'input-available':
+                  case "input-available":
                     return <pre>{JSON.stringify(part.input, null, 2)}</pre>;
-                  case 'output-available':
+                  case "output-available":
                     return <pre>{JSON.stringify(part.output, null, 2)}</pre>;
-                  case 'output-error':
+                  case "output-error":
                     return <div>Error: {part.errorText}</div>;
                 }
             }
@@ -576,18 +575,18 @@ If you want to display boundaries between tool calls, you can use the `step-star
 // where you render the message parts:
 message.parts.map((part, index) => {
   switch (part.type) {
-    case 'step-start':
+    case "step-start":
       // show step boundaries as horizontal lines:
       return index > 0 ? (
         <div key={index} className="text-gray-500">
           <hr className="my-2 border-gray-300" />
         </div>
       ) : null;
-    case 'text':
+    case "text":
     // ...
-    case 'tool-askForConfirmation':
-    case 'tool-getLocation':
-    case 'tool-getWeatherInformation':
+    case "tool-askForConfirmation":
+    case "tool-getLocation":
+    case "tool-getWeatherInformation":
     // ...
   }
 });
@@ -600,9 +599,9 @@ You can also use multi-step calls on the server-side with `streamText`.
 This works when all invoked tools have an `execute` function on the server side.
 
 ```tsx filename='app/api/chat/route.ts' highlight="15-21,24"
-import { convertToModelMessages, streamText, UIMessage, stepCountIs } from 'ai';
+import { convertToModelMessages, streamText, UIMessage, stepCountIs } from "ai";
 __PROVIDER_IMPORT__;
-import { z } from 'zod';
+import { z } from "zod";
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
@@ -612,11 +611,11 @@ export async function POST(req: Request) {
     messages: await convertToModelMessages(messages),
     tools: {
       getWeatherInformation: {
-        description: 'show the weather in a given city to the user',
+        description: "show the weather in a given city to the user",
         inputSchema: z.object({ city: z.string() }),
         // tool has execute function:
         execute: async ({}: { city: string }) => {
-          const weatherOptions = ['sunny', 'cloudy', 'rainy', 'snowy', 'windy'];
+          const weatherOptions = ["sunny", "cloudy", "rainy", "snowy", "windy"];
           return weatherOptions[
             Math.floor(Math.random() * weatherOptions.length)
           ];
@@ -640,10 +639,10 @@ To surface the errors, you can use the `onError` function when calling `toUIMess
 ```tsx
 export function errorHandler(error: unknown) {
   if (error == null) {
-    return 'unknown error';
+    return "unknown error";
   }
 
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error;
   }
 
@@ -673,6 +672,6 @@ const response = createUIMessageResponse({
   async execute(dataStream) {
     // ...
   },
-  onError: error => `Custom error: ${error.message}`,
+  onError: (error) => `Custom error: ${error.message}`,
 });
 ```

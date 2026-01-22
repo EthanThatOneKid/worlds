@@ -13,7 +13,6 @@ const tabs = [
   "overview",
   "playground",
   "search",
-  "conversations",
   "webhooks",
   "settings",
 ] as const;
@@ -79,16 +78,7 @@ export function WorldTabs({
           >
             Search
           </button>
-          <button
-            onClick={() => setActiveTab("conversations")}
-            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
-              activeTab === "conversations"
-                ? "border-amber-500 text-amber-600 dark:text-amber-400"
-                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
-            }`}
-          >
-            Conversations
-          </button>
+
           <button
             onClick={() => setActiveTab("webhooks")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
@@ -139,28 +129,7 @@ export function WorldTabs({
         {activeTab === "search" && (
           <WorldSearch worldId={world.id} userId={userId} />
         )}
-        {activeTab === "conversations" && (
-          <ComingSoonPlaceholder
-            title="Conversations - Coming soon"
-            description="A chat interface for your worlds is currently under development."
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-amber-600 dark:text-amber-400"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M7.5 8.25h9m-9 3h9m-9 3h3m-6.75 4.125a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3V7.5a3 3 0 0 0-3-3h-7.5a3 3 0 0 0-3 3v10.625Z"
-                />
-              </svg>
-            }
-          />
-        )}
+
         {activeTab === "webhooks" && (
           <ComingSoonPlaceholder
             title="Webhooks - Coming soon"

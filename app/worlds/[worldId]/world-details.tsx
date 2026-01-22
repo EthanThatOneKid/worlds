@@ -7,6 +7,7 @@ import { ConnectSdkButton } from "@/components/connect-sdk";
 import { PixelPlanet } from "@/components/pixel-planet/pixel-planet";
 import { PlanetDialog } from "@/components/pixel-planet/planet-dialog";
 import { getSeedFromId } from "@/components/pixel-planet/lib/seed-utils";
+import { ConversationChat } from "./chat/client";
 
 export function WorldDetails({
   world,
@@ -218,6 +219,15 @@ export function WorldDetails({
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="pt-2">
+        <h3 className="text-sm font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-4">
+          Chat with World
+        </h3>
+        <div className="flex flex-col">
+          <ConversationChat worldId={world.id} className="w-full" />
         </div>
       </div>
     </div>
