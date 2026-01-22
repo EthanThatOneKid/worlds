@@ -1,12 +1,13 @@
 "use client";
 
-import { useQueryState, parseAsStringLiteral } from "nuqs";
-import { WorldDetails } from "./world-details";
-
-import { WorldPlayground } from "./world-playground";
-import { WorldSearch } from "./world-search";
 import type { WorldRecord } from "@fartlabs/worlds";
 import { useState } from "react";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
+import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
+import { WorldDetails } from "./world-details";
+import { WorldPlayground } from "./world-playground";
+import { WorldSearch } from "./world-search";
+import { WorldSettings } from "./world-settings";
 
 const tabs = [
   "overview",
@@ -16,9 +17,6 @@ const tabs = [
   "webhooks",
   "settings",
 ] as const;
-
-import { WorldSettings } from "./world-settings";
-import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
 
 interface WorldTabsProps {
   world: WorldRecord;

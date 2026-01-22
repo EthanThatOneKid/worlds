@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupText,
-} from "@/components/ui/button-group";
+import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
 import { cn } from "@/lib/utils";
 import type { Experimental_SpeechResult as SpeechResult } from "ai";
 import {
@@ -27,7 +24,6 @@ export type AudioPlayerProps = Omit<
 >;
 
 export const AudioPlayer = ({
-  className,
   children,
   style,
   ...props

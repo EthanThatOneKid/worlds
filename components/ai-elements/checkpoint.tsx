@@ -21,7 +21,7 @@ export const Checkpoint = ({
   <div
     className={cn(
       "flex items-center gap-0.5 overflow-hidden text-muted-foreground",
-      className
+      className,
     )}
     {...props}
   >
@@ -47,7 +47,6 @@ export type CheckpointTriggerProps = ComponentProps<typeof Button> & {
 
 export const CheckpointTrigger = ({
   children,
-  className,
   variant = "ghost",
   size = "sm",
   tooltip,
