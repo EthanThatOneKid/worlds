@@ -83,7 +83,9 @@ export const AgentTools = memo(
       <span className="font-medium text-muted-foreground text-sm">Tools</span>
       <Accordion
         className="rounded-md border"
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {...(props as any)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         type={type as any}
       />
     </div>
