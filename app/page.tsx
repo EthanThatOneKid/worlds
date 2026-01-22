@@ -11,7 +11,7 @@ import { codeToHtml } from "shiki";
 import { ConnectSdkButton } from "@/components/connect-sdk";
 
 export const metadata: Metadata = {
-  title: "My Worlds",
+  title: "Dashboard",
 };
 
 export default async function Home() {

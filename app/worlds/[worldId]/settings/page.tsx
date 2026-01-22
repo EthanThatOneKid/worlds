@@ -3,7 +3,29 @@ import { redirect, notFound } from "next/navigation";
 import { sdk } from "@/lib/sdk";
 import { WorldSettings } from "../world-settings";
 
+import type { Metadata } from "next";
+
 type Params = { worldId: string };
+
+export async function generateMetadata(props: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { worldId } = await props.params;
+  const { user } = await authkit.withAuth();
+
+  if (!user) {
+    return { title: "Settings" };
+  }
+
+  try {
+    const world = await sdk.worlds.get(worldId, { accountId: user.id });
+    return {
+      title: world ? `Settings - ${world.label}` : "Settings",
+    };
+  } catch {
+    return { title: "Settings" };
+  }
+}
 
 export default async function WorldSettingsPage(props: {
   params: Promise<Params>;

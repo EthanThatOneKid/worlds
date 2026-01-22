@@ -8,7 +8,7 @@ import { Metadata } from "next";
 import { sdk } from "@/lib/sdk";
 
 export const metadata: Metadata = {
-  title: "Account",
+  title: "Account Settings",
 };
 
 export default async function AccountPage() {

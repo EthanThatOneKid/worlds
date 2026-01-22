@@ -1,6 +1,10 @@
-"use client";
-
 import { ConversationDemo } from "@/components/conversation-demo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Conversation Demo",
+  description: "A full-featured chat interface demo using Gemini 3 and 2.5 models.",
+};
 
 export default function ConversationDemoPage() {
   return (

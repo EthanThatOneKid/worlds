@@ -1,5 +1,31 @@
 import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
 
+import * as authkit from "@workos-inc/authkit-nextjs";
+import { sdk } from "@/lib/sdk";
+import type { Metadata } from "next";
+
+type Params = { worldId: string };
+
+export async function generateMetadata(props: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { worldId } = await props.params;
+  const { user } = await authkit.withAuth();
+
+  if (!user) {
+    return { title: "Webhooks" };
+  }
+
+  try {
+    const world = await sdk.worlds.get(worldId, { accountId: user.id });
+    return {
+      title: world ? `Webhooks - ${world.label}` : "Webhooks",
+    };
+  } catch {
+    return { title: "Webhooks" };
+  }
+}
+
 export default function WorldWebhooksPage() {
   return (
     <ComingSoonPlaceholder
