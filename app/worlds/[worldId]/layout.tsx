@@ -86,28 +86,7 @@ export default async function WorldLayout(props: {
 
   return (
     <>
-      <PageHeader accountId={user.id}>
-        <Link
-          href="/"
-          className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer"
-          title="Back to Dashboard"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-            />
-          </svg>
-        </Link>
-      </PageHeader>
+      <PageHeader accountId={user.id} />
 
       <div className="w-full mx-auto max-w-5xl px-6 pb-12">
         <div className="space-y-6">
