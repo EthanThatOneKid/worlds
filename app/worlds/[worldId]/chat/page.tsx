@@ -52,18 +52,8 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6rem)] max-w-5xl mx-auto px-4 sm:px-6 animate-in fade-in duration-500">
-      {/* Header */}
-      <div className="mb-4 flex items-start gap-4 flex-shrink-0">
+    <div className="flex flex-col h-[calc(100vh-13rem)] max-w-5xl mx-auto px-4 sm:px-6 animate-in fade-in duration-500">
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider">
-            <span>{world?.label || "World"}</span>
-            <span className="opacity-50">/</span>
-            <span className="text-stone-900 dark:text-white">Chat</span>
-          </div>
-        </div>
-      </div>
 
       <ConversationChat worldId={worldId} />
     </div>
