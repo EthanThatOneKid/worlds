@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { SparqlResults } from "@fartlabs/worlds";
+import type { SparqlResult } from "@fartlabs/worlds";
 import dynamic from "next/dynamic";
 
 const CodeEditor = dynamic(
@@ -40,7 +40,7 @@ INSERT DATA {
 export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<
-    SparqlResults | { message: string } | null
+    SparqlResult | { message: string } | null
   >(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         throw new Error(errorText || response.statusText);
       }
 
-      const data = (await response.json()) as SparqlResults | null;
+      const data = (await response.json()) as SparqlResult | null;
       if (data === null) {
         setResults({ message: "Update executed successfully" });
       } else {

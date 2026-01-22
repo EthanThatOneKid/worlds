@@ -1,7 +1,11 @@
-import { SparqlResults } from "@fartlabs/worlds";
+import type {
+  SparqlResult,
+  SparqlSelectResults,
+  SparqlBinding,
+} from "@fartlabs/worlds";
 
 interface SparqlResultsDisplayProps {
-  results: SparqlResults | { message: string } | null;
+  results: SparqlResult | { message: string } | null;
   loading?: boolean;
 }
 
@@ -82,9 +86,14 @@ export function SparqlResultsDisplay({
   }
 
   // Handle Select
-  if ("results" in results && "head" in results) {
-    const vars = results.head.vars || [];
-    const bindings = results.results.bindings || [];
+  if (
+    "results" in results &&
+    "head" in results &&
+    "bindings" in results.results
+  ) {
+    const selectResults = results as SparqlSelectResults;
+    const vars = selectResults.head.vars || [];
+    const bindings = selectResults.results.bindings || [];
 
     if (bindings.length === 0) {
       return <div className="p-4 text-stone-500 italic">No results found.</div>;
@@ -95,7 +104,7 @@ export function SparqlResultsDisplay({
         <table className="w-full text-left font-mono text-sm">
           <thead className="bg-stone-100 dark:bg-stone-800 sticky top-0 z-10">
             <tr>
-              {vars.map((v) => (
+              {vars.map((v: string) => (
                 <th
                   key={v}
                   className="px-4 py-2 border-b border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold whitespace-nowrap"
@@ -106,12 +115,12 @@ export function SparqlResultsDisplay({
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-200 dark:divide-stone-800">
-            {bindings.map((binding, i) => (
+            {bindings.map((binding: SparqlBinding, i: number) => (
               <tr
                 key={i}
                 className="hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors"
               >
-                {vars.map((v) => {
+                {vars.map((v: string) => {
                   const cell = binding[v];
                   return (
                     <td

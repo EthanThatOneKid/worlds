@@ -3,6 +3,7 @@ import * as authkit from "@workos-inc/authkit-nextjs";
 import { sdk } from "@/lib/sdk";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditableConversationLabel } from "@/components/editable-conversation-label";
 
 type Params = { worldId: string; conversationId: string };
 
@@ -20,10 +21,10 @@ export async function generateMetadata(props: {
     const conversation = await sdk.conversations.get(worldId, conversationId, {
       accountId: user.id,
     });
+    const label =
+      conversation?.label || (conversation ? conversation.id.slice(0, 8) : "");
     return {
-      title: conversation
-        ? `Conversation ${conversation.id.slice(0, 8)}`
-        : "Conversation",
+      title: label ? `Conversation - ${label}` : "Conversation",
     };
   } catch {
     return { title: "Conversation" };
@@ -70,17 +71,19 @@ export default async function ConversationPage(props: {
           <ChevronLeftIcon className="size-5" />
         </Link>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider">
             <GlobeIcon className="size-3" />
             <span>{world?.label || "World"}</span>
             <span className="opacity-50">/</span>
-            <span className="truncate">Conversation {conversation.id}</span>
+            <EditableConversationLabel
+              worldId={worldId}
+              conversationId={conversationId}
+              initialLabel={conversation.label ?? "Untitled"}
+              className="truncate text-xs font-bold uppercase tracking-wider text-stone-900 dark:text-white"
+              inputClassName="h-7 text-[10px] bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-700 focus:ring-amber-500/20 py-0 px-2 uppercase font-bold tracking-wider"
+            />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2 truncate">
-            <MessageSquareIcon className="size-5 text-stone-400 shrink-0" />
-            Conversation {conversation.id.slice(0, 8)}...
-          </h1>
-          <p className="text-stone-500 dark:text-stone-400 text-xs mt-0.5">
+          <p className="text-stone-500 dark:text-stone-400 text-[10px] mt-1">
             Started{" "}
             {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",

@@ -22,7 +22,11 @@ export function CreateConversationButton({ worldId }: { worldId: string }) {
   };
 
   return (
-    <Button onClick={handleCreate} disabled={isPending} className="gap-2">
+    <Button
+      onClick={handleCreate}
+      disabled={isPending}
+      className="gap-2 bg-amber-600 hover:bg-amber-700 text-white border-none"
+    >
       {isPending ? (
         <Loader2Icon className="size-4 animate-spin" />
       ) : (
