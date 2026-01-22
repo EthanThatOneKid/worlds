@@ -2,30 +2,23 @@
 
 import { MessageSquareIcon, SendIcon, Loader2Icon } from "lucide-react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { DefaultChatTransport } from "ai";
 import React, { useRef, useEffect } from "react";
-import type { MessageRecord } from "@fartlabs/worlds";
 
 type Props = {
   worldId: string;
-  conversationId: string;
-  initialMessages: MessageRecord[];
 };
 
-export function ConversationChat({
-  worldId,
-  conversationId,
-  initialMessages,
-}: Props) {
+export function ConversationChat({ worldId }: Props) {
   const {
     messages: chatMessages,
     sendMessage,
     status,
   } = useChat({
     transport: new DefaultChatTransport({
-      api: `/api/worlds/${worldId}/conversations/${conversationId}/chat`,
+      api: `/api/worlds/${worldId}/chat`,
     }),
-    messages: convertToUIMessages(initialMessages),
+    messages: [],
   });
 
   const [input, setInput] = React.useState("");
@@ -249,46 +242,4 @@ export function ConversationChat({
       </div>
     </div>
   );
-}
-
-export function convertToUIMessages(messages: MessageRecord[]): UIMessage[] {
-  return messages.map((m) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let parts: any[] = [];
-    let contentStr = "";
-
-    // Check for UIMessage style parts first (Assistant messages saved from onFinish)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (Array.isArray((m.content as any).parts)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      parts = (m.content as any).parts;
-      contentStr =
-        typeof m.content.content === "string" ? m.content.content : "";
-    }
-    // Check for CoreMessage style content array (User messages)
-    else if (Array.isArray(m.content.content)) {
-      parts = m.content.content;
-      contentStr = parts
-        .map((p) => {
-          if (p.type === "text") return p.text;
-          return "";
-        })
-        .join("");
-    }
-    // Fallback to string content
-    else if (typeof m.content.content === "string") {
-      contentStr = m.content.content;
-      parts = [{ type: "text", text: contentStr }];
-    } else {
-      contentStr = JSON.stringify(m.content.content);
-      parts = [{ type: "text", text: contentStr }];
-    }
-
-    return {
-      id: m.id,
-      role: m.content.role as "user" | "assistant" | "system",
-      content: contentStr,
-      parts: parts,
-    };
-  });
 }
