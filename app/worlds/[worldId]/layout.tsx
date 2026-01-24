@@ -84,9 +84,11 @@ export default async function WorldLayout(props: {
     );
   }
 
+  const isAdmin = !!user.metadata?.admin;
+
   return (
     <>
-      <PageHeader accountId={user.id} />
+      <PageHeader accountId={user.id} isAdmin={isAdmin} />
 
       <div className="w-full mx-auto max-w-5xl px-6 pb-12">
         <div className="space-y-6">

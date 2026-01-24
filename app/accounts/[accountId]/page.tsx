@@ -35,9 +35,10 @@ export default async function AccountPage() {
     );
   }
 
+  const isAdmin = !!user.metadata?.admin;
   return (
     <>
-      <PageHeader accountId={user.id} />
+      <PageHeader accountId={user.id} isAdmin={isAdmin} />
 
       <div className="mx-auto max-w-2xl px-6 py-12">
         <Link

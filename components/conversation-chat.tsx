@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquareIcon, SendIcon, Loader2Icon } from "lucide-react";
+import { SendIcon, Loader2Icon } from "lucide-react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import React, { useRef, useEffect } from "react";

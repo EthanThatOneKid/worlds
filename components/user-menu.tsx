@@ -7,10 +7,12 @@ export function UserMenu({
   email,
   accountId,
   onSignOut,
+  isAdmin,
 }: {
   email?: string | null;
   accountId?: string | null;
   onSignOut: () => Promise<void>;
+  isAdmin?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -61,6 +63,15 @@ export function UserMenu({
                 onClick={() => setIsOpen(false)}
               >
                 Account
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                href="/admin/invites"
+                className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              >
+                Admin
               </Link>
             )}
             <button

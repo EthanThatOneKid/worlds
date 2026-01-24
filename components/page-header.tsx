@@ -7,9 +7,11 @@ import { signOutAction } from "@/app/actions";
 export function PageHeader({
   accountId,
   children,
+  isAdmin,
 }: {
   accountId?: string | null;
   children?: ReactNode;
+  isAdmin?: boolean;
 }) {
   return (
     <nav className="border-b border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-sm sticky top-0 z-50">
@@ -39,7 +41,11 @@ export function PageHeader({
               API Keys
             </Link>
           )}
-          <UserMenu accountId={accountId} onSignOut={signOutAction} />
+          <UserMenu
+            accountId={accountId}
+            onSignOut={signOutAction}
+            isAdmin={isAdmin}
+          />
         </div>
       </div>
     </nav>
