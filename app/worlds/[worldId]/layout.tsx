@@ -2,7 +2,6 @@ import * as authkit from "@workos-inc/authkit-nextjs";
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { PageHeader } from "@/components/page-header";
 import { WorldTabsNav } from "./world-tabs-nav";
 import React from "react";
 
@@ -84,12 +83,8 @@ export default async function WorldLayout(props: {
     );
   }
 
-  const isAdmin = !!user.metadata?.admin;
-
   return (
     <>
-      <PageHeader accountId={user.id} isAdmin={isAdmin} />
-
       <div className="w-full mx-auto max-w-5xl px-6 pb-12">
         <div className="space-y-6">
           <WorldTabsNav worldId={worldId} />

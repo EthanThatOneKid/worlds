@@ -1,7 +1,6 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { PageHeader } from "@/components/page-header";
 import { DeleteAccountSection } from "@/components/delete-account-section";
 import { ApiKeySection } from "@/components/api-key-section";
 import { Metadata } from "next";
@@ -35,11 +34,8 @@ export default async function AccountPage() {
     );
   }
 
-  const isAdmin = !!user.metadata?.admin;
   return (
     <>
-      <PageHeader accountId={user.id} isAdmin={isAdmin} />
-
       <div className="mx-auto max-w-2xl px-6 py-12">
         <Link
           href="/"

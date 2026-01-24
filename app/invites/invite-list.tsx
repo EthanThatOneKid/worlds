@@ -68,9 +68,14 @@ function InviteRow({ invite }: { invite: InviteRecord }) {
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
         {invite.redeemedAt ? (
-          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300">
-            Redeemed
-          </span>
+          <div className="flex flex-col">
+            <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300 w-fit">
+              Redeemed
+            </span>
+            <span className="text-xs text-stone-500 mt-1">
+              {new Date(invite.redeemedAt).toLocaleDateString()}
+            </span>
+          </div>
         ) : (
           <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-300">
             Active

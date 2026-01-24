@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "@workos-inc/authkit-nextjs/components";
 
 export function UserMenu({
   email,
@@ -14,8 +15,12 @@ export function UserMenu({
   onSignOut: () => Promise<void>;
   isAdmin?: boolean;
 }) {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Fallback to prop if context is empty (e.g. during initial load or edge cases), but context is preferred
+  const finalAccountId = user?.id || accountId;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -56,22 +61,26 @@ export function UserMenu({
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-stone-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 border border-stone-200 dark:border-stone-700">
           <div className="py-1">
-            {accountId && (
+            {isAdmin && (
+              <>
+                <Link
+                  href="/invites"
+                  className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Invites
+                </Link>
+                <div className="my-1 border-t border-stone-200 dark:border-stone-700" />
+              </>
+            )}
+
+            {finalAccountId && (
               <Link
-                href={`/accounts/${accountId}`}
+                href={`/accounts/${finalAccountId}`}
                 className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
                 onClick={() => setIsOpen(false)}
               >
                 Account
-              </Link>
-            )}
-            {isAdmin && (
-              <Link
-                href="/admin/invites"
-                className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
-                onClick={() => setIsOpen(false)}
-              >
-                Admin
               </Link>
             )}
             <button

@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 import { sdk } from "@/lib/sdk";
 import { WorldRow } from "@/components/world-row";
 import { CreateWorldButton } from "@/components/create-world-button";
-import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
 import { codeToHtml } from "shiki";
 import { ConnectSdkButton } from "@/components/connect-sdk";
+import { InviteRedemptionForm } from "@/components/invite-redemption-form";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -46,6 +46,11 @@ export default async function Home() {
 
   if (!account) {
     redirect("/sign-up");
+  }
+
+  // If the account has no plan, show the invite redemption screen
+  if (!account.plan) {
+    return <InviteRedemptionForm />;
   }
 
   let worlds;
@@ -90,11 +95,8 @@ console.log("My worlds:", worlds.length);`;
     theme: "github-dark",
   });
 
-  const isAdmin = !!user.metadata?.admin;
   return (
     <>
-      <PageHeader accountId={user.id} isAdmin={isAdmin} />
-
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
