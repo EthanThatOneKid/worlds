@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQueryState } from "nuqs";
-import type { SearchResult } from "@fartlabs/worlds";
+import type { WorldsSearchResult } from "@fartlabs/worlds";
 
 interface WorldSearchProps {
   worldId: string;
@@ -11,7 +11,7 @@ interface WorldSearchProps {
 
 export function WorldSearch({ worldId, userId }: WorldSearchProps) {
   const [query, setQuery] = useQueryState("q", { defaultValue: "" });
-  const [results, setResults] = useState<SearchResult[] | null>(null);
+  const [results, setResults] = useState<WorldsSearchResult[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isResultsCopied, setIsResultsCopied] = useState(false);
@@ -35,7 +35,7 @@ export function WorldSearch({ worldId, userId }: WorldSearchProps) {
         throw new Error(errorText || response.statusText);
       }
 
-      const data = (await response.json()) as SearchResult[];
+      const data = (await response.json()) as WorldsSearchResult[];
       setResults(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to execute search");

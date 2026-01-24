@@ -34,7 +34,7 @@ export async function POST(
     tools: createTools({
       apiKey: process.env.WORLDS_API_KEY!,
       baseUrl: process.env.WORLDS_API_BASE_URL!,
-      worldId,
+      worldIds: [worldId],
     }),
     stopWhen: stepCountIs(5),
   });

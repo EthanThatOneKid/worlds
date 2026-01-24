@@ -27,7 +27,7 @@ export async function deleteWorld(worldId: string) {
     throw new Error("Unauthorized");
   }
 
-  await sdk.worlds.remove(worldId, { accountId: user.id });
+  await sdk.worlds.delete(worldId, { accountId: user.id });
   revalidatePath("/");
 }
 
