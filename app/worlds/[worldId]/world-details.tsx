@@ -7,7 +7,7 @@ import { ConnectSdkButton } from "@/components/connect-sdk";
 import { PixelPlanet } from "@/components/pixel-planet/pixel-planet";
 import { PlanetDialog } from "@/components/pixel-planet/planet-dialog";
 import { getSeedFromId } from "@/components/pixel-planet/lib/seed-utils";
-import { ConversationChat } from "./chat/client";
+import { ConversationChat } from "@/components/conversation-chat";
 
 export function WorldDetails({
   world,

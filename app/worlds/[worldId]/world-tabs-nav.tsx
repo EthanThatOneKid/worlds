@@ -8,7 +8,6 @@ const tabs = [
   { id: "overview", label: "Overview", path: "" },
   { id: "playground", label: "Playground", path: "/playground" },
   { id: "search", label: "Search", path: "/search" },
-  { id: "conversations", label: "Conversations", path: "/chat" },
   { id: "webhooks", label: "Webhooks", path: "/webhooks" },
   { id: "settings", label: "Settings", path: "/settings" },
 ] as const;
