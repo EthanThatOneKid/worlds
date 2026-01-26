@@ -11,7 +11,7 @@ export async function createInviteAction() {
     try {
       const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 4);
       await sdk.invites.create({ code: nanoid() });
-      revalidatePath("/admin/invites");
+      revalidatePath("/invites");
       return { success: true };
     } catch (error) {
       console.error(`Attempt ${attempts + 1} failed:`, error);
@@ -27,7 +27,7 @@ export async function createInviteAction() {
 export async function deleteInviteAction(id: string) {
   try {
     await sdk.invites.delete(id);
-    revalidatePath("/admin/invites");
+    revalidatePath("/invites");
     return { success: true };
   } catch (error) {
     console.error("Failed to delete invite:", error);
