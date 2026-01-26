@@ -38,7 +38,7 @@ export function PageHeader({
               href={`/accounts/${accountId}#api-keys`}
               className="text-xs font-medium px-2.5 py-1 rounded-md border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all"
             >
-              API Keys
+              API Key
             </Link>
           )}
           <UserMenu

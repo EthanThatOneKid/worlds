@@ -34,6 +34,11 @@ export default async function AccountPage() {
     );
   }
 
+  // Check if user is a shadow user - redirect to root if plan is null/undefined or "shadow"
+  if (!account.plan || account.plan === "shadow") {
+    redirect("/");
+  }
+
   return (
     <>
       <div className="mx-auto max-w-2xl px-6 py-12">

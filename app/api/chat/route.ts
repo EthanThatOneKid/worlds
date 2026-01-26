@@ -1,5 +1,5 @@
-// import { google } from "@ai-sdk/google";
 import { anthropic } from "@ai-sdk/anthropic";
+import { sdk } from "@/lib/sdk";
 import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 import {
   createTools,
@@ -46,6 +46,24 @@ export async function POST(req: Request) {
 
   if (!currentUser || !currentUser.metadata?.admin) {
     return new Response("Forbidden: Chat feature is only available to admins", {
+      status: 403,
+    });
+  }
+
+  // Check if user is a shadow user - return forbidden if plan is null/undefined or "shadow"
+  try {
+    const account = await sdk.accounts.get(user.id);
+    if (account && (!account.plan || account.plan === "shadow")) {
+      return new Response(
+        "Forbidden: Shadow users cannot access this feature",
+        {
+          status: 403,
+        },
+      );
+    }
+  } catch (error) {
+    console.error("Failed to fetch account for shadow user check:", error);
+    return new Response("Forbidden: Unable to verify account", {
       status: 403,
     });
   }
