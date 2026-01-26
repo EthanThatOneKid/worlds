@@ -227,6 +227,7 @@ export function WorldDetails({
           <ConversationChat
             worldId={world.id}
             worldLabel={world.label}
+            worldDescription={world.description}
             className="w-full"
           />
         </div>

@@ -1,8 +1,4 @@
-import type {
-  SparqlBinding,
-  SparqlResult,
-  SparqlSelectResults,
-} from "@fartlabs/worlds";
+import type { SparqlBinding, SparqlResult } from "@fartlabs/worlds";
 import { Loader2Icon } from "lucide-react";
 import { CodeBlock } from "./ai-elements/code-block";
 
@@ -116,7 +112,7 @@ export function SparqlResultsDisplay({
                 {vars.map((v: string) => (
                   <th
                     key={v}
-                    className={`${compact ? "px-2 py-1.5" : "px-4 py-2"} border-b border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold whitespace-nowrap`}
+                    className={`${compact ? "px-3 py-2" : "px-4 py-2"} border-b border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold whitespace-nowrap`}
                   >
                     ?{v}
                   </th>
@@ -134,7 +130,7 @@ export function SparqlResultsDisplay({
                     return (
                       <td
                         key={v}
-                        className={`${compact ? "px-2 py-1" : "px-4 py-2"} text-stone-900 dark:text-stone-100 whitespace-nowrap max-w-xs truncate`}
+                        className={`${compact ? "px-3 py-2" : "px-4 py-2"} text-stone-900 dark:text-stone-100 whitespace-nowrap max-w-xs truncate`}
                         title={cell?.value || ""}
                       >
                         {cell ? (

@@ -6,9 +6,10 @@ import {
   DefaultChatTransport,
   type SourceDocumentUIPart,
   type TextUIPart,
+  lastAssistantMessageIsCompleteWithApprovalResponses,
 } from "ai";
 import { CheckIcon, CopyIcon } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MessageResponse } from "@/components/ai-elements/message";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,15 +49,18 @@ import { PixelPlanet } from "./pixel-planet/pixel-planet";
 type Props = {
   worldId: string;
   worldLabel?: string;
+  worldDescription?: string;
   className?: string;
 };
 
 const PromptInputSourcesDisplay = ({
   worldId,
   worldLabel,
+  worldDescription,
 }: {
   worldId: string;
   worldLabel?: string;
+  worldDescription?: string;
 }) => {
   const sources = usePromptInputReferencedSources();
   const [, setShowPlanetDialog] = useQueryState(
@@ -121,10 +125,11 @@ const PromptInputSourcesDisplay = ({
                     <div className="size-1.5 rounded-full bg-green-500 animate-pulse" />
                     <span>World is active and reachable</span>
                   </div>
-                  <p className="text-stone-300 text-sm leading-relaxed">
-                    This is your active world. All messages will be sent to this
-                    environment. Click to enter the 3D lounge.
-                  </p>
+                  {worldDescription && (
+                    <p className="text-stone-300 text-sm leading-relaxed">
+                      {worldDescription}
+                    </p>
+                  )}
                 </div>
               </AttachmentHoverCardContent>
             </AttachmentHoverCard>
@@ -142,6 +147,7 @@ type PromptInputWrapperProps = {
   status: ChatStatus;
   worldId: string;
   worldLabel?: string;
+  worldDescription?: string;
 };
 
 // Component that adds the world as a source on mount
@@ -224,6 +230,7 @@ const PromptInputWrapper = ({
   status,
   worldId,
   worldLabel,
+  worldDescription,
 }: PromptInputWrapperProps) => {
   const submitHandlerRef = React.useRef<
     ((message: PromptInputMessage) => Promise<void>) | null
@@ -257,6 +264,7 @@ const PromptInputWrapper = ({
           <PromptInputSourcesDisplay
             worldId={worldId}
             worldLabel={worldLabel}
+            worldDescription={worldDescription}
           />
         </div>
         <PromptInputSubmit status={status} size="icon-sm" />
@@ -268,6 +276,7 @@ const PromptInputWrapper = ({
 export function ConversationChat({
   worldId,
   worldLabel,
+  worldDescription,
   className = "",
 }: Props) {
   const {
@@ -280,6 +289,7 @@ export function ConversationChat({
       api: `/api/chat`,
     }),
     messages: [],
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses,
   });
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -290,271 +300,332 @@ export function ConversationChat({
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
-
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm flex flex-col ${
-        chatMessages.length > 0 ? "min-h-[400px] max-h-[700px]" : ""
-      } ${className}`}
+      className={`overflow-hidden rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm flex flex-col ${className}`}
     >
       {/* Messages List */}
       {chatMessages.length > 0 && (
-        <div
-          className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
-          ref={scrollRef}
-        >
+        <div className="p-6 space-y-6">
           {chatMessages.map((m) => (
             <div
               key={m.id}
               className={`flex w-full items-start gap-2 ${
                 m.role === "user" ? "justify-end" : "justify-start"
-              } group`}
+              }`}
             >
-              {/* Copy button for user messages - appears on the left */}
-              {m.role === "user" && (
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                          onClick={() => {
-                            const text = m.parts
-                              ? m.parts
-                                  .filter((p) => p.type === "text")
-                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  .map((p) => (p as any).text)
-                                  .join("")
-                              : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                (m as any).content.content;
-                            handleCopy(m.id, text);
-                          }}
-                        >
-                          {copiedId === m.id ? (
-                            <CheckIcon className="size-3.5" />
-                          ) : (
-                            <CopyIcon className="size-3.5" />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copy message</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              )}
-
-              <div
-                className={`max-w-[80%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed shadow-sm ${
-                  m.role === "user"
-                    ? "bg-amber-500 text-stone-950 rounded-tr-none"
-                    : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700"
-                }`}
-              >
-                {/* Tool Invocations */}
+              {/* Render each part in its own bubble */}
+              <div className="flex flex-col gap-2 max-w-[80%]">
                 {m.parts ? (
                   m.parts.map((part, i) => {
-                    if (part.type === "text") {
-                      return (
-                        <div
-                          key={i}
-                          className="prose dark:prose-invert max-w-none"
-                        >
-                          <MessageResponse>{part.text}</MessageResponse>
-                        </div>
-                      );
-                    }
-
+                    // Skip reasoning parts
                     if (part.type === "reasoning") {
                       return null;
                     }
 
-                    // if (part.type === "source") {
-                    //   return null;
-                    // }
+                    // Render each part in its own bubble
+                    return (
+                      <div
+                        key={i}
+                        className={`flex w-full items-start gap-2 ${
+                          m.role === "user" ? "justify-end" : "justify-start"
+                        } group`}
+                      >
+                        {/* Copy button for user messages - appears on the left */}
+                        {m.role === "user" && part.type === "text" && (
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                                    onClick={() => {
+                                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                      const text = (part as any).text || "";
+                                      handleCopy(`${m.id}-${i}`, text);
+                                    }}
+                                  >
+                                    {copiedId === `${m.id}-${i}` ? (
+                                      <CheckIcon className="size-3.5" />
+                                    ) : (
+                                      <CopyIcon className="size-3.5" />
+                                    )}
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Copy message</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        )}
 
-                    // Handle tool parts - type is "tool-{toolName}" e.g. "tool-executeSparql"
-                    if (part.type.startsWith("tool-")) {
-                      // Extract tool name from type (e.g., "tool-executeSparql" -> "executeSparql")
-                      const toolName = part.type.slice(5); // Remove "tool-" prefix
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      const toolPart = part as any;
-                      const toolState = toolPart.state as
-                        | "input-streaming"
-                        | "input-available"
-                        | "approval-requested"
-                        | "approval-responded"
-                        | "output-available"
-                        | "output-error"
-                        | "output-denied";
-                      const toolArgs = toolPart.input;
-                      const toolOutput = toolPart.output;
-                      const approval = toolPart.approval as
-                        | { id: string; approved?: boolean; reason?: string }
-                        | undefined;
+                        {part.type === "text" ? (
+                          <div
+                            className={`rounded-2xl text-sm leading-relaxed shadow-sm break-words ${
+                              m.role === "user"
+                                ? "bg-amber-500 text-stone-950 rounded-tr-none px-5 py-4"
+                                : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700 px-5 py-4"
+                            }`}
+                          >
+                            <div className="prose dark:prose-invert max-w-none">
+                              <MessageResponse>
+                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                {(part as any).text}
+                              </MessageResponse>
+                            </div>
+                          </div>
+                        ) : part.type.startsWith("tool-") ? (
+                          <div
+                            className={`rounded-2xl text-sm leading-relaxed shadow-sm overflow-hidden ${
+                              m.role === "user"
+                                ? "bg-amber-500 text-stone-950 rounded-tr-none p-0"
+                                : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700 p-0"
+                            }`}
+                          >
+                            {(() => {
+                              // Extract tool name from type (e.g., "tool-executeSparql" -> "executeSparql")
+                              const toolName = part.type.slice(5); // Remove "tool-" prefix
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const toolPart = part as any;
 
-                      // Render tool-specific components
-                      if (toolName === "executeSparql") {
-                        return (
-                          <ExecuteSparqlTool
-                            key={i}
-                            input={toolArgs}
-                            output={toolOutput}
-                            state={toolState}
-                            approval={approval}
-                            onApprove={
-                              approval
-                                ? () =>
-                                    addToolApprovalResponse({
-                                      id: approval.id,
-                                      approved: true,
-                                    })
-                                : undefined
-                            }
-                            onReject={
-                              approval
-                                ? () =>
-                                    addToolApprovalResponse({
-                                      id: approval.id,
-                                      approved: false,
-                                    })
-                                : undefined
-                            }
-                          />
-                        );
-                      }
+                              const toolState = toolPart.state as
+                                | "input-streaming"
+                                | "input-available"
+                                | "approval-requested"
+                                | "approval-responded"
+                                | "output-available"
+                                | "output-error"
+                                | "output-denied";
+                              const toolArgs = toolPart.input;
+                              const toolOutput = toolPart.output;
+                              // Try multiple ways to access approval
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const partAny = part as any;
+                              const approval = (toolPart.approval ||
+                                partAny.approval) as
+                                | {
+                                    id: string;
+                                    approved?: boolean;
+                                    reason?: string;
+                                  }
+                                | undefined;
 
-                      if (toolName === "searchFacts") {
-                        return (
-                          <SearchFactsTool
-                            key={i}
-                            input={toolArgs}
-                            output={toolOutput}
-                            state={toolState}
-                          />
-                        );
-                      }
+                              // Debug: Log the entire tool part to see its structure
+                              if (toolName === "executeSparql") {
+                                console.log("🔍 Tool Part Debug:", {
+                                  toolName,
+                                  partType: part.type,
+                                  state: toolState,
+                                  approval: approval,
+                                  approvalFromToolPart: toolPart.approval,
+                                  approvalFromPart: partAny.approval,
+                                  input: toolArgs,
+                                  output: toolOutput,
+                                  allPartKeys: Object.keys(part),
+                                  allToolPartKeys: Object.keys(toolPart),
+                                  partStructure: part,
+                                  toolPartStructure: toolPart,
+                                });
+                              }
 
-                      if (toolName === "generateIri") {
-                        return (
-                          <GenerateIriTool
-                            key={i}
-                            input={toolArgs}
-                            output={toolOutput}
-                            state={toolState}
-                          />
-                        );
-                      }
+                              // Render tool-specific components
+                              if (toolName === "executeSparql") {
+                                return (
+                                  <ExecuteSparqlTool
+                                    input={toolArgs}
+                                    output={toolOutput}
+                                    state={toolState}
+                                    approval={approval}
+                                    onApprove={
+                                      approval
+                                        ? () =>
+                                            addToolApprovalResponse({
+                                              id: approval.id,
+                                              approved: true,
+                                            })
+                                        : undefined
+                                    }
+                                    onReject={
+                                      approval
+                                        ? () =>
+                                            addToolApprovalResponse({
+                                              id: approval.id,
+                                              approved: false,
+                                            })
+                                        : undefined
+                                    }
+                                  />
+                                );
+                              }
 
-                      // Fallback to generic tool display
-                      return (
-                        <GenericTool
-                          key={i}
-                          toolName={toolName}
-                          input={toolArgs}
-                          output={toolOutput}
-                          state={toolState}
-                        />
-                      );
-                    }
+                              if (toolName === "searchFacts") {
+                                return (
+                                  <SearchFactsTool
+                                    input={toolArgs}
+                                    output={toolOutput}
+                                    state={toolState}
+                                  />
+                                );
+                              }
 
-                    return null;
+                              if (toolName === "generateIri") {
+                                return (
+                                  <GenerateIriTool
+                                    input={toolArgs}
+                                    output={toolOutput}
+                                    state={toolState}
+                                  />
+                                );
+                              }
+
+                              // Fallback to generic tool display
+                              return (
+                                <GenericTool
+                                  toolName={toolName}
+                                  input={toolArgs}
+                                  output={toolOutput}
+                                  state={toolState}
+                                />
+                              );
+                            })()}
+                          </div>
+                        ) : null}
+
+                        {/* Copy button for assistant messages - appears on the right */}
+                        {m.role === "assistant" && part.type === "text" && (
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                                    onClick={() => {
+                                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                      const text = (part as any).text || "";
+                                      handleCopy(`${m.id}-${i}`, text);
+                                    }}
+                                  >
+                                    {copiedId === `${m.id}-${i}` ? (
+                                      <CheckIcon className="size-3.5" />
+                                    ) : (
+                                      <CopyIcon className="size-3.5" />
+                                    )}
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Copy response</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        )}
+                      </div>
+                    );
                   })
                 ) : (
                   // Fallback using content if parts are missing
-                  <div className="prose dark:prose-invert max-w-none">
-                    <MessageResponse>
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {typeof (m as any).content === "string"
-                        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          (m as any).content
-                        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          (m as any).content?.content}
-                    </MessageResponse>
+                  <div
+                    className={`flex w-full items-start gap-2 ${
+                      m.role === "user" ? "justify-end" : "justify-start"
+                    } group`}
+                  >
+                    {/* Copy button for user messages - appears on the left */}
+                    {m.role === "user" && (
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                                onClick={() => {
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  const text =
+                                    (m as any).content?.content || "";
+                                  handleCopy(m.id, text);
+                                }}
+                              >
+                                {copiedId === m.id ? (
+                                  <CheckIcon className="size-3.5" />
+                                ) : (
+                                  <CopyIcon className="size-3.5" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copy message</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
+
+                    <div
+                      className={`rounded-2xl text-sm leading-relaxed shadow-sm ${
+                        m.role === "user"
+                          ? "bg-amber-500 text-stone-950 rounded-tr-none px-5 py-4"
+                          : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700 px-5 py-4"
+                      }`}
+                    >
+                      <div className="prose dark:prose-invert max-w-none">
+                        <MessageResponse>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {typeof (m as any).content === "string"
+                            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              (m as any).content
+                            : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              (m as any).content?.content}
+                        </MessageResponse>
+                      </div>
+                    </div>
+
+                    {/* Copy button for assistant messages - appears on the right */}
+                    {m.role === "assistant" && (
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                                onClick={() => {
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  const text =
+                                    (m as any).content?.content || "";
+                                  handleCopy(m.id, text);
+                                }}
+                              >
+                                {copiedId === m.id ? (
+                                  <CheckIcon className="size-3.5" />
+                                ) : (
+                                  <CopyIcon className="size-3.5" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copy response</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-
-              {/* Copy button for assistant messages - appears on the right */}
-              {m.role === "assistant" && (
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center self-center">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                          onClick={() => {
-                            let text = "";
-                            if (m.parts) {
-                              // Find the index of the last tool part
-                              let lastToolIndex = -1;
-                              for (let i = m.parts.length - 1; i >= 0; i--) {
-                                if (m.parts[i].type.startsWith("tool-")) {
-                                  lastToolIndex = i;
-                                  break;
-                                }
-                              }
-
-                              // Get all text parts that come after the last tool call
-                              const textParts = m.parts
-                                .slice(lastToolIndex + 1)
-                                .filter((p) => p.type === "text")
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                .map((p) => (p as any).text);
-
-                              text = textParts.join("").trim();
-
-                              // If no text after tools, fallback to last text part only
-                              if (!text) {
-                                const allTextParts = m.parts
-                                  .filter((p) => p.type === "text")
-                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  .map((p) => (p as any).text);
-                                if (allTextParts.length > 0) {
-                                  text = allTextParts[allTextParts.length - 1];
-                                }
-                              }
-                            } else {
-                              // Fallback for messages without parts structure
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              text = (m as any).content?.content || "";
-                            }
-                            handleCopy(m.id, text);
-                          }}
-                        >
-                          {copiedId === m.id ? (
-                            <CheckIcon className="size-3.5" />
-                          ) : (
-                            <CopyIcon className="size-3.5" />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copy response</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              )}
             </div>
           ))}
 
           {/* Status Indicator */}
           {status === "submitted" ? (
             <div className="flex justify-start animate-in fade-in slide-in-from-left-2 duration-300">
-              <div className="bg-stone-100 dark:bg-stone-800 rounded-2xl rounded-tl-none px-5 py-3 flex items-center gap-3 border border-stone-200 dark:border-stone-700 shadow-sm">
+              <div className="bg-stone-100 dark:bg-stone-800 rounded-2xl rounded-tl-none px-5 py-4 flex items-center gap-3 border border-stone-200 dark:border-stone-700 shadow-sm">
                 <div className="flex gap-1">
                   <span className="size-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:-0.3s]"></span>
                   <span className="size-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:-0.15s]"></span>
@@ -575,6 +646,7 @@ export function ConversationChat({
         status={status}
         worldId={worldId}
         worldLabel={worldLabel}
+        worldDescription={worldDescription}
       />
     </div>
   );

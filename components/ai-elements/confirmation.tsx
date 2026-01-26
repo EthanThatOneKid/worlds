@@ -69,10 +69,19 @@ export const Confirmation = ({
   state,
   ...props
 }: ConfirmationProps) => {
-  if (!approval || state === "input-streaming" || state === "input-available") {
+  // Don't render if no approval object
+  if (!approval) {
     return null;
   }
 
+  // Don't render during input streaming (before approval is requested)
+  if (state === "input-streaming") {
+    return null;
+  }
+
+  // Allow rendering in "input-available" state if approval exists
+  // (this handles cases where state transitions from input-available to approval-requested)
+  // Also allow all other states where approval is relevant
   return (
     <ConfirmationContext.Provider value={{ approval, state }}>
       <Alert className={cn("flex flex-col gap-2", className)} {...props} />
