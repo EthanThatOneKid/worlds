@@ -361,10 +361,6 @@ export function ConversationChat({
                     : "bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-200 dark:border-stone-700"
                 }`}
               >
-                <div className="font-bold text-[10px] uppercase tracking-wider mb-1 opacity-70">
-                  {m.role === "user" ? "You" : "Assistant"}
-                </div>
-
                 {/* Tool Invocations */}
                 {m.parts ? (
                   m.parts.map((part, i) => {
@@ -500,14 +496,41 @@ export function ConversationChat({
                           size="icon"
                           className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
                           onClick={() => {
-                            const text = m.parts
-                              ? m.parts
+                            let text = "";
+                            if (m.parts) {
+                              // Find the index of the last tool part
+                              let lastToolIndex = -1;
+                              for (let i = m.parts.length - 1; i >= 0; i--) {
+                                if (m.parts[i].type.startsWith("tool-")) {
+                                  lastToolIndex = i;
+                                  break;
+                                }
+                              }
+
+                              // Get all text parts that come after the last tool call
+                              const textParts = m.parts
+                                .slice(lastToolIndex + 1)
+                                .filter((p) => p.type === "text")
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                .map((p) => (p as any).text);
+
+                              text = textParts.join("").trim();
+
+                              // If no text after tools, fallback to last text part only
+                              if (!text) {
+                                const allTextParts = m.parts
                                   .filter((p) => p.type === "text")
                                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  .map((p) => (p as any).text)
-                                  .join("")
-                              : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                (m as any).content.content;
+                                  .map((p) => (p as any).text);
+                                if (allTextParts.length > 0) {
+                                  text = allTextParts[allTextParts.length - 1];
+                                }
+                              }
+                            } else {
+                              // Fallback for messages without parts structure
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              text = (m as any).content?.content || "";
+                            }
                             handleCopy(m.id, text);
                           }}
                         >
@@ -519,7 +542,7 @@ export function ConversationChat({
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Copy message</p>
+                        <p>Copy response</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>

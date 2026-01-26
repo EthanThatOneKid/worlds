@@ -1,7 +1,9 @@
 "use client";
 
-import { CheckIcon, Loader2Icon, XIcon } from "lucide-react";
+import { CheckIcon, XIcon, Maximize2 } from "lucide-react";
 import { CodeBlock } from "@/components/ai-elements/code-block";
+import { Loader } from "@/components/ai-elements/loader";
+import { TypingIndicator } from "@/components/ai-elements/typing-indicator";
 import {
   Confirmation,
   ConfirmationRequest,
@@ -12,6 +14,14 @@ import {
 } from "@/components/ai-elements/confirmation";
 import { SparqlResultsDisplay } from "@/components/sparql-results-display";
 import type { SparqlResult } from "@fartlabs/worlds";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 type ToolState =
   | "input-streaming"
@@ -130,11 +140,15 @@ export function ExecuteSparqlTool({
     return (
       <div className="mt-2 space-y-2">
         {confirmationUI}
-        <details className="group border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden bg-stone-50/50 dark:bg-stone-900/50">
-          <summary className="cursor-pointer px-3 py-2 flex items-center justify-between hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors select-none">
-            <div className="flex items-center gap-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start gap-2 h-auto py-2 px-3"
+            >
               <div
-                className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
+                className={`size-2 rounded-full shrink-0 ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
               />
               <span className="text-sm font-medium text-stone-600 dark:text-stone-400">
                 executeSparql
@@ -144,32 +158,45 @@ export function ExecuteSparqlTool({
                   {worldId}
                 </span>
               )}
-            </div>
-            <span className="text-xs text-stone-400 group-open:rotate-180 transition-transform">
-              ▼
-            </span>
-          </summary>
-          <div className="border-t border-stone-200 dark:border-stone-700">
-            <div className="p-2">
-              <div className="text-[10px] uppercase tracking-wider text-stone-400 mb-1.5 px-1">
-                Query
+              <Maximize2 className="size-3 ml-auto text-stone-400" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <div
+                  className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
+                />
+                <span>SPARQL Query Execution</span>
+                {worldId && (
+                  <span className="text-xs font-normal text-stone-500 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded">
+                    {worldId}
+                  </span>
+                )}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+              <div>
+                <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
+                  Query
+                </div>
+                <CodeBlock code={sparql} language="sparql" />
               </div>
-              <CodeBlock code={sparql} language="sparql" />
-            </div>
-            {output !== undefined && output !== null && (
-              <div className="border-t border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950">
-                <div className="p-2">
-                  <div className="text-[10px] uppercase tracking-wider text-stone-400 mb-1.5 px-1">
+              {output !== undefined && output !== null && (
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
                     Result
                   </div>
-                  <div className="max-h-64 overflow-auto">
-                    <SparqlResultsDisplay results={output} compact />
+                  <div className="border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden">
+                    <div className="max-h-96 overflow-auto p-2">
+                      <SparqlResultsDisplay results={output} compact />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </details>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -179,11 +206,19 @@ export function ExecuteSparqlTool({
     return confirmationUI;
   }
 
-  // In-progress state
+  // In-progress state - show typing indicator for streaming, loader for execution
+  if (state === "input-streaming") {
+    return (
+      <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
+        <TypingIndicator variant="amber" label="Preparing SPARQL query..." />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
       <div className="text-amber-500 flex items-center gap-2 text-sm">
-        <Loader2Icon className="size-4 animate-spin" />
+        <Loader size={16} />
         <span>Executing SPARQL query...</span>
       </div>
     </div>
@@ -207,14 +242,15 @@ export function SearchFactsTool({
 
     return (
       <div className="mt-2">
-        <details
-          className="group border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden bg-stone-50/50 dark:bg-stone-900/50"
-          open
-        >
-          <summary className="cursor-pointer px-3 py-2 flex items-center justify-between hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors select-none">
-            <div className="flex items-center gap-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start gap-2 h-auto py-2 px-3"
+            >
               <div
-                className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-blue-500"}`}
+                className={`size-2 rounded-full shrink-0 ${state === "output-error" ? "bg-red-500" : "bg-blue-500"}`}
               />
               <span className="text-sm font-medium text-stone-600 dark:text-stone-400">
                 searchFacts
@@ -223,70 +259,118 @@ export function SearchFactsTool({
                 &quot;{query}&quot; → {results.length} result
                 {results.length !== 1 ? "s" : ""}
               </span>
-            </div>
-            <span className="text-xs text-stone-400 group-open:rotate-180 transition-transform">
-              ▼
-            </span>
-          </summary>
-          <div className="border-t border-stone-200 dark:border-stone-700 max-h-64 overflow-y-auto">
-            {results.length === 0 ? (
-              <div className="p-3 text-sm text-stone-500 italic">
-                No results found
-              </div>
-            ) : (
-              <div className="divide-y divide-stone-200 dark:divide-stone-700">
-                {results.map((fact, idx) => (
-                  <div
-                    key={idx}
-                    className="p-2 text-xs font-mono hover:bg-stone-100 dark:hover:bg-stone-800"
-                  >
-                    <div className="flex items-start gap-2">
-                      <span className="text-stone-400 w-4 text-right shrink-0">
-                        {idx + 1}.
-                      </span>
-                      <div className="space-y-0.5 min-w-0">
-                        <div
-                          className="text-blue-600 dark:text-blue-400 truncate"
-                          title={fact.value?.subject}
-                        >
-                          {fact.value?.subject}
-                        </div>
-                        <div
-                          className="text-purple-600 dark:text-purple-400 truncate"
-                          title={fact.value?.predicate}
-                        >
-                          {fact.value?.predicate}
-                        </div>
-                        <div
-                          className="text-green-600 dark:text-green-400 truncate"
-                          title={fact.value?.object}
-                        >
-                          {fact.value?.object}
-                        </div>
-                        {(fact.value?.worldId || fact.value?.world) && (
-                          <div className="text-stone-400 text-[10px]">
-                            World: {fact.value?.worldId || fact.value?.world}
-                            {fact.score !== undefined &&
-                              ` • Score: ${fact.score.toFixed(3)}`}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+              <Maximize2 className="size-3 ml-auto text-stone-400" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <div
+                  className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-blue-500"}`}
+                />
+                <span>Search Facts Results</span>
+              </DialogTitle>
+            </DialogHeader>
+            <div className="flex-1 overflow-y-auto pr-2">
+              {results.length === 0 ? (
+                <div className="p-6 text-center text-sm text-stone-500 italic">
+                  No results found for &quot;{query}&quot;
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="text-xs text-stone-400 mb-3 px-1">
+                    Found {results.length} result
+                    {results.length !== 1 ? "s" : ""} for &quot;{query}&quot;
+                    {limit && ` (limit: ${limit})`}
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </details>
+                  <div className="divide-y divide-stone-200 dark:divide-stone-700 border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden">
+                    {results.map((fact, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 text-xs font-mono hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors"
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className="text-stone-400 w-6 text-right shrink-0 font-sans">
+                            {idx + 1}.
+                          </span>
+                          <div className="space-y-1.5 min-w-0 flex-1">
+                            <div
+                              className="text-blue-600 dark:text-blue-400 break-all"
+                              title={fact.value?.subject}
+                            >
+                              <span className="text-stone-500 text-[10px] uppercase tracking-wider">
+                                Subject:
+                              </span>{" "}
+                              {fact.value?.subject}
+                            </div>
+                            <div
+                              className="text-purple-600 dark:text-purple-400 break-all"
+                              title={fact.value?.predicate}
+                            >
+                              <span className="text-stone-500 text-[10px] uppercase tracking-wider">
+                                Predicate:
+                              </span>{" "}
+                              {fact.value?.predicate}
+                            </div>
+                            <div
+                              className="text-green-600 dark:text-green-400 break-all"
+                              title={fact.value?.object}
+                            >
+                              <span className="text-stone-500 text-[10px] uppercase tracking-wider">
+                                Object:
+                              </span>{" "}
+                              {fact.value?.object}
+                            </div>
+                            {(fact.value?.worldId ||
+                              fact.value?.world ||
+                              fact.score !== undefined) && (
+                              <div className="text-stone-400 text-[10px] pt-1 border-t border-stone-200 dark:border-stone-700">
+                                {fact.value?.worldId || fact.value?.world ? (
+                                  <>
+                                    World:{" "}
+                                    {fact.value?.worldId || fact.value?.world}
+                                  </>
+                                ) : null}
+                                {fact.score !== undefined && (
+                                  <>
+                                    {fact.value?.worldId || fact.value?.world
+                                      ? " • "
+                                      : ""}
+                                    Score: {fact.score.toFixed(3)}
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
 
-  // In-progress state
+  // In-progress state - show typing indicator for streaming, loader for execution
+  if (state === "input-streaming") {
+    return (
+      <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
+        <TypingIndicator
+          variant="blue"
+          label={`Preparing search for "${query}"${limit ? ` (limit: ${limit})` : ""}...`}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
       <div className="text-blue-500 flex items-center gap-2 text-sm">
-        <Loader2Icon className="size-4 animate-spin" />
+        <Loader size={16} />
         <span>
           Searching for &quot;{query}&quot;{limit ? ` (limit: ${limit})` : ""}
           ...
@@ -311,26 +395,78 @@ export function GenerateIriTool({
   if (state === "output-available") {
     return (
       <div className="mt-2">
-        <div className="inline-flex items-center gap-2 text-xs bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg px-3 py-1.5">
-          <div className="size-2 rounded-full bg-emerald-500" />
-          <span className="text-stone-500">generateIri</span>
-          {entityText && (
-            <span className="text-stone-400">for &quot;{entityText}&quot;</span>
-          )}
-          <span className="text-stone-300 dark:text-stone-600">→</span>
-          <code className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">
-            {iri}
-          </code>
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start gap-2 h-auto py-2 px-3"
+            >
+              <div className="size-2 rounded-full shrink-0 bg-emerald-500" />
+              <span className="text-sm font-medium text-stone-600 dark:text-stone-400">
+                generateIri
+              </span>
+              {entityText && (
+                <span className="text-xs text-stone-400">
+                  for &quot;{entityText}&quot;
+                </span>
+              )}
+              <Maximize2 className="size-3 ml-auto text-stone-400" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <div className="size-2 rounded-full bg-emerald-500" />
+                <span>Generated IRI</span>
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              {entityText && (
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
+                    Entity Text
+                  </div>
+                  <div className="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-700">
+                    <span className="text-sm text-stone-700 dark:text-stone-300">
+                      &quot;{entityText}&quot;
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div>
+                <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
+                  Generated IRI
+                </div>
+                <div className="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-700">
+                  <code className="text-emerald-600 dark:text-emerald-400 font-mono text-sm break-all">
+                    {iri}
+                  </code>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
 
-  // In-progress state
+  // In-progress state - show typing indicator for streaming, loader for execution
+  if (state === "input-streaming") {
+    return (
+      <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
+        <TypingIndicator
+          variant="emerald"
+          label={`Preparing IRI generation${entityText ? ` for "${entityText}"` : ""}...`}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
       <div className="text-emerald-500 flex items-center gap-2 text-sm">
-        <Loader2Icon className="size-4 animate-spin" />
+        <Loader size={16} />
         <span>Generating IRI{entityText ? ` for "${entityText}"` : ""}...</span>
       </div>
     </div>
@@ -349,52 +485,72 @@ export function GenericTool({
   if (state === "output-available" || state === "output-error") {
     return (
       <div className="mt-2">
-        <details className="group border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden bg-stone-50/50 dark:bg-stone-900/50">
-          <summary className="cursor-pointer px-3 py-2 flex items-center justify-between hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors select-none">
-            <div className="flex items-center gap-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start gap-2 h-auto py-2 px-3"
+            >
               <div
-                className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
+                className={`size-2 rounded-full shrink-0 ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
               />
               <span className="text-sm font-medium text-stone-600 dark:text-stone-400">
                 {toolName}
               </span>
-            </div>
-            <span className="text-xs text-stone-400 group-open:rotate-180 transition-transform">
-              ▼
-            </span>
-          </summary>
-          <div className="border-t border-stone-200 dark:border-stone-700 space-y-2 p-2">
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-stone-400 mb-1 px-1">
-                Input
-              </div>
-              <CodeBlock
-                code={JSON.stringify(input, null, 2)}
-                language="json"
-              />
-            </div>
-            {output !== undefined && output !== null && (
+              <Maximize2 className="size-3 ml-auto text-stone-400" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <div
+                  className={`size-2 rounded-full ${state === "output-error" ? "bg-red-500" : "bg-green-500"}`}
+                />
+                <span>{toolName}</span>
+              </DialogTitle>
+            </DialogHeader>
+            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-stone-400 mb-1 px-1">
-                  Output
+                <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
+                  Input
                 </div>
                 <CodeBlock
-                  code={JSON.stringify(output, null, 2)}
+                  code={JSON.stringify(input, null, 2)}
                   language="json"
                 />
               </div>
-            )}
-          </div>
-        </details>
+              {output !== undefined && output !== null && (
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-stone-400 mb-2 px-1">
+                    Output
+                  </div>
+                  <CodeBlock
+                    code={JSON.stringify(output, null, 2)}
+                    language="json"
+                  />
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
 
-  // In-progress state
+  // In-progress state - show typing indicator for streaming, loader for execution
+  if (state === "input-streaming") {
+    return (
+      <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
+        <TypingIndicator variant="amber" label={`Preparing ${toolName}...`} />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 p-3 bg-stone-50/50 dark:bg-stone-900/50 rounded-lg border border-stone-200 dark:border-stone-700">
       <div className="text-amber-500 flex items-center gap-2 text-sm">
-        <Loader2Icon className="size-4 animate-spin" />
+        <Loader size={16} />
         <span>{toolName}...</span>
       </div>
     </div>

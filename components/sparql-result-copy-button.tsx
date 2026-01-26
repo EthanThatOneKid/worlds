@@ -43,9 +43,7 @@ export function SparqlResultCopyButton({
   };
 
   const Icon = isCopied ? CheckIcon : CopyIcon;
-  const iconColor = isCopied
-    ? "text-green-600 dark:text-green-500"
-    : undefined;
+  const iconColor = isCopied ? "text-green-600 dark:text-green-500" : undefined;
 
   if (showLabel) {
     return (
@@ -75,4 +73,3 @@ export function SparqlResultCopyButton({
     </Button>
   );
 }
-

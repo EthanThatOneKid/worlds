@@ -20,22 +20,23 @@ export function createExecuteSparqlTool(options: CreateToolsOptions): Tool<
 > {
   const worlds = new Worlds(options);
 
+  const inputSchema = z.object({
+    sparql: z
+      .string()
+      .describe(
+        "The SPARQL query or update to execute. Supports both read operations (SELECT, ASK, CONSTRUCT, DESCRIBE) and write operations (INSERT, DELETE, UPDATE, etc.).",
+      ),
+    worldId: z
+      .string()
+      .optional()
+      .describe(
+        "The ID of the world to execute the query against. If omitted, uses the default source.",
+      ),
+  });
+
   return tool({
     description: formatExecuteSparqlDescription(options),
-    inputSchema: z.object({
-      sparql: z
-        .string()
-        .describe(
-          "The SPARQL query or update to execute. Supports both read operations (SELECT, ASK, CONSTRUCT, DESCRIBE) and write operations (INSERT, DELETE, UPDATE, etc.).",
-        ),
-      worldId: z
-        .string()
-        .optional()
-        .describe(
-          "The ID of the world to execute the query against. If omitted, uses the default source.",
-        ),
-    }),
-    // Require user approval for all SPARQL operations
+    inputSchema,
     needsApproval: true,
     execute: async ({ sparql, worldId }) => {
       const source = worldId
@@ -49,5 +50,11 @@ export function createExecuteSparqlTool(options: CreateToolsOptions): Tool<
 
       return await worlds.sparql(source.worldId, sparql);
     },
-  });
+  }) as Tool<
+    {
+      sparql: string;
+      worldId?: string;
+    },
+    SparqlResult | null
+  >;
 }
