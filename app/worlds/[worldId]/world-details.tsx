@@ -17,7 +17,6 @@ export function WorldDetails({
   maskedCodeSnippet,
   codeSnippetHtml,
   maskedCodeSnippetHtml,
-  isAdmin,
 }: {
   world: WorldRecord;
   userId: string;
