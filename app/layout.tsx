@@ -34,7 +34,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const userInfo = await authkit.withAuth();
-
   if (userInfo.user) {
     const user = await authkit
       .getWorkOS()
@@ -43,9 +42,6 @@ export default async function RootLayout({
   }
 
   const isAdmin = !!userInfo?.user?.metadata?.admin;
-
-  console.log({ userInfo });
-
   return (
     <html lang="en" className="h-full">
       <head>

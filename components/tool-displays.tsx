@@ -79,63 +79,57 @@ export function ExecuteSparqlTool({
   const sparql = input?.sparql || "";
   const worldId = input?.worldId;
 
-  // Handle approval state
-  if (
-    approval &&
-    (state === "approval-requested" ||
-      state === "approval-responded" ||
-      state === "output-denied")
-  ) {
-    return (
-      <div className="mt-2 overflow-hidden">
-        <Confirmation
-          approval={approval as Parameters<typeof Confirmation>[0]["approval"]}
-          state={state}
-        >
-          <ConfirmationRequest>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="font-medium text-sm text-stone-700 dark:text-stone-300">
-                  Execute SPARQL Query?
-                </div>
-                {worldId && (
-                  <span className="text-xs text-stone-500 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded">
-                    {worldId}
-                  </span>
-                )}
+  // Render confirmation UI when approval exists (Confirmation component handles state checking)
+  const confirmationUI = approval ? (
+    <div className="mt-2 overflow-hidden">
+      <Confirmation
+        approval={approval as Parameters<typeof Confirmation>[0]["approval"]}
+        state={state}
+      >
+        <ConfirmationRequest>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="font-medium text-sm text-stone-700 dark:text-stone-300">
+                Execute SPARQL Query?
               </div>
-              <CodeBlock code={sparql} language="sparql" />
+              {worldId && (
+                <span className="text-xs text-stone-500 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded">
+                  {worldId}
+                </span>
+              )}
             </div>
-          </ConfirmationRequest>
-          <ConfirmationAccepted>
-            <div className="flex items-center gap-1.5 text-green-600 text-sm">
-              <CheckIcon className="size-4" />
-              <span>Query approved and executed</span>
-            </div>
-          </ConfirmationAccepted>
-          <ConfirmationRejected>
-            <div className="flex items-center gap-1.5 text-red-600 text-sm">
-              <XIcon className="size-4" />
-              <span>Query rejected</span>
-            </div>
-          </ConfirmationRejected>
-          <ConfirmationActions>
-            <ConfirmationAction variant="outline" onClick={onReject}>
-              Reject
-            </ConfirmationAction>
-            <ConfirmationAction variant="default" onClick={onApprove}>
-              Approve
-            </ConfirmationAction>
-          </ConfirmationActions>
-        </Confirmation>
-      </div>
-    );
-  }
+            <CodeBlock code={sparql} language="sparql" />
+          </div>
+        </ConfirmationRequest>
+        <ConfirmationAccepted>
+          <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400 text-sm">
+            <CheckIcon className="size-4" />
+            <span>Query approved and executed</span>
+          </div>
+        </ConfirmationAccepted>
+        <ConfirmationRejected>
+          <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400 text-sm">
+            <XIcon className="size-4" />
+            <span>Query rejected</span>
+          </div>
+        </ConfirmationRejected>
+        <ConfirmationActions>
+          <ConfirmationAction variant="outline" onClick={onReject}>
+            Reject
+          </ConfirmationAction>
+          <ConfirmationAction variant="default" onClick={onApprove}>
+            Approve
+          </ConfirmationAction>
+        </ConfirmationActions>
+      </Confirmation>
+    </div>
+  ) : null;
 
-  // Completed state
+  // Completed state - show results
   if (state === "output-available" || state === "output-error") {
     return (
       <div className="mt-2 space-y-2">
+        {confirmationUI}
         <details className="group border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden bg-stone-50/50 dark:bg-stone-900/50">
           <summary className="cursor-pointer px-3 py-2 flex items-center justify-between hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors select-none">
             <div className="flex items-center gap-2">
@@ -164,11 +158,13 @@ export function ExecuteSparqlTool({
             </div>
             {output !== undefined && output !== null && (
               <div className="border-t border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950">
-                <div className="text-[10px] uppercase tracking-wider text-stone-400 p-2 pb-0">
-                  Result
-                </div>
-                <div className="max-h-64 overflow-auto">
-                  <SparqlResultsDisplay results={output} compact />
+                <div className="p-2">
+                  <div className="text-[10px] uppercase tracking-wider text-stone-400 mb-1.5 px-1">
+                    Result
+                  </div>
+                  <div className="max-h-64 overflow-auto">
+                    <SparqlResultsDisplay results={output} compact />
+                  </div>
                 </div>
               </div>
             )}
@@ -176,6 +172,11 @@ export function ExecuteSparqlTool({
         </details>
       </div>
     );
+  }
+
+  // Show confirmation UI for approval states (requested, responded, denied)
+  if (confirmationUI) {
+    return confirmationUI;
   }
 
   // In-progress state
