@@ -123,7 +123,7 @@ const PromptInputSourcesDisplay = ({
                 <div className="p-4 space-y-3">
                   <div className="flex items-center gap-2 text-xs text-stone-400">
                     <div className="size-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span>World is active and reachable</span>
+                    <span>World is reachable</span>
                   </div>
                   {worldDescription && (
                     <p className="text-stone-300 text-sm leading-relaxed">
