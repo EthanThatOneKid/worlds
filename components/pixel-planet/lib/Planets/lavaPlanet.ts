@@ -1,4 +1,4 @@
-import { Vector2, Vector4, Group } from "three";
+import { Group, Vector2, Vector4 } from "three";
 import { createBasePlanet } from "../Layers/basePlanet";
 import { createCraterLayer } from "../Layers/craterLayer";
 import { createRiverLayer } from "../Layers/riversLayer";

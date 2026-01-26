@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import {
   type ComponentProps,
-  type CSSProperties,
   createContext,
+  type CSSProperties,
   type HTMLAttributes,
   memo,
   useContext,

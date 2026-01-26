@@ -243,7 +243,7 @@ export const MicSelectorLabel = ({
   return (
     <span className={className} {...props}>
       <span>{name}</span>
-      <span className="text-muted-foreground"> ({deviceId})</span>
+      <span className="text-muted-foreground">({deviceId})</span>
     </span>
   );
 };

@@ -1,8 +1,8 @@
 import {
   Group,
+  NearestFilter,
   Sprite,
   SpriteMaterial,
-  NearestFilter,
   TextureLoader,
 } from "three";
 import { flip, rand, randomPointOnSphere } from "../utils";

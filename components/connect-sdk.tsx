@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQueryState, parseAsBoolean } from "nuqs";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import { DialogCloseButton } from "@/components/ui/dialog-close-button";
 
 export function ConnectSdkButton({

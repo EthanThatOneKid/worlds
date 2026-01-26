@@ -224,7 +224,11 @@ export function WorldDetails({
 
       <div className="pt-2">
         <div className="flex flex-col">
-          <ConversationChat worldId={world.id} className="w-full" />
+          <ConversationChat
+            worldId={world.id}
+            worldLabel={world.label}
+            className="w-full"
+          />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import type { WorldRecord } from "@fartlabs/worlds";
 import { useState } from "react";
-import { useQueryState, parseAsStringLiteral } from "nuqs";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
 import { WorldDetails } from "./world-details";
 import { WorldPlayground } from "./world-playground";

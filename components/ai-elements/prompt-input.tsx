@@ -676,21 +676,38 @@ export const PromptInput = ({
     [files, add, remove, clearAttachments, openFileDialog],
   );
 
+  const addSource = useCallback(
+    (incoming: SourceDocumentUIPart[] | SourceDocumentUIPart) => {
+      const array = Array.isArray(incoming) ? incoming : [incoming];
+      setReferencedSources((prev) => {
+        // Simple deduplication: skip if title or filename already exists
+        const toAdd = array.filter(
+          (s) =>
+            !prev.some(
+              (p) =>
+                p.title === s.title ||
+                (p.filename && s.filename && p.filename === s.filename),
+            ),
+        );
+        if (toAdd.length === 0) return prev;
+        return prev.concat(toAdd.map((s) => ({ ...s, id: nanoid() })));
+      });
+    },
+    [],
+  );
+
+  const removeSource = useCallback((id: string) => {
+    setReferencedSources((prev) => prev.filter((s) => s.id !== id));
+  }, []);
+
   const refsCtx = useMemo<ReferencedSourcesContext>(
     () => ({
       sources: referencedSources,
-      add: (incoming: SourceDocumentUIPart[] | SourceDocumentUIPart) => {
-        const array = Array.isArray(incoming) ? incoming : [incoming];
-        setReferencedSources((prev) =>
-          prev.concat(array.map((s) => ({ ...s, id: nanoid() }))),
-        );
-      },
-      remove: (id: string) => {
-        setReferencedSources((prev) => prev.filter((s) => s.id !== id));
-      },
+      add: addSource,
+      remove: removeSource,
       clear: clearReferencedSources,
     }),
-    [referencedSources, clearReferencedSources],
+    [referencedSources, addSource, removeSource, clearReferencedSources],
   );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {

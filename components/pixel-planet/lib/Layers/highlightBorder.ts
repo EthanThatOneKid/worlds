@@ -1,9 +1,9 @@
 import {
-  NearestFilter,
   Mesh,
   MeshBasicMaterial,
-  TextureLoader,
+  NearestFilter,
   PlaneGeometry,
+  TextureLoader,
 } from "three";
 
 export const Border = (): Mesh => {

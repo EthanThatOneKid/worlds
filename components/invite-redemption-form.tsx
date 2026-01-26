@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useState, useTransition } from "react";
 import { redeemInviteAction } from "@/app/actions";
 
 export function InviteRedemptionForm() {

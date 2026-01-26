@@ -1,7 +1,9 @@
 # Chatbot Tool Usage
 
-With [`useChat`](/docs/reference/ai-sdk-ui/use-chat) and [`streamText`](/docs/reference/ai-sdk-core/stream-text), you can use tools in your chatbot application.
-The AI SDK supports three types of tools in this context:
+With [`useChat`](/docs/reference/ai-sdk-ui/use-chat) and
+[`streamText`](/docs/reference/ai-sdk-core/stream-text), you can use tools in
+your chatbot application. The AI SDK supports three types of tools in this
+context:
 
 1. Automatically executed server-side tools
 2. Automatically executed client-side tools
@@ -11,20 +13,27 @@ The flow is as follows:
 
 1. The user enters a message in the chat UI.
 1. The message is sent to the API route.
-1. In your server side route, the language model generates tool calls during the `streamText` call.
+1. In your server side route, the language model generates tool calls during the
+   `streamText` call.
 1. All tool calls are forwarded to the client.
-1. Server-side tools are executed using their `execute` method and their results are forwarded to the client.
-1. Client-side tools that should be automatically executed are handled with the `onToolCall` callback.
-   You must call `addToolOutput` to provide the tool result.
+1. Server-side tools are executed using their `execute` method and their results
+   are forwarded to the client.
+1. Client-side tools that should be automatically executed are handled with the
+   `onToolCall` callback. You must call `addToolOutput` to provide the tool
+   result.
 1. Client-side tool that require user interactions can be displayed in the UI.
-   The tool calls and results are available as tool invocation parts in the `parts` property of the last assistant message.
-1. When the user interaction is done, `addToolOutput` can be used to add the tool result to the chat.
-1. The chat can be configured to automatically submit when all tool results are available using `sendAutomaticallyWhen`.
-   This triggers another iteration of this flow.
+   The tool calls and results are available as tool invocation parts in the
+   `parts` property of the last assistant message.
+1. When the user interaction is done, `addToolOutput` can be used to add the
+   tool result to the chat.
+1. The chat can be configured to automatically submit when all tool results are
+   available using `sendAutomaticallyWhen`. This triggers another iteration of
+   this flow.
 
-The tool calls and tool executions are integrated into the assistant message as typed tool parts.
-A tool part is at first a tool call, and then it becomes a tool result when the tool is executed.
-The tool result contains all information about the tool call as well as the result of the tool execution.
+The tool calls and tool executions are integrated into the assistant message as
+typed tool parts. A tool part is at first a tool call, and then it becomes a
+tool result when the tool is executed. The tool result contains all information
+about the tool call as well as the result of the tool execution.
 
 <Note>
   Tool result submission can be configured using the `sendAutomaticallyWhen`
@@ -37,9 +46,12 @@ The tool result contains all information about the tool call as well as the resu
 
 In this example, we'll use three tools:
 
-- `getWeatherInformation`: An automatically executed server-side tool that returns the weather in a given city.
-- `askForConfirmation`: A user-interaction client-side tool that asks the user for confirmation.
-- `getLocation`: An automatically executed client-side tool that returns a random city.
+- `getWeatherInformation`: An automatically executed server-side tool that
+  returns the weather in a given city.
+- `askForConfirmation`: A user-interaction client-side tool that asks the user
+  for confirmation.
+- `getLocation`: An automatically executed client-side tool that returns a
+  random city.
 
 ### API route
 
@@ -91,15 +103,18 @@ export async function POST(req: Request) {
 
 ### Client-side page
 
-The client-side page uses the `useChat` hook to create a chatbot application with real-time message streaming.
-Tool calls are displayed in the chat UI as typed tool parts.
-Please make sure to render the messages using the `parts` property of the message.
+The client-side page uses the `useChat` hook to create a chatbot application
+with real-time message streaming. Tool calls are displayed in the chat UI as
+typed tool parts. Please make sure to render the messages using the `parts`
+property of the message.
 
 There are three things worth mentioning:
 
-1. The [`onToolCall`](/docs/reference/ai-sdk-ui/use-chat#on-tool-call) callback is used to handle client-side tools that should be automatically executed.
-   In this example, the `getLocation` tool is a client-side tool that returns a random city.
-   You call `addToolOutput` to provide the result (without `await` to avoid potential deadlocks).
+1. The [`onToolCall`](/docs/reference/ai-sdk-ui/use-chat#on-tool-call) callback
+   is used to handle client-side tools that should be automatically executed. In
+   this example, the `getLocation` tool is a client-side tool that returns a
+   random city. You call `addToolOutput` to provide the result (without `await`
+   to avoid potential deadlocks).
 
    <Note>
      Always check `if (toolCall.dynamic)` first in your `onToolCall` handler.
@@ -108,12 +123,16 @@ There are three things worth mentioning:
      `toolCall.toolName` in `addToolOutput`.
    </Note>
 
-2. The [`sendAutomaticallyWhen`](/docs/reference/ai-sdk-ui/use-chat#send-automatically-when) option with `lastAssistantMessageIsCompleteWithToolCalls` helper automatically submits when all tool results are available.
+2. The
+   [`sendAutomaticallyWhen`](/docs/reference/ai-sdk-ui/use-chat#send-automatically-when)
+   option with `lastAssistantMessageIsCompleteWithToolCalls` helper
+   automatically submits when all tool results are available.
 
-3. The `parts` array of assistant messages contains tool parts with typed names like `tool-askForConfirmation`.
-   The client-side tool `askForConfirmation` is displayed in the UI.
-   It asks the user for confirmation and displays the result once the user confirms or denies the execution.
-   The result is added to the chat using `addToolOutput` with the `tool` parameter for type safety.
+3. The `parts` array of assistant messages contains tool parts with typed names
+   like `tool-askForConfirmation`. The client-side tool `askForConfirmation` is
+   displayed in the UI. It asks the user for confirmation and displays the
+   result once the user confirms or denies the execution. The result is added to
+   the chat using `addToolOutput` with the `tool` parameter for type safety.
 
 ```tsx filename='app/page.tsx' highlight="2,6,10,14-20"
 "use client";
@@ -293,7 +312,9 @@ export default function Chat() {
 
 ### Error handling
 
-Sometimes an error may occur during client-side tool execution. Use the `addToolOutput` method with a `state` of `output-error` and `errorText` value instead of `output` record the error.
+Sometimes an error may occur during client-side tool execution. Use the
+`addToolOutput` method with a `state` of `output-error` and `errorText` value
+instead of `output` record the error.
 
 ```tsx filename='app/page.tsx' highlight="19,36-41"
 "use client";
@@ -346,7 +367,10 @@ export default function Chat() {
 
 ## Tool Execution Approval
 
-Tool execution approval lets you require user confirmation before a server-side tool runs. Unlike [client-side tools](#example) that execute in the browser, tools with approval still execute on the server—but only after the user approves.
+Tool execution approval lets you require user confirmation before a server-side
+tool runs. Unlike [client-side tools](#example) that execute in the browser,
+tools with approval still execute on the server—but only after the user
+approves.
 
 Use tool execution approval when you want to:
 
@@ -354,11 +378,14 @@ Use tool execution approval when you want to:
 - Let users review tool inputs before execution
 - Add human oversight to automated workflows
 
-For tools that need to run in the browser (updating UI state, accessing browser APIs), use client-side tools instead.
+For tools that need to run in the browser (updating UI state, accessing browser
+APIs), use client-side tools instead.
 
 ### Server Setup
 
-Enable approval by setting `needsApproval` on your tool. See [Tool Execution Approval](/docs/ai-sdk-core/tools-and-tool-calling#tool-execution-approval) for configuration options including dynamic approval based on input.
+Enable approval by setting `needsApproval` on your tool. See
+[Tool Execution Approval](/docs/ai-sdk-core/tools-and-tool-calling#tool-execution-approval)
+for configuration options including dynamic approval based on input.
 
 ```tsx filename='app/api/chat/route.ts'
 import { streamText, tool } from "ai";
@@ -392,7 +419,8 @@ export async function POST(req: Request) {
 
 ### Client-Side Approval UI
 
-When a tool requires approval, the tool part state is `approval-requested`. Use `addToolApprovalResponse` to approve or deny:
+When a tool requires approval, the tool part state is `approval-requested`. Use
+`addToolApprovalResponse` to approve or deny:
 
 ```tsx filename='app/page.tsx'
 "use client";
@@ -460,7 +488,8 @@ export default function Chat() {
   `useChat` hook.
 </Note>
 
-Use `lastAssistantMessageIsCompleteWithApprovalResponses` to automatically continue the conversation after approvals:
+Use `lastAssistantMessageIsCompleteWithApprovalResponses` to automatically
+continue the conversation after approvals:
 
 ```tsx
 import { useChat } from "@ai-sdk/react";
@@ -473,7 +502,8 @@ const { messages, addToolApprovalResponse } = useChat({
 
 ## Dynamic Tools
 
-When using dynamic tools (tools with unknown types at compile time), the UI parts use a generic `dynamic-tool` type instead of specific tool types:
+When using dynamic tools (tools with unknown types at compile time), the UI
+parts use a generic `dynamic-tool` type instead of specific tool types:
 
 ```tsx filename='app/page.tsx'
 {
@@ -512,7 +542,9 @@ Dynamic tools are useful when integrating with:
 
 ## Tool call streaming
 
-Tool call streaming is **enabled by default** in AI SDK 5.0, allowing you to stream tool calls while they are being generated. This provides a better user experience by showing tool inputs as they are generated in real-time.
+Tool call streaming is **enabled by default** in AI SDK 5.0, allowing you to
+stream tool calls while they are being generated. This provides a better user
+experience by showing tool inputs as they are generated in real-time.
 
 ```tsx filename='app/api/chat/route.ts'
 export async function POST(req: Request) {
@@ -529,10 +561,10 @@ export async function POST(req: Request) {
 }
 ```
 
-With tool call streaming enabled, partial tool calls are streamed as part of the data stream.
-They are available through the `useChat` hook.
-The typed tool parts of assistant messages will also contain partial tool calls.
-You can use the `state` property of the tool part to render the correct UI.
+With tool call streaming enabled, partial tool calls are streamed as part of the
+data stream. They are available through the `useChat` hook. The typed tool parts
+of assistant messages will also contain partial tool calls. You can use the
+`state` property of the tool part to render the correct UI.
 
 ```tsx filename='app/page.tsx' highlight="9,10"
 export default function Chat() {
@@ -567,8 +599,9 @@ export default function Chat() {
 
 ## Step start parts
 
-When you are using multi-step tool calls, the AI SDK will add step start parts to the assistant messages.
-If you want to display boundaries between tool calls, you can use the `step-start` parts as follows:
+When you are using multi-step tool calls, the AI SDK will add step start parts
+to the assistant messages. If you want to display boundaries between tool calls,
+you can use the `step-start` parts as follows:
 
 ```tsx filename='app/page.tsx'
 // ...
@@ -595,11 +628,11 @@ message.parts.map((part, index) => {
 
 ## Server-side Multi-Step Calls
 
-You can also use multi-step calls on the server-side with `streamText`.
-This works when all invoked tools have an `execute` function on the server side.
+You can also use multi-step calls on the server-side with `streamText`. This
+works when all invoked tools have an `execute` function on the server side.
 
 ```tsx filename='app/api/chat/route.ts' highlight="15-21,24"
-import { convertToModelMessages, streamText, UIMessage, stepCountIs } from "ai";
+import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 __PROVIDER_IMPORT__;
 import { z } from "zod";
 
@@ -631,10 +664,11 @@ export async function POST(req: Request) {
 
 ## Errors
 
-Language models can make errors when calling tools.
-By default, these errors are masked for security reasons, and show up as "An error occurred" in the UI.
+Language models can make errors when calling tools. By default, these errors are
+masked for security reasons, and show up as "An error occurred" in the UI.
 
-To surface the errors, you can use the `onError` function when calling `toUIMessageResponse`.
+To surface the errors, you can use the `onError` function when calling
+`toUIMessageResponse`.
 
 ```tsx
 export function errorHandler(error: unknown) {
@@ -664,7 +698,8 @@ return result.toUIMessageStreamResponse({
 });
 ```
 
-In case you are using `createUIMessageResponse`, you can use the `onError` function when calling `toUIMessageResponse`:
+In case you are using `createUIMessageResponse`, you can use the `onError`
+function when calling `toUIMessageResponse`:
 
 ```tsx
 const response = createUIMessageResponse({

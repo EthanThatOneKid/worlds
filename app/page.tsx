@@ -80,7 +80,9 @@ console.log("My worlds:", worlds.length);`;
 
   const maskedCodeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const sdk = new WorldsSdk({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}" });
+const sdk = new WorldsSdk({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(
+    -4,
+  )}" });
 
 const worlds = await sdk.worlds.list();
 console.log("My worlds:", worlds.length);`;

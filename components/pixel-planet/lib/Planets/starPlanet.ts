@@ -1,4 +1,4 @@
-import { Vector2, Group } from "three";
+import { Group, Vector2 } from "three";
 import { createStar } from "../Layers/star";
 import { createStarBlobLayer } from "../Layers/starBlobLayer";
 import { createStarFlareLayer } from "../Layers/starFlareLayer";

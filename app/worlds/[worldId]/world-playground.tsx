@@ -104,7 +104,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
 
       <div className="space-y-6">
         {/* Query Input */}
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col h-[500px]">
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col h-[300px]">
           <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between flex-shrink-0">
             <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
               SPARQL Editor

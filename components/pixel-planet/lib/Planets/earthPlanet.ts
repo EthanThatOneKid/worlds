@@ -1,4 +1,4 @@
-import { Vector2, Vector4, Group } from "three";
+import { Group, Vector2, Vector4 } from "three";
 import { createAtmosphereLayer } from "../Layers/atmosphereLayer";
 import { createBasePlanet } from "../Layers/basePlanet";
 import { createCloudLayer } from "../Layers/cloudLayer";
