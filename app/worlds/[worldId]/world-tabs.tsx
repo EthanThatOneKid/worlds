@@ -25,6 +25,7 @@ interface WorldTabsProps {
   maskedCodeSnippet: string;
   codeSnippetHtml: string;
   maskedCodeSnippetHtml: string;
+  isAdmin?: boolean;
 }
 
 export function WorldTabs({
@@ -35,6 +36,7 @@ export function WorldTabs({
   maskedCodeSnippet,
   codeSnippetHtml,
   maskedCodeSnippetHtml,
+  isAdmin,
 }: WorldTabsProps) {
   const [activeTab, setActiveTab] = useQueryState(
     "tab",
@@ -121,6 +123,7 @@ export function WorldTabs({
             maskedCodeSnippet={maskedCodeSnippet}
             codeSnippetHtml={codeSnippetHtml}
             maskedCodeSnippetHtml={maskedCodeSnippetHtml}
+            isAdmin={isAdmin}
           />
         )}
         {activeTab === "playground" && (

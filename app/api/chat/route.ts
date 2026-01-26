@@ -36,6 +36,20 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  // Check if user is admin - chat is a demo feature only accessible to admins
+  // (no metering set up for LLM tokens yet)
+  let currentUser = user;
+  if (currentUser) {
+    const workos = authkit.getWorkOS();
+    currentUser = await workos.userManagement.getUser(currentUser.id);
+  }
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return new Response("Forbidden: Chat feature is only available to admins", {
+      status: 403,
+    });
+  }
+
   const resolvedUserIri = userIri ?? generateUserIri(user.id);
   const resolvedAssistantIri = assistantIri ?? generateAssistantIri(user.id);
 

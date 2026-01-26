@@ -209,7 +209,28 @@ export function ExecuteSparqlTool({
               )}
           </div>
         )}
-        {input && <ToolInput input={input} />}
+        {input && (
+          <div className="space-y-2 overflow-hidden">
+            <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+              Parameters
+            </h4>
+            <div className="space-y-3">
+              {input.sparql && (
+                <div className="rounded-md bg-muted/50 overflow-hidden">
+                  <CodeBlock code={input.sparql} language="sparql" />
+                </div>
+              )}
+              {input.worldId && (
+                <div className="text-xs text-muted-foreground">
+                  <span className="font-medium">World ID:</span>{" "}
+                  <code className="px-1.5 py-0.5 bg-muted rounded text-foreground">
+                    {input.worldId}
+                  </code>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         {loadingIndicator ? (
           <div>{loadingIndicator}</div>
         ) : (
@@ -335,7 +356,31 @@ export function SearchFactsTool({
     >
       <ToolHeader type="tool-searchFacts" state={state} />
       <ToolContent>
-        {input && <ToolInput input={input} />}
+        {input && (
+          <div className="space-y-2 overflow-hidden">
+            <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+              Parameters
+            </h4>
+            <div className="space-y-2">
+              {input.query && (
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Query:</span>{" "}
+                  <span className="font-medium text-foreground">
+                    &quot;{input.query}&quot;
+                  </span>
+                </div>
+              )}
+              {input.limit !== undefined && (
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Limit:</span>{" "}
+                  <span className="font-medium text-foreground">
+                    {input.limit}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         {loadingIndicator ? (
           <div>{loadingIndicator}</div>
         ) : (
@@ -377,7 +422,27 @@ export function GenerateIriTool({
     >
       <ToolHeader type="tool-generateIri" state={state} />
       <ToolContent>
-        {input && <ToolInput input={input} />}
+        {input && (
+          <div className="space-y-2 overflow-hidden">
+            <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+              Parameters
+            </h4>
+            <div className="text-sm">
+              {input.entityText ? (
+                <>
+                  <span className="text-muted-foreground">Entity Text:</span>{" "}
+                  <span className="font-medium text-foreground">
+                    &quot;{input.entityText}&quot;
+                  </span>
+                </>
+              ) : (
+                <span className="text-muted-foreground italic">
+                  No entity text provided
+                </span>
+              )}
+            </div>
+          </div>
+        )}
         {loadingIndicator ? (
           <div>{loadingIndicator}</div>
         ) : (

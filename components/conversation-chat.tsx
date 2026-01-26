@@ -294,6 +294,25 @@ export function ConversationChat({
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  // Helper function to extract text content from message
+  // Messages from useChat can have content as string or object with content property
+  // Using type assertion since UIMessage type doesn't expose content property in types
+  const getMessageText = (message: unknown): string => {
+    const msg = message as { content?: string | { content?: string } };
+    if (typeof msg.content === "string") {
+      return msg.content;
+    }
+    if (
+      msg.content &&
+      typeof msg.content === "object" &&
+      "content" in msg.content &&
+      typeof msg.content.content === "string"
+    ) {
+      return msg.content.content;
+    }
+    return "";
+  };
+
   const handleCopy = (id: string, content: string) => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
@@ -545,9 +564,7 @@ export function ConversationChat({
                                 size="icon"
                                 className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
                                 onClick={() => {
-                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  const text =
-                                    (m as any).content?.content || "";
+                                  const text = getMessageText(m);
                                   handleCopy(m.id, text);
                                 }}
                               >
@@ -574,14 +591,7 @@ export function ConversationChat({
                       }`}
                     >
                       <div className="prose dark:prose-invert max-w-none">
-                        <MessageResponse>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {typeof (m as any).content === "string"
-                            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              (m as any).content
-                            : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              (m as any).content?.content}
-                        </MessageResponse>
+                        <MessageResponse>{getMessageText(m)}</MessageResponse>
                       </div>
                     </div>
 
@@ -596,9 +606,7 @@ export function ConversationChat({
                                 size="icon"
                                 className="h-7 w-7 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
                                 onClick={() => {
-                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  const text =
-                                    (m as any).content?.content || "";
+                                  const text = getMessageText(m);
                                   handleCopy(m.id, text);
                                 }}
                               >

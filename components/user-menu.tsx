@@ -70,6 +70,13 @@ export function UserMenu({
                 >
                   Invites
                 </Link>
+                <Link
+                  href="/admins"
+                  className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admins
+                </Link>
                 <div className="my-1 border-t border-stone-200 dark:border-stone-700" />
               </>
             )}

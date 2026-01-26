@@ -17,6 +17,7 @@ export function WorldDetails({
   maskedCodeSnippet,
   codeSnippetHtml,
   maskedCodeSnippetHtml,
+  isAdmin,
 }: {
   world: WorldRecord;
   userId: string;
@@ -25,6 +26,7 @@ export function WorldDetails({
   maskedCodeSnippet: string;
   codeSnippetHtml: string;
   maskedCodeSnippetHtml: string;
+  isAdmin?: boolean;
 }) {
   const [isCopied, setIsCopied] = useState(false);
   const [isAccountCopied, setIsAccountCopied] = useState(false);
@@ -222,16 +224,18 @@ export function WorldDetails({
         </div>
       </div>
 
-      <div className="pt-2">
-        <div className="flex flex-col">
-          <ConversationChat
-            worldId={world.id}
-            worldLabel={world.label}
-            worldDescription={world.description}
-            className="w-full"
-          />
+      {isAdmin && (
+        <div className="pt-2">
+          <div className="flex flex-col">
+            <ConversationChat
+              worldId={world.id}
+              worldLabel={world.label}
+              worldDescription={world.description}
+              className="w-full"
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
