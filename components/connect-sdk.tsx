@@ -90,11 +90,15 @@ function ConnectSdkDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm animate-in fade-in duration-200 text-stone-900 dark:text-stone-100">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm animate-in fade-in duration-200 text-stone-900 dark:text-stone-100"
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-2xl bg-white dark:bg-stone-900 rounded-lg shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 border border-stone-200 dark:border-stone-800"
         role="dialog"
         aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-6 border-b border-stone-200 dark:border-stone-800">
           <h2 className="text-xl font-bold text-stone-900 dark:text-white">

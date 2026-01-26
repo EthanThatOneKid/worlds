@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { AlertTriangle } from "lucide-react";
 import { redeemInviteAction } from "@/app/actions";
 
 export function InviteRedemptionForm() {
@@ -54,6 +55,31 @@ export function InviteRedemptionForm() {
                 </p>
               </div>
             )}
+
+            <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900/30">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 space-y-2">
+                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">
+                    Beta Program Notice
+                  </p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+                    By participating in this beta program, you acknowledge that:
+                  </p>
+                  <ul className="text-xs text-amber-800 dark:text-amber-300 space-y-1 list-disc list-inside leading-relaxed">
+                    <li>
+                      Your data is subject to data loss and may be deleted at
+                      any time
+                    </li>
+                    <li>There are no security guarantees for beta accounts</li>
+                    <li>
+                      Your usage patterns may be analyzed by engineers to
+                      improve the product
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
             <button
               type="submit"

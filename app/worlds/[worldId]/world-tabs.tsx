@@ -3,19 +3,12 @@
 import type { WorldRecord } from "@fartlabs/worlds";
 import { useState } from "react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
-import { ComingSoonPlaceholder } from "@/components/coming-soon-placeholder";
 import { WorldDetails } from "./world-details";
 import { WorldPlayground } from "./world-playground";
 import { WorldSearch } from "./world-search";
 import { WorldSettings } from "./world-settings";
 
-const tabs = [
-  "overview",
-  "playground",
-  "search",
-  "webhooks",
-  "settings",
-] as const;
+const tabs = ["overview", "playground", "search", "settings"] as const;
 
 interface WorldTabsProps {
   world: WorldRecord;
@@ -80,17 +73,6 @@ export function WorldTabs({
           >
             Search
           </button>
-
-          <button
-            onClick={() => setActiveTab("webhooks")}
-            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
-              activeTab === "webhooks"
-                ? "border-amber-500 text-amber-600 dark:text-amber-400"
-                : "border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600"
-            }`}
-          >
-            Webhooks
-          </button>
           <button
             onClick={() => setActiveTab("settings")}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
@@ -131,29 +113,6 @@ export function WorldTabs({
         )}
         {activeTab === "search" && (
           <WorldSearch worldId={world.id} userId={userId} />
-        )}
-
-        {activeTab === "webhooks" && (
-          <ComingSoonPlaceholder
-            title="Webhooks - Coming soon"
-            description="Connect third-party webhooks to your world."
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-amber-600 dark:text-amber-400"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
-                />
-              </svg>
-            }
-          />
         )}
         {activeTab === "settings" && <WorldSettings world={world} />}
       </div>

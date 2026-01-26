@@ -1,6 +1,5 @@
 import type { SparqlBinding, SparqlResult } from "@fartlabs/worlds";
 import { Loader2Icon } from "lucide-react";
-import { CodeBlock } from "./ai-elements/code-block";
 
 interface SparqlResultsDisplayProps {
   results: SparqlResult | { message: string } | null;
@@ -156,14 +155,12 @@ export function SparqlResultsDisplay({
     }
   }
 
-  // Fallback to CodeBlock for better look if it's not a table
+  // Fallback to formatted JSON if it's not a table
   return (
     <div className={compact ? "p-0" : "p-2"}>
-      <CodeBlock
-        code={JSON.stringify(results, null, 2)}
-        language="json"
-        className="border-none bg-transparent"
-      />
+      <pre className="overflow-auto rounded-md bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-4 text-xs font-mono text-stone-900 dark:text-stone-100">
+        <code>{JSON.stringify(results, null, 2)}</code>
+      </pre>
     </div>
   );
 }
