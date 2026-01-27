@@ -26,8 +26,21 @@ async function checkAdmin() {
 }
 
 export async function createInviteAction() {
-  const authError = await checkAdmin();
-  if (authError) return authError;
+  // Verify the current user is an admin
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const workos = authkit.getWorkOS();
+  const currentUser = await workos.userManagement.getUser(user.id);
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return {
+      success: false,
+      error: "Forbidden: Only admins can create invites",
+    };
+  }
 
   let attempts = 0;
   while (attempts < 3) {
