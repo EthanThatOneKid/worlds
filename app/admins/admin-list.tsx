@@ -3,9 +3,26 @@
 import { useTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseAsString, parseAsInteger, useQueryState } from "nuqs";
-import { toggleAdminAction } from "./actions";
+import { toggleAdminAction, deleteUserAction } from "./actions";
 import type { AccountRecord } from "@fartlabs/worlds/internal";
 import type { WorkOSUser } from "./types";
+import { MoreVertical, UserPlus, UserMinus, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 type AdminListProps = {
   users: Array<{ user: WorkOSUser; account: AccountRecord | null }>;
@@ -193,6 +210,7 @@ function AdminRow({
   const [error, setError] = useState<string | null>(null);
   const [isApiKeyCopied, setIsApiKeyCopied] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const isAdmin = !!user.metadata?.admin;
   const displayName =
@@ -206,6 +224,18 @@ function AdminRow({
       const result = await toggleAdminAction(user.id, !isAdmin);
       if (!result.success) {
         setError(result.error || "Failed to update admin status");
+      }
+    });
+  };
+
+  const handleDelete = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await deleteUserAction(user.id);
+      if (result.success) {
+        setShowDeleteDialog(false);
+      } else {
+        setError(result.error || "Failed to delete user");
       }
     });
   };
@@ -300,27 +330,78 @@ function AdminRow({
         )}
       </td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-        <div className="flex flex-col items-end gap-1">
-          <button
-            onClick={handleToggle}
-            disabled={isPending}
-            className={`${
-              isAdmin
-                ? "text-red-600 hover:text-red-900 dark:hover:text-red-400"
-                : "text-green-600 hover:text-green-900 dark:hover:text-green-400"
-            } disabled:opacity-50 transition-colors cursor-pointer`}
-          >
-            {isPending
-              ? "Updating..."
-              : isAdmin
-                ? "Remove Admin"
-                : "Make Admin"}
-          </button>
+        <div className="flex items-center justify-end gap-2">
           {error && (
             <span className="text-xs text-red-600 dark:text-red-400">
               {error}
             </span>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 p-0 cursor-pointer"
+                disabled={isPending}
+              >
+                <MoreVertical className="h-4 w-4" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={handleToggle}
+                className="cursor-pointer"
+                variant={isAdmin ? "destructive" : "default"}
+              >
+                {isAdmin ? (
+                  <>
+                    <UserMinus className="mr-2 h-4 w-4" />
+                    <span>Remove Admin</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    <span>Make Admin</span>
+                  </>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowDeleteDialog(true)}
+                className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                <span>Delete User</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete User</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete <strong>{displayName}</strong>
+                  ? This will remove the user from the platform and delete their
+                  account on the Worlds API. This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline" disabled={isPending}>
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={isPending}
+                >
+                  {isPending ? "Deleting..." : "Delete User"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </td>
     </tr>

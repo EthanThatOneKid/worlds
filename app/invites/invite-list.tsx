@@ -1,10 +1,10 @@
 "use client";
 
 import { useTransition, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { InviteRecord } from "@fartlabs/worlds/internal";
-import { deleteInviteAction, deleteInvitesAction } from "./actions";
+import { deleteInvitesAction } from "./actions";
 
 type InviteListProps = {
   invites: InviteRecord[];
@@ -19,7 +19,6 @@ export function InviteList({
   pageSize: initialPageSize,
   hasMore,
 }: InviteListProps) {
-  const router = useRouter();
   const [page, setPage] = useQueryState(
     "page",
     parseAsInteger.withDefault(initialPage),
@@ -225,7 +224,6 @@ export function InviteList({
     </div>
   );
 }
-
 function InviteRow({
   invite,
   isSelected,
@@ -235,7 +233,6 @@ function InviteRow({
   isSelected: boolean;
   onToggle: () => void;
 }) {
-  const [isPending, startTransition] = useTransition();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyRedeemerId = () => {
@@ -256,7 +253,12 @@ function InviteRow({
         />
       </td>
       <td className="whitespace-nowrap py-4 px-3 text-sm font-medium text-stone-900 dark:text-white font-mono">
-        {invite.code}
+        <Link
+          href={`/invites/${invite.code}`}
+          className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors"
+        >
+          {invite.code}
+        </Link>
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
         {invite.createdAt

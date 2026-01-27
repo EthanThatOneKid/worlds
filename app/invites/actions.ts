@@ -35,7 +35,9 @@ export async function deleteInviteAction(id: string) {
   }
 }
 export async function deleteInvitesAction(ids: string[]) {
-  const results = await Promise.allSettled(ids.map((id) => sdk.invites.delete(id)));
+  const results = await Promise.allSettled(
+    ids.map((id) => sdk.invites.delete(id)),
+  );
   revalidatePath("/invites");
 
   if (results.some((r) => r.status === "rejected")) {

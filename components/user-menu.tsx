@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function UserMenu({
   email,
@@ -16,92 +22,71 @@ export function UserMenu({
   isAdmin?: boolean;
 }) {
   const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   // Fallback to prop if context is empty (e.g. during initial load or edge cases), but context is preferred
   const finalAccountId = user?.id || accountId;
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-all focus:outline-none cursor-pointer"
-        title={email || "User menu"}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className="p-2 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-all focus:outline-none cursor-pointer"
+          title={email || "User menu"}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+        </button>
+      </DropdownMenuTrigger>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-stone-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 border border-stone-200 dark:border-stone-700">
-          <div className="py-1">
-            {isAdmin && (
-              <>
-                <Link
-                  href="/admins"
-                  className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Admins
-                </Link>
-                <Link
-                  href="/invites"
-                  className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Invites
-                </Link>
-                <div className="my-1 border-t border-stone-200 dark:border-stone-700" />
-              </>
-            )}
-
-            {finalAccountId && (
-              <Link
-                href={`/accounts/${finalAccountId}`}
-                className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
-                onClick={() => setIsOpen(false)}
-              >
-                Account
+      <DropdownMenuContent align="end">
+        {isAdmin && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href="/admins" className="w-full cursor-pointer">
+                Admins
               </Link>
-            )}
-            <button
-              onClick={async () => {
-                setIsOpen(false);
-                await onSignOut();
-              }}
-              className="block w-full text-left px-4 py-2 text-sm text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/invites" className="w-full cursor-pointer">
+                Invites
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
+        {finalAccountId && (
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/accounts/${finalAccountId}`}
+              className="w-full cursor-pointer"
             >
-              Sign out
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+              Account
+            </Link>
+          </DropdownMenuItem>
+        )}
+
+        <DropdownMenuItem
+          onSelect={async () => {
+            await onSignOut();
+          }}
+          className="cursor-pointer"
+        >
+          Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

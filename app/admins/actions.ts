@@ -71,3 +71,57 @@ export async function toggleAdminAction(userId: string, isAdmin: boolean) {
     };
   }
 }
+
+export async function deleteUserAction(userId: string) {
+  // Verify the current user is an admin
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const workos = authkit.getWorkOS();
+  const currentUser = await workos.userManagement.getUser(user.id);
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return {
+      success: false,
+      error: "Forbidden: Only admins can delete users",
+    };
+  }
+
+  // Prevent admins from deleting themselves
+  if (userId === user.id) {
+    return {
+      success: false,
+      error: "You cannot delete your own account",
+    };
+  }
+
+  try {
+    const { sdk } = await import("@/lib/sdk");
+
+    // 1. Delete from Worlds API
+    try {
+      await sdk.accounts.delete(userId);
+    } catch (error) {
+      console.error(
+        `Failed to delete account ${userId} from Worlds API:`,
+        error,
+      );
+      // We continue even if Worlds API delete fails, as the account might not exist there
+      // or we want to ensure WorkOS user is deleted anyway.
+    }
+
+    // 2. Delete from WorkOS
+    await workos.userManagement.deleteUser(userId);
+
+    revalidatePath("/admins");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to delete user",
+    };
+  }
+}
