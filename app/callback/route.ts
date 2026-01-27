@@ -8,34 +8,41 @@ export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const returnPath = cookieStore.get("auth_return_path")?.value || "/";
 
-  // Clear the cookie since we're using it
-  if (cookieStore.get("auth_return_path")) {
-    cookieStore.delete("auth_return_path");
-  }
-
   // Create a handler with the return path
-  return authkit.handleAuth({
-    returnPathname: returnPath,
-    onSuccess: async (data) => {
-      if (!data.user) {
-        return;
-      }
+  try {
+    return await authkit.handleAuth({
+      returnPathname: returnPath,
+      onSuccess: async (data) => {
+        // Clear the cookie after successful authentication
+        if (cookieStore.get("auth_return_path")) {
+          cookieStore.delete("auth_return_path");
+        }
 
-      try {
-        // Skip if user already has an account.
-        const existingAccount = await sdk.accounts.get(data.user.id);
-        if (existingAccount) {
+        if (!data.user) {
           return;
         }
 
-        // Create the account in Worlds API.
-        await sdk.accounts.create({
-          id: data.user.id, // Associate WorkOS ID with account ID.
-        });
-      } catch (error) {
-        console.error("Error in callback route:", error);
-        throw error; // Re-throw to trigger AuthKit error handling.
-      }
-    },
-  })(request);
+        try {
+          // Skip if user already has an account.
+          const existingAccount = await sdk.accounts.get(data.user.id);
+          if (existingAccount) {
+            return;
+          }
+
+          // Create the account in Worlds API.
+          await sdk.accounts.create({
+            id: data.user.id, // Associate WorkOS ID with account ID.
+          });
+        } catch (error) {
+          console.error("Error in callback route:", error);
+          throw error; // Re-throw to trigger AuthKit error handling.
+        }
+      },
+    })(request);
+  } finally {
+    // Ensure cookie is cleared even if handleAuth throws or redirects
+    if (cookieStore.get("auth_return_path")) {
+      cookieStore.delete("auth_return_path");
+    }
+  }
 }

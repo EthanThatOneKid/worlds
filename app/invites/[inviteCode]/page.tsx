@@ -17,31 +17,6 @@ export async function generateMetadata(props: {
   };
 }
 
-async function findInviteByCode(code: string): Promise<InviteRecord | null> {
-  try {
-    // List invites and find by code
-    let page = 1;
-    const pageSize = 100;
-    let hasMore = true;
-
-    while (hasMore) {
-      const invites = await sdk.invites.list(page, pageSize);
-      const invite = invites.find((inv) => inv.code === code.toUpperCase());
-      if (invite) {
-        return invite;
-      }
-      hasMore = invites.length === pageSize;
-      page++;
-      // Safety limit to prevent infinite loops
-      if (page > 10) break;
-    }
-    return null;
-  } catch (error) {
-    console.error("Failed to fetch invite:", error);
-    return null;
-  }
-}
-
 function StatusPage({
   title,
   message,
@@ -107,7 +82,7 @@ export default async function InvitePage(props: { params: Promise<Params> }) {
   }
 
   // Find invite by code
-  const invite = await findInviteByCode(normalizedCode);
+  const invite = await sdk.invites.get(normalizedCode);
 
   // Handle invite not found
   if (!invite) {
@@ -134,13 +109,28 @@ export default async function InvitePage(props: { params: Promise<Params> }) {
   }
 
   // Attempt to redeem the invite
+  // Note: The backend API should enforce atomicity to prevent race conditions
+  // where multiple users attempt to redeem the same invite simultaneously.
   let redemptionError: Error | null = null;
   try {
     await sdk.invites.redeem(normalizedCode, user.id);
   } catch (error) {
     console.error("Failed to redeem invite:", error);
-    redemptionError =
-      error instanceof Error ? error : new Error("Failed to redeem invite");
+    // Handle case where invite was redeemed between check and redemption
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to redeem invite";
+    if (
+      errorMessage.includes("already redeemed") ||
+      errorMessage.includes("not found")
+    ) {
+      return (
+        <StatusPage
+          title="Invite Already Used"
+          message="This invite has already been redeemed."
+        />
+      );
+    }
+    redemptionError = error instanceof Error ? error : new Error(errorMessage);
   }
 
   if (redemptionError) {
