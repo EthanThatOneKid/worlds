@@ -16,7 +16,8 @@ export async function POST(
 
     const body = await request.text();
     const query = body;
-    const results = await sdk.worlds.search(worldId, query, {
+    const results = await sdk.worlds.search(query, {
+      worldIds: [worldId],
       accountId,
     });
 

@@ -8,8 +8,6 @@ const tabs = [
   { id: "overview", label: "Overview", path: "" },
   { id: "playground", label: "Playground", path: "/playground" },
   { id: "search", label: "Search", path: "/search" },
-  { id: "conversations", label: "Conversations", path: "/conversations" },
-  { id: "webhooks", label: "Webhooks", path: "/webhooks" },
   { id: "settings", label: "Settings", path: "/settings" },
 ] as const;
 
@@ -22,14 +20,24 @@ export function WorldTabsNav({ worldId }: WorldTabsNavProps) {
 
   // Determine active tab based on pathname
   const getActiveTab = () => {
-    const segments = pathname.split("/");
-    const lastSegment = segments[segments.length - 1];
+    const worldPath = `/worlds/${worldId}`;
 
-    // If the last segment is the worldId, we are on the overview page
-    if (lastSegment === worldId) return "overview";
+    // Check if we are exactly on the world overview page
+    if (pathname === worldPath) return "overview";
 
-    const tab = tabs.find((t) => t.path === `/${lastSegment}`);
-    return tab ? tab.id : "overview";
+    // Find the tab that matches the start of the current pathname
+    for (const tab of tabs) {
+      if (tab.path === "") continue;
+      const tabFullChildPath = `${worldPath}${tab.path}`;
+      if (
+        pathname === tabFullChildPath ||
+        pathname.startsWith(`${tabFullChildPath}/`)
+      ) {
+        return tab.id;
+      }
+    }
+
+    return "overview";
   };
 
   const activeTab = getActiveTab();

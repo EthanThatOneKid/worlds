@@ -49,6 +49,15 @@ export default async function WorldOverviewPage(props: {
     redirect(signInUrl);
   }
 
+  // Get full user object to check admin status
+  let currentUser = user;
+  if (currentUser) {
+    const workos = authkit.getWorkOS();
+    currentUser = await workos.userManagement.getUser(currentUser.id);
+  }
+
+  const isAdmin = !!currentUser?.metadata?.admin;
+
   // Fetch account
   let account;
   try {
@@ -113,6 +122,7 @@ console.log("Connected to world:", world.label);`;
       maskedCodeSnippet={maskedCodeSnippet}
       codeSnippetHtml={codeSnippetHtml}
       maskedCodeSnippetHtml={maskedCodeSnippetHtml}
+      isAdmin={isAdmin}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { Vector2, Group } from "three";
+import { Group, Vector2 } from "three";
 import { createDenseGasPlanet } from "../Layers/denseGasLayer";
 import { createRingLayer } from "../Layers/ringLayer";
 import { PlanetOptions } from "../utils";

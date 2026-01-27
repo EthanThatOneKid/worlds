@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import type { SparqlResults } from "@fartlabs/worlds";
+import type { SparqlResult } from "@fartlabs/worlds";
 import dynamic from "next/dynamic";
+import { SparqlResultsDisplay } from "./sparql-results-display";
+import { SparqlResultCopyButton } from "@/components/sparql-result-copy-button";
 
 const CodeEditor = dynamic(
   () => import("@uiw/react-textarea-code-editor").then((mod) => mod.default),
   { ssr: false },
 );
-import { SparqlResultsDisplay } from "./sparql-results-display";
 
 interface WorldPlaygroundProps {
   worldId: string;
@@ -40,11 +41,10 @@ INSERT DATA {
 export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<
-    SparqlResults | { message: string } | null
+    SparqlResult | { message: string } | null
   >(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isResultsCopied, setIsResultsCopied] = useState(false);
 
   const executeQuery = async () => {
     try {
@@ -69,7 +69,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
         throw new Error(errorText || response.statusText);
       }
 
-      const data = (await response.json()) as SparqlResults | null;
+      const data = (await response.json()) as SparqlResult | null;
       if (data === null) {
         setResults({ message: "Update executed successfully" });
       } else {
@@ -104,7 +104,7 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
 
       <div className="space-y-6">
         {/* Query Input */}
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col h-[500px]">
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden flex flex-col h-[300px]">
           <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between flex-shrink-0">
             <h3 className="text-lg font-semibold text-stone-900 dark:text-white">
               SPARQL Editor
@@ -150,49 +150,10 @@ export function WorldPlayground({ worldId, userId }: WorldPlaygroundProps) {
                     : ""}
             </h3>
             {!error && results && (
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    JSON.stringify(results, null, 2),
-                  );
-                  setIsResultsCopied(true);
-                  setTimeout(() => setIsResultsCopied(false), 2000);
-                }}
-                className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 rounded-md transition-colors cursor-pointer"
-                title="Copy results"
-              >
-                {isResultsCopied ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4 text-green-600 dark:text-green-500"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m4.5 12.75 6 6 9-13.5"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5"
-                    />
-                  </svg>
-                )}
-              </button>
+              <SparqlResultCopyButton
+                results={results}
+                className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 rounded-md"
+              />
             )}
           </div>
           <div className="flex-grow bg-stone-950 overflow-hidden relative">

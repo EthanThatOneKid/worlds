@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 import { sdk } from "@/lib/sdk";
 import { WorldRow } from "@/components/world-row";
 import { CreateWorldButton } from "@/components/create-world-button";
-import { PageHeader } from "@/components/page-header";
 import { Metadata } from "next";
 import { codeToHtml } from "shiki";
 import { ConnectSdkButton } from "@/components/connect-sdk";
+import { InviteRedemptionForm } from "@/components/invite-redemption-form";
 
 export const metadata: Metadata = {
-  title: "My Worlds",
+  title: "Dashboard",
 };
 
 export default async function Home() {
@@ -48,6 +48,11 @@ export default async function Home() {
     redirect("/sign-up");
   }
 
+  // If the account has no plan, show the invite redemption screen
+  if (!account.plan) {
+    return <InviteRedemptionForm />;
+  }
+
   let worlds;
   try {
     const listResult = await sdk.worlds.list(1, 100, { accountId: user.id });
@@ -75,7 +80,9 @@ console.log("My worlds:", worlds.length);`;
 
   const maskedCodeSnippet = `import { WorldsSdk } from "@fartlabs/worlds";
 
-const sdk = new WorldsSdk({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(-4)}" });
+const sdk = new WorldsSdk({ apiKey: "${account.apiKey.slice(0, 4)}...${account.apiKey.slice(
+    -4,
+  )}" });
 
 const worlds = await sdk.worlds.list();
 console.log("My worlds:", worlds.length);`;
@@ -92,8 +99,6 @@ console.log("My worlds:", worlds.length);`;
 
   return (
     <>
-      <PageHeader accountId={user.id} />
-
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">

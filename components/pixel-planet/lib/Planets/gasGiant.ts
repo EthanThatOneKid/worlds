@@ -1,4 +1,4 @@
-import { Vector2, Vector4, Group } from "three";
+import { Group, Vector2, Vector4 } from "three";
 import { createBaseGasPlanet } from "../Layers/baseGasPlanet";
 import { createGasPLayer } from "../Layers/gasLayer";
 import { PlanetOptions } from "../utils";

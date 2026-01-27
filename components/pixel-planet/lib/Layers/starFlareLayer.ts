@@ -1,9 +1,9 @@
 import {
-  NearestFilter,
-  TextureLoader,
   Mesh,
+  NearestFilter,
   PlaneGeometry,
   ShaderMaterial,
+  TextureLoader,
 } from "three";
 import { flip } from "../utils";
 

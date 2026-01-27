@@ -1,14 +1,13 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { PageHeader } from "@/components/page-header";
 import { DeleteAccountSection } from "@/components/delete-account-section";
 import { ApiKeySection } from "@/components/api-key-section";
 import { Metadata } from "next";
 import { sdk } from "@/lib/sdk";
 
 export const metadata: Metadata = {
-  title: "Account",
+  title: "Account Settings",
 };
 
 export default async function AccountPage() {
@@ -35,10 +34,13 @@ export default async function AccountPage() {
     );
   }
 
+  // Check if user is a shadow user - redirect to root if plan is null/undefined or "shadow"
+  if (!account.plan || account.plan === "shadow") {
+    redirect("/");
+  }
+
   return (
     <>
-      <PageHeader accountId={user.id} />
-
       <div className="mx-auto max-w-2xl px-6 py-12">
         <Link
           href="/"

@@ -6,12 +6,16 @@ The official web dashboard for [Worlds API™](https://jsr.io/@fartlabs/worlds).
 
 ## Design
 
-This project is built with modern web technologies to provide a premium user experience:
+This project is built with modern web technologies to provide a premium user
+experience:
 
-- **[Worlds API SDK](https://jsr.io/@fartlabs/worlds)**: Powered by the official Worlds API SDK.
+- **[Worlds API SDK](https://jsr.io/@fartlabs/worlds)**: Powered by the official
+  Worlds API SDK.
 - **[Next.js](https://nextjs.org)**: The React framework for the web.
-- **[WorkOS AuthKit](https://workos.com/docs/authkit)**: Secure and seamless authentication.
-- **[Tailwind CSS](https://tailwindcss.com)**: Utility-first CSS framework for rapid UI development.
+- **[WorkOS AuthKit](https://workos.com/docs/authkit)**: Secure and seamless
+  authentication.
+- **[Tailwind CSS](https://tailwindcss.com)**: Utility-first CSS framework for
+  rapid UI development.
 - **[Nuqs](https://nuqs.47ng.com)**: Type-safe search params state management.
 
 ## Getting Started
@@ -38,7 +42,8 @@ This project is built with modern web technologies to provide a premium user exp
 
 3. Set up environment variables:
 
-   Copy the example environment file and configure the required keys (e.g., WorkOS credentials).
+   Copy the example environment file and configure the required keys (e.g.,
+   WorkOS credentials).
 
    ```bash
    cp .env.example .env
@@ -50,7 +55,8 @@ This project is built with modern web technologies to provide a premium user exp
    npm run dev
    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the
+result.
 
 ## Development
 
@@ -58,7 +64,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - **Format**: `npm run format`
 - **Type Check**: `npm run check`
 
-For more information on the background, research, and glossary, please visit the [Worlds API repository](https://github.com/FartLabs/worlds). Official documentation: <https://github.com/wazootech/docs>.
+For more information on the background, research, and glossary, please visit the
+[Worlds API repository](https://github.com/FartLabs/worlds). Official
+documentation: <https://github.com/wazootech/docs>.
 
 ---
 

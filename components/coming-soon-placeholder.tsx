@@ -1,17 +1,20 @@
 "use client";
 
 import React from "react";
+import { ExternalLinkIcon } from "lucide-react";
 
 interface ComingSoonPlaceholderProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+  docsUrl: string;
 }
 
 export function ComingSoonPlaceholder({
   title,
   description,
   icon,
+  docsUrl,
 }: ComingSoonPlaceholderProps) {
   return (
     <div className="rounded-lg border border-dashed border-stone-300 dark:border-stone-700 p-12 text-center bg-white dark:bg-stone-900 shadow-sm animate-in fade-in duration-300">
@@ -24,20 +27,15 @@ export function ComingSoonPlaceholder({
       <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
         {description}
       </p>
-      <div className="mt-6 flex items-center justify-center gap-4">
+      <div className="mt-6 flex items-center justify-center">
         <a
-          href="https://github.com/EthanThatOneKid/worlds/issues/new"
+          href={docsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer shadow-sm"
         >
-          Provide Feedback
-        </a>
-        <a
-          href="https://etok.me/meet"
-          className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors border border-stone-200 dark:border-stone-700 px-4 py-2 rounded-md hover:bg-stone-50 dark:hover:bg-stone-800"
-        >
-          Chat with founder
+          View Documentation
+          <ExternalLinkIcon className="w-4 h-4" />
         </a>
       </div>
     </div>

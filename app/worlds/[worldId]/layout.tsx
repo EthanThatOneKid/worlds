@@ -1,8 +1,7 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import Link from "next/link";
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { PageHeader } from "@/components/page-header";
 import { WorldTabsNav } from "./world-tabs-nav";
 import React from "react";
 
@@ -54,6 +53,11 @@ export default async function WorldLayout(props: {
     );
   }
 
+  // Check if user is a shadow user - redirect to root if plan is null/undefined or "shadow"
+  if (!account.plan || account.plan === "shadow") {
+    redirect("/");
+  }
+
   // Fetch world data
   let world;
   try {
@@ -86,29 +90,6 @@ export default async function WorldLayout(props: {
 
   return (
     <>
-      <PageHeader accountId={user.id}>
-        <Link
-          href="/"
-          className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer"
-          title="Back to Dashboard"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-            />
-          </svg>
-        </Link>
-      </PageHeader>
-
       <div className="w-full mx-auto max-w-5xl px-6 pb-12">
         <div className="space-y-6">
           <WorldTabsNav worldId={worldId} />
