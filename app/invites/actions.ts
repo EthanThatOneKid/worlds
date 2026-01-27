@@ -34,3 +34,13 @@ export async function deleteInviteAction(id: string) {
     return { success: false, error: "Failed to delete invite" };
   }
 }
+export async function deleteInvitesAction(ids: string[]) {
+  try {
+    await Promise.all(ids.map((id) => sdk.invites.delete(id)));
+    revalidatePath("/invites");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete invites:", error);
+    return { success: false, error: "Failed to delete invites" };
+  }
+}

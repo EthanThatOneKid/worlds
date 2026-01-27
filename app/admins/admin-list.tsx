@@ -121,7 +121,7 @@ export function AdminList({
               {users.length === 0 && (
                 <tr>
                   <td
-                  colSpan={8}
+                    colSpan={8}
                     className="px-3 py-8 text-center text-sm text-stone-500 dark:text-stone-400"
                   >
                     No users found.
