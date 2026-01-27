@@ -40,18 +40,17 @@ export default async function AdminsPage({
       ...(after ? { after } : {}),
     });
 
-    // Fetch full user details to get metadata
-    paginatedUsers = await Promise.all(
-      response.data.map((u) => workos.userManagement.getUser(u.id)),
-    );
-
+    paginatedUsers = response.data;
     nextCursor = response.listMetadata?.after;
     hasMore = !!nextCursor;
   } catch (e) {
     console.error("Failed to list users", e);
   }
 
-  // Fetch accounts for each user
+  // Fetch accounts for each user concurrently.
+  // Note: We use Promise.all here because the Worlds API doesn't currently
+  // support a batch-get or filtered-list endpoint. This ensures we only
+  // fetch exactly the accounts needed for the current page.
   const usersWithAccounts = await Promise.all(
     paginatedUsers.map(async (user) => {
       let account: AccountRecord | null = null;
