@@ -1,56 +1,72 @@
 import * as authkit from "@workos-inc/authkit-nextjs";
 import { AdminList } from "./admin-list";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import { sdk } from "@/lib/sdk";
+import type { AccountRecord } from "@fartlabs/worlds/internal";
 
 export const metadata: Metadata = {
   title: "Manage Admins",
 };
 
-export default async function AdminsPage() {
+export default async function AdminsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; pageSize?: string; after?: string }>;
+}) {
   const { user } = await authkit.withAuth();
-
   if (!user) {
     return null;
   }
 
+  const params = await searchParams;
+  const pageSize = Math.max(
+    1,
+    Math.min(100, parseInt(params.pageSize ?? "25", 10)),
+  );
+  const after = params.after as string | undefined;
+
   const workos = authkit.getWorkOS();
 
-  // List all users
   type WorkOSUser = Awaited<ReturnType<typeof workos.userManagement.getUser>>;
-  let allUsers: WorkOSUser[] = [];
+
+  // Fetch only the current page using WorkOS cursor pagination
+  let paginatedUsers: WorkOSUser[] = [];
+  let nextCursor: string | undefined;
+  let hasMore = false;
   try {
-    // WorkOS listUsers returns paginated results
-    let cursor: string | undefined;
-    do {
-      const response = await workos.userManagement.listUsers({
-        limit: 100,
-        ...(cursor ? { after: cursor } : {}),
-      });
+    const response = await workos.userManagement.listUsers({
+      limit: pageSize,
+      ...(after ? { after } : {}),
+    });
 
-      // Fetch full user details to get metadata
-      const usersWithMetadata = await Promise.all(
-        response.data.map(async (u) => {
-          const fullUser = await workos.userManagement.getUser(u.id);
-          return fullUser;
-        }),
-      );
+    // Fetch full user details to get metadata
+    paginatedUsers = await Promise.all(
+      response.data.map((u) => workos.userManagement.getUser(u.id)),
+    );
 
-      allUsers = [...allUsers, ...usersWithMetadata];
-      cursor = response.listMetadata?.after;
-    } while (cursor);
+    nextCursor = response.listMetadata?.after;
+    hasMore = !!nextCursor;
   } catch (e) {
     console.error("Failed to list users", e);
   }
 
-  // Sort users by email
-  allUsers = allUsers.sort((a, b) => {
-    const emailA = a.email?.toLowerCase() || "";
-    const emailB = b.email?.toLowerCase() || "";
-    return emailA.localeCompare(emailB);
-  });
+  // Fetch accounts for each user
+  const usersWithAccounts = await Promise.all(
+    paginatedUsers.map(async (user) => {
+      let account: AccountRecord | null = null;
+      try {
+        account = await sdk.accounts.get(user.id);
+      } catch (error) {
+        // Log error but continue - some users may not have accounts
+        console.error(`Failed to fetch account for user ${user.id}:`, error);
+      }
+      return { user, account };
+    }),
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-stone-900 dark:text-white">
           User Management
@@ -59,7 +75,19 @@ export default async function AdminsPage() {
       <p className="text-stone-500 dark:text-stone-400">
         Manage admin status for all users in the system.
       </p>
-      <AdminList users={allUsers} />
+      <Suspense
+        fallback={
+          <div className="text-stone-500 dark:text-stone-400">Loading...</div>
+        }
+      >
+        <AdminList
+          users={usersWithAccounts}
+          pageSize={pageSize}
+          nextCursor={nextCursor}
+          hasMore={hasMore}
+          currentCursor={after}
+        />
+      </Suspense>
     </div>
   );
 }

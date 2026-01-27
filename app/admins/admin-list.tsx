@@ -1,75 +1,198 @@
 "use client";
 
 import { useTransition, useState } from "react";
+import { useRouter } from "next/navigation";
+import { parseAsString, parseAsInteger, useQueryState } from "nuqs";
 import { toggleAdminAction } from "./actions";
+import type { AccountRecord } from "@fartlabs/worlds/internal";
+import type { WorkOSUser } from "./types";
 
-type WorkOSUser = {
-  id: string;
-  email?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  metadata?: Record<string, unknown> | null;
-  createdAt?: string | null;
+type AdminListProps = {
+  users: Array<{ user: WorkOSUser; account: AccountRecord | null }>;
+  pageSize: number;
+  nextCursor?: string;
+  hasMore: boolean;
+  currentCursor?: string;
 };
 
-export function AdminList({ users }: { users: WorkOSUser[] }) {
+export function AdminList({
+  users,
+  pageSize: initialPageSize,
+  nextCursor,
+  hasMore,
+  currentCursor,
+}: AdminListProps) {
+  const router = useRouter();
+  const [, setAfter] = useQueryState("after", parseAsString);
+  const [pageSize, setPageSize] = useQueryState(
+    "pageSize",
+    parseAsInteger.withDefault(initialPageSize),
+  );
+
+  const goToNext = () => {
+    if (!nextCursor) return;
+    // Browser history is automatically tracked when URL changes
+    setAfter(nextCursor);
+  };
+
+  const goToPrevious = () => {
+    // Use browser's back button functionality
+    // If there's no history (e.g., user navigated directly to this page),
+    // fall back to clearing the cursor to go to first page
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      // No history available, go to first page
+      setAfter(null);
+    }
+  };
+
+  const updatePageSize = (newPageSize: number) => {
+    setPageSize(newPageSize);
+    // Reset to first page when changing page size
+    setAfter(null);
+  };
+
+  // If we have a current cursor, we're not on the first page, so we can go back
+  const hasPrevious = !!currentCursor;
+
   return (
-    <div className="overflow-hidden rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm">
-      <table className="min-w-full divide-y divide-stone-200 dark:divide-stone-800">
-        <thead className="bg-stone-50 dark:bg-stone-950/50">
-          <tr>
-            <th
-              scope="col"
-              className="py-3 pl-4 pr-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+    <div className="space-y-4 w-full min-w-0">
+      <div className="w-full max-w-full rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
+          <table className="w-full">
+            <thead className="bg-stone-50 dark:bg-stone-950/50">
+              <tr>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 py-3 pl-4 pr-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  User
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Created At
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Admin Status
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Plan
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Account ID
+                </th>
+
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
+                >
+                  API Key
+                </th>
+                <th
+                  scope="col"
+                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 relative py-3 pl-3 pr-4 sm:pr-6 whitespace-nowrap"
+                >
+                  <span className="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-200 dark:divide-stone-800 bg-white dark:bg-stone-900">
+              {users.map(({ user, account }) => (
+                <AdminRow key={user.id} user={user} account={account} />
+              ))}
+              {users.length === 0 && (
+                <tr>
+                  <td
+                  colSpan={8}
+                    className="px-3 py-8 text-center text-sm text-stone-500 dark:text-stone-400"
+                  >
+                    No users found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="page-size"
+              className="text-sm text-stone-600 dark:text-stone-400"
             >
-              User
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
+              Show:
+            </label>
+            <select
+              id="page-size"
+              value={pageSize}
+              onChange={(e) => updatePageSize(Number(e.target.value))}
+              className="rounded-md border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-2 py-1 text-sm text-stone-900 dark:text-stone-100 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500"
             >
-              Email
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
-            >
-              Created At
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider"
-            >
-              Admin Status
-            </th>
-            <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-              <span className="sr-only">Actions</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-stone-200 dark:divide-stone-800 bg-white dark:bg-stone-900">
-          {users.map((user) => (
-            <AdminRow key={user.id} user={user} />
-          ))}
-          {users.length === 0 && (
-            <tr>
-              <td
-                colSpan={5}
-                className="px-3 py-8 text-center text-sm text-stone-500 dark:text-stone-400"
-              >
-                No users found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <span className="text-sm text-stone-600 dark:text-stone-400">
+            Showing {users.length} user{users.length !== 1 ? "s" : ""}
+            {hasMore && " (more available)"}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={goToPrevious}
+            disabled={!hasPrevious}
+            className="rounded-md border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-sm font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Previous
+          </button>
+          <button
+            onClick={goToNext}
+            disabled={!hasMore}
+            className="rounded-md border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-sm font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
-function AdminRow({ user }: { user: WorkOSUser }) {
+function AdminRow({
+  user,
+  account,
+}: {
+  user: WorkOSUser;
+  account: AccountRecord | null;
+}) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [isApiKeyCopied, setIsApiKeyCopied] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const isAdmin = !!user.metadata?.admin;
   const displayName =
@@ -87,12 +210,35 @@ function AdminRow({ user }: { user: WorkOSUser }) {
     });
   };
 
+  const handleCopyAccountId = () => {
+    if (!accountId || accountId === "-") return;
+    navigator.clipboard.writeText(accountId);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleCopyApiKey = () => {
+    if (!fullApiKey) return;
+    navigator.clipboard.writeText(fullApiKey);
+    setIsApiKeyCopied(true);
+    setTimeout(() => setIsApiKeyCopied(false), 2000);
+  };
+
+  // Format account data
+  const plan = account?.plan || "No plan";
+  const accountId = account?.id || "-";
+
+  const fullApiKey = account?.apiKey || null;
+  const maskedApiKey = fullApiKey
+    ? `${fullApiKey.slice(0, 4)}...${fullApiKey.slice(-4)}`
+    : "-";
+
   return (
     <tr>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 dark:text-white">
         {displayName}
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
+      <td className="px-3 py-4 text-sm text-stone-500 dark:text-stone-400 whitespace-nowrap min-w-[150px]">
         {user.email || "-"}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
@@ -107,6 +253,50 @@ function AdminRow({ user }: { user: WorkOSUser }) {
           <span className="inline-flex items-center rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-800 dark:bg-stone-800 dark:text-stone-300">
             User
           </span>
+        )}
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
+        {plan}
+      </td>
+      <td className="px-3 py-4 text-sm text-stone-500 dark:text-stone-400 font-mono whitespace-nowrap min-w-[120px]">
+        {accountId !== "-" ? (
+          <button
+            onClick={handleCopyAccountId}
+            className="hover:text-stone-700 dark:hover:text-stone-300 transition-colors cursor-pointer text-left flex items-center gap-1 group"
+            title="Click to copy Account ID"
+          >
+            {accountId}
+            <span
+              className={`text-[10px] uppercase font-sans font-bold px-1 rounded transition-opacity ${isCopied ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 opacity-100" : "opacity-0 group-hover:opacity-40"}`}
+            >
+              {isCopied ? "Copied" : "Copy"}
+            </span>
+          </button>
+        ) : (
+          "-"
+        )}
+      </td>
+
+      <td className="px-3 py-4 text-sm text-stone-500 dark:text-stone-400 font-mono whitespace-nowrap min-w-[150px]">
+        {fullApiKey ? (
+          <button
+            onClick={handleCopyApiKey}
+            className="hover:text-stone-700 dark:hover:text-stone-300 transition-colors cursor-pointer text-left flex items-center gap-1 group"
+            title="Click to copy API Key"
+          >
+            {maskedApiKey}
+            <span
+              className={`text-[10px] uppercase font-sans font-bold px-1 rounded transition-opacity ${
+                isApiKeyCopied
+                  ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 opacity-100"
+                  : "opacity-0 group-hover:opacity-40"
+              }`}
+            >
+              {isApiKeyCopied ? "Copied" : "Copy"}
+            </span>
+          </button>
+        ) : (
+          "-"
         )}
       </td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
