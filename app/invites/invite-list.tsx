@@ -145,12 +145,6 @@ export function InviteList({
                   scope="col"
                   className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
                 >
-                  Status
-                </th>
-                <th
-                  scope="col"
-                  className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-3 py-3 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider whitespace-nowrap"
-                >
                   Redeemed At
                 </th>
                 <th
@@ -173,7 +167,7 @@ export function InviteList({
               {invites.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={5}
                     className="px-3 py-8 text-center text-sm text-stone-500 dark:text-stone-400"
                   >
                     No invites found. Create one to get started.
@@ -268,17 +262,6 @@ function InviteRow({
         {invite.createdAt
           ? new Date(invite.createdAt).toLocaleDateString()
           : "-"}
-      </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
-        {invite.redeemedAt ? (
-          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300 w-fit">
-            Redeemed
-          </span>
-        ) : (
-          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-300">
-            Active
-          </span>
-        )}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-stone-500 dark:text-stone-400">
         {invite.redeemedAt

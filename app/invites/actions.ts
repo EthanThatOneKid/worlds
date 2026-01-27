@@ -35,12 +35,12 @@ export async function deleteInviteAction(id: string) {
   }
 }
 export async function deleteInvitesAction(ids: string[]) {
-  try {
-    await Promise.all(ids.map((id) => sdk.invites.delete(id)));
-    revalidatePath("/invites");
-    return { success: true };
-  } catch (error) {
-    console.error("Failed to delete invites:", error);
-    return { success: false, error: "Failed to delete invites" };
+  const results = await Promise.allSettled(ids.map((id) => sdk.invites.delete(id)));
+  revalidatePath("/invites");
+
+  if (results.some((r) => r.status === "rejected")) {
+    return { success: false, error: "Failed to delete some invites" };
   }
+
+  return { success: true };
 }
