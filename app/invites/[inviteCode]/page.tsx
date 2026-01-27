@@ -2,7 +2,6 @@ import * as authkit from "@workos-inc/authkit-nextjs";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { InviteRecord } from "@fartlabs/worlds/internal";
 import Link from "next/link";
 import { CheckCircle2, XCircle } from "lucide-react";
 
@@ -70,7 +69,7 @@ function StatusPage({
 
 export default async function InvitePage(props: { params: Promise<Params> }) {
   const { inviteCode } = await props.params;
-  const normalizedCode = inviteCode.toUpperCase();
+  const normalizedCode = inviteCode.toUpperCase().trim();
 
   // Check authentication status
   const { user } = await authkit.withAuth();

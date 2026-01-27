@@ -6,25 +6,6 @@ import * as authkit from "@workos-inc/authkit-nextjs";
 
 import { customAlphabet } from "nanoid";
 
-async function checkAdmin() {
-  const { user } = await authkit.withAuth();
-  if (!user) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const workos = authkit.getWorkOS();
-  const currentUser = await workos.userManagement.getUser(user.id);
-
-  if (!currentUser || !currentUser.metadata?.admin) {
-    return {
-      success: false,
-      error: "Forbidden: Only admins can manage invites",
-    };
-  }
-
-  return null;
-}
-
 export async function createInviteAction() {
   // Verify the current user is an admin
   const { user } = await authkit.withAuth();
