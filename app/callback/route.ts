@@ -39,10 +39,8 @@ export async function GET(request: NextRequest) {
         }
       },
     })(request);
-  } finally {
-    // Ensure cookie is cleared even if handleAuth throws or redirects
-    if (cookieStore.get("auth_return_path")) {
-      cookieStore.delete("auth_return_path");
-    }
+  }
+  // Note: finally block would execute after response is sent
+  // Cookie is already cleared in onSuccess callback above
   }
 }
