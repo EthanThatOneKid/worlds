@@ -4,20 +4,19 @@ import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  // Read return path from cookie before calling handleAuth
   const cookieStore = await cookies();
   const returnPath = cookieStore.get("auth_return_path")?.value || "/";
+
+  // Delete the cookie immediately after reading
+  if (cookieStore.get("auth_return_path")) {
+    cookieStore.delete("auth_return_path");
+  }
 
   // Create a handler with the return path
 
   return await authkit.handleAuth({
     returnPathname: returnPath,
     onSuccess: async (data) => {
-      // Clear the cookie after successful authentication
-      if (cookieStore.get("auth_return_path")) {
-        cookieStore.delete("auth_return_path");
-      }
-
       if (!data.user) {
         return;
       }
