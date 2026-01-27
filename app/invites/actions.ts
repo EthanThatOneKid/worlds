@@ -2,10 +2,33 @@
 
 import { sdk } from "@/lib/sdk";
 import { revalidatePath } from "next/cache";
+import * as authkit from "@workos-inc/authkit-nextjs";
 
 import { customAlphabet } from "nanoid";
 
+async function checkAdmin() {
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const workos = authkit.getWorkOS();
+  const currentUser = await workos.userManagement.getUser(user.id);
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return {
+      success: false,
+      error: "Forbidden: Only admins can manage invites",
+    };
+  }
+
+  return null;
+}
+
 export async function createInviteAction() {
+  const authError = await checkAdmin();
+  if (authError) return authError;
+
   let attempts = 0;
   while (attempts < 3) {
     try {
@@ -25,6 +48,22 @@ export async function createInviteAction() {
 }
 
 export async function deleteInviteAction(id: string) {
+  // Verify the current user is an admin
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const workos = authkit.getWorkOS();
+  const currentUser = await workos.userManagement.getUser(user.id);
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return {
+      success: false,
+      error: "Forbidden: Only admins can delete invites",
+    };
+  }
+
   try {
     await sdk.invites.delete(id);
     revalidatePath("/invites");
@@ -35,6 +74,22 @@ export async function deleteInviteAction(id: string) {
   }
 }
 export async function deleteInvitesAction(ids: string[]) {
+  // Verify the current user is an admin
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const workos = authkit.getWorkOS();
+  const currentUser = await workos.userManagement.getUser(user.id);
+
+  if (!currentUser || !currentUser.metadata?.admin) {
+    return {
+      success: false,
+      error: "Forbidden: Only admins can delete invites",
+    };
+  }
+
   const results = await Promise.allSettled(
     ids.map((id) => sdk.invites.delete(id)),
   );
