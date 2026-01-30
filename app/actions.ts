@@ -27,7 +27,7 @@ export async function deleteWorld(worldId: string) {
     throw new Error("Unauthorized");
   }
 
-  await sdk.worlds.remove(worldId, { accountId: user.id });
+  await sdk.worlds.delete(worldId, { accountId: user.id });
   revalidatePath("/");
 }
 
@@ -74,6 +74,25 @@ export async function deleteAccount() {
 
   // Sign out the user
   await authkit.signOut();
+}
+
+export async function redeemInviteAction(code: string) {
+  const { user } = await authkit.withAuth();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await sdk.invites.redeem(code, user.id);
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to redeem invite:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to redeem invite",
+    };
+  }
 }
 
 export async function rotateApiKey() {

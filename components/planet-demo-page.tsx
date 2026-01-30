@@ -18,7 +18,7 @@ const PLANET_TYPES: PixelPlanetProps["type"][] = [
   "no_atmosphere",
 ];
 
-export default function PlanetDemoPage() {
+export function PlanetDemoPage() {
   const [seed, setSeed] = useState(1);
 
   const randomizeAll = () => {

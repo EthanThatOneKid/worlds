@@ -2,8 +2,8 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
-import { useEffect, useMemo, useState, useRef } from "react";
-import { PlanetOptions, generatePlanetByType } from "./lib/utils";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { generatePlanetByType, PlanetOptions } from "./lib/utils";
 
 export interface PixelPlanetProps {
   type:

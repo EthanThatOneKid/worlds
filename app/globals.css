@@ -189,4 +189,74 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Custom Scrollbar Styles - Webkit (Chrome, Safari, Edge) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(168 162 158 / 0.5) transparent; /* stone-400 with opacity */
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(168 162 158 / 0.5); /* stone-400 with opacity */
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.2s ease;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(168 162 158 / 0.8); /* stone-400 with more opacity */
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background-color: rgb(120 113 108 / 0.9); /* stone-500 */
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Dark mode scrollbar styles */
+  .dark * {
+    scrollbar-color: rgb(87 83 78 / 0.6) transparent; /* stone-600 with opacity */
+  }
+
+  .dark *::-webkit-scrollbar-thumb {
+    background-color: rgb(87 83 78 / 0.6); /* stone-600 with opacity */
+  }
+
+  .dark *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(87 83 78 / 0.8); /* stone-600 with more opacity */
+  }
+
+  .dark *::-webkit-scrollbar-thumb:active {
+    background-color: rgb(68 64 60 / 0.9); /* stone-700 */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    * {
+      scrollbar-color: rgb(87 83 78 / 0.6) transparent; /* stone-600 with opacity */
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: rgb(87 83 78 / 0.6); /* stone-600 with opacity */
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background-color: rgb(87 83 78 / 0.8); /* stone-600 with more opacity */
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+      background-color: rgb(68 64 60 / 0.9); /* stone-700 */
+    }
+  }
 }

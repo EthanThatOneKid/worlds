@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQueryState } from "nuqs";
-import type { SearchResult } from "@fartlabs/worlds";
+import type { WorldsSearchResult } from "@fartlabs/worlds";
 
 interface WorldSearchProps {
   worldId: string;
@@ -11,7 +11,7 @@ interface WorldSearchProps {
 
 export function WorldSearch({ worldId, userId }: WorldSearchProps) {
   const [query, setQuery] = useQueryState("q", { defaultValue: "" });
-  const [results, setResults] = useState<SearchResult[] | null>(null);
+  const [results, setResults] = useState<WorldsSearchResult[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isResultsCopied, setIsResultsCopied] = useState(false);
@@ -35,7 +35,7 @@ export function WorldSearch({ worldId, userId }: WorldSearchProps) {
         throw new Error(errorText || response.statusText);
       }
 
-      const data = (await response.json()) as SearchResult[];
+      const data = (await response.json()) as WorldsSearchResult[];
       setResults(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to execute search");
@@ -192,14 +192,16 @@ export function WorldSearch({ worldId, userId }: WorldSearchProps) {
                             ? { ...rest, ...value }
                             : first;
                         })(),
-                      ).map((key) => (
-                        <th
-                          key={key}
-                          className="px-4 py-2 border-b border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold whitespace-nowrap"
-                        >
-                          {key}
-                        </th>
-                      ))}
+                      )
+                        .filter((key) => key !== "accountId")
+                        .map((key) => (
+                          <th
+                            key={key}
+                            className="px-4 py-2 border-b border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold whitespace-nowrap"
+                          >
+                            {key}
+                          </th>
+                        ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-200 dark:divide-stone-800">
@@ -227,26 +229,28 @@ export function WorldSearch({ worldId, userId }: WorldSearchProps) {
                                 ? { ...rest, ...value }
                                 : first;
                             })(),
-                          ).map((key) => {
-                            const val = (
-                              flattenedItem as Record<string, unknown>
-                            )[key];
-                            return (
-                              <td
-                                key={key}
-                                className="px-4 py-2 text-stone-900 dark:text-stone-100 whitespace-nowrap max-w-xs truncate"
-                                title={
-                                  typeof val === "object"
+                          )
+                            .filter((key) => key !== "accountId")
+                            .map((key) => {
+                              const val = (
+                                flattenedItem as Record<string, unknown>
+                              )[key];
+                              return (
+                                <td
+                                  key={key}
+                                  className="px-4 py-2 text-stone-900 dark:text-stone-100 whitespace-nowrap max-w-xs truncate"
+                                  title={
+                                    typeof val === "object"
+                                      ? JSON.stringify(val)
+                                      : String(val)
+                                  }
+                                >
+                                  {typeof val === "object"
                                     ? JSON.stringify(val)
-                                    : String(val)
-                                }
-                              >
-                                {typeof val === "object"
-                                  ? JSON.stringify(val)
-                                  : String(val)}
-                              </td>
-                            );
-                          })}
+                                    : String(val)}
+                                </td>
+                              );
+                            })}
                         </tr>
                       );
                     })}
